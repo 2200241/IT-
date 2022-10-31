@@ -7,6 +7,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import com.example.recipe_app.make_menu.select_conditions.select_ingredients.SelectIngredients
+import com.example.recipe_app.make_menu.select_conditions.select_tags.SelectTags
 
 @Composable
 fun SelectConditions(
@@ -22,12 +24,12 @@ fun SelectConditions(
 
         when (uiState.selectedTab) {
             ConditionTab.SelectTagsTab -> {
-                SelectTagsPage() {
+                SelectTags() {
                     Text("Tags")
                 }
             }
             ConditionTab.SelectIngredientsTab -> {
-                SelectIngredientsPage() {
+                SelectIngredients() {
                     Text("Ingredients")
                 }
             }

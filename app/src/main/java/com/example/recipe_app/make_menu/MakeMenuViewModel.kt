@@ -1,8 +1,6 @@
 package com.example.recipe_app.make_menu
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.example.recipe_app.R
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update

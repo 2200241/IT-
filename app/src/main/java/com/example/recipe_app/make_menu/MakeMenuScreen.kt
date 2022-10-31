@@ -1,13 +1,11 @@
 package com.example.recipe_app.make_menu
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.Tab
-import androidx.compose.material.TabRow
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import com.example.recipe_app.make_menu.select_conditions.SelectConditions
+import com.example.recipe_app.make_menu.select_recipes.SelectRecipes
 
 @Composable
 fun MakeMenuScreen(
@@ -15,7 +13,12 @@ fun MakeMenuScreen(
 ) {
     val uiState = state.uiState
 
-    Column {
-        SelectConditions()
+    NavHost(
+        navController = state.navController,
+        startDestination = Screen.SelectConditions.route
+    ) {
+        composable(Screen.SelectConditions.route) { SelectConditions()}
+        composable(Screen.SelectRecipes.route) { SelectRecipes() }
+        composable(Screen.RecipeDetail.route) {}
     }
 }
