@@ -11,12 +11,10 @@ class MakeMenuViewModel(
 ): ViewModel() {
     data class UiState(
         val isLoading: Boolean = false,
-        val selectedTab: ConditionTab = ConditionTab.SelectTagsTab
     )
 
     private val _uiState = MutableStateFlow(UiState(
         isLoading = false,
-        selectedTab = ConditionTab.SelectTagsTab
     ))
     val uiState = _uiState.asStateFlow()
 
@@ -27,23 +25,4 @@ class MakeMenuViewModel(
     suspend fun endLoading() {
         _uiState.update { it.copy(isLoading = false) }
     }
-
-    fun onTabClicked(selectedTab: ConditionTab) {
-        _uiState.update { it.copy(selectedTab = selectedTab) }
-        Log.d("debug", uiState.value.selectedTab.toString())
-    }
 }
-
-sealed class ConditionTab(
-    val titleId: Int,
-    val index: Int
-) {
-    object SelectTagsTab: ConditionTab(R.string.select_tags, 0)
-    object SelectIngredientsTab: ConditionTab(R.string.select_ingredients, 1)
-}
-
-/*
-internal sealed class TabPage(val route: String) {
-    object SelectTags : TabPage("selectTags")
-    object SelectIngredients : TabPage("selectIngredients")
-}*/
