@@ -41,7 +41,7 @@ fun SelectConditions(
 private fun SelectConditionsTabBar(
     modifier: Modifier = Modifier,
     selectedTab: ConditionTab,
-    onClick: (ConditionTab) -> Unit
+    onClick: (ConditionTab) -> Unit = {}
 ) {
     TabRow(
         modifier = modifier,

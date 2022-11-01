@@ -8,7 +8,7 @@ class SelectConditionsState(
     private val viewModel: SelectConditionsViewModel,
 ) {
 
-    val uiState: SelectConditionsViewModel.UiState
+    val uiState: SelectConditionsUiState
         @Composable get() = viewModel.uiState.collectAsState().value
 
     fun onTabClicked(selectedTab: ConditionTab) = viewModel.onTabClicked(selectedTab)

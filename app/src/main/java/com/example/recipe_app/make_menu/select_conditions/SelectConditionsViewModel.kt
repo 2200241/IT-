@@ -7,14 +7,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
+data class SelectConditionsUiState(
+    val isLoading: Boolean = false,
+    val selectedTab: ConditionTab = ConditionTab.SelectTagsTab
+)
+
 class SelectConditionsViewModel(
 ): ViewModel() {
-    data class UiState(
-        val isLoading: Boolean = false,
-        val selectedTab: ConditionTab = ConditionTab.SelectTagsTab
-    )
 
-    private val _uiState = MutableStateFlow(UiState(
+    private val _uiState = MutableStateFlow(SelectConditionsUiState(
         isLoading = false,
         selectedTab = ConditionTab.SelectTagsTab
     ))

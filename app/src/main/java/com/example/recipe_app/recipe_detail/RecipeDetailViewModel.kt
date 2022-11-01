@@ -1,18 +1,19 @@
-package com.example.recipe_app.make_menu
+package com.example.recipe_app.recipe_detail
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-data class MakeMenuUiState(
+data class RecipeDetailUiState(
     val isLoading: Boolean = false,
 )
 
-class MakeMenuViewModel(
+class RecipeDetailViewModel(
+    private val recipeId: String?
 ): ViewModel() {
 
-    private val _uiState = MutableStateFlow(MakeMenuUiState(
+    private val _uiState = MutableStateFlow(RecipeDetailUiState(
         isLoading = false,
     ))
     val uiState = _uiState.asStateFlow()
@@ -24,4 +25,9 @@ class MakeMenuViewModel(
     suspend fun endLoading() {
         _uiState.update { it.copy(isLoading = false) }
     }
+
+    fun getRecipeData() {
+
+    }
+
 }
