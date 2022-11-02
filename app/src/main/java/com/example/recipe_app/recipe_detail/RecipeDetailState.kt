@@ -17,8 +17,10 @@ class RecipeDetailState(
 //viewModel()を使うと同じインスタンスが返されてしまう？
 @Composable
 fun rememberRecipeDetailState(
-    viewModel: RecipeDetailViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
-    recipeId: String?
+    recipeId: String?,
+    viewModel: RecipeDetailViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
+        factory = RecipeDetailViewModel.provideFactory(recipeId = recipeId)
+    )
 ): RecipeDetailState = remember {
     RecipeDetailState(recipeId, viewModel)
 }
