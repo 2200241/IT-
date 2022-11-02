@@ -12,7 +12,8 @@ import com.example.recipe_app.make_menu.select_conditions.select_tags.SelectTags
 
 @Composable
 fun SelectConditions(
-    state: SelectConditionsState = rememberSelectConditionsState()
+    state: SelectConditionsState = rememberSelectConditionsState(),
+    onSearchClicked: () -> Unit = {},
 ) {
     val uiState = state.uiState
 
@@ -24,14 +25,14 @@ fun SelectConditions(
 
         when (uiState.selectedTab) {
             ConditionTab.SelectTagsTab -> {
-                SelectTags() {
-                    Text("Tags")
-                }
+                SelectTags(
+                    onSearchClicked = onSearchClicked
+                )
             }
             ConditionTab.SelectIngredientsTab -> {
-                SelectIngredients() {
-                    Text("Ingredients")
-                }
+                SelectIngredients(
+                    onSearchClicked = onSearchClicked
+                )
             }
         }
     }

@@ -1,11 +1,18 @@
 package com.example.recipe_app.make_menu.select_conditions.select_tags
 
-import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material.Button
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 
 @Composable
 fun SelectTags(
-    content: @Composable ColumnScope.() -> Unit
+    onSearchClicked: () -> Unit = {}
 ) {
+    Column() {
+        Text("Tags")
+        Button(onClick = onSearchClicked) {
 
+        }
+    }
 }

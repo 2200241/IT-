@@ -8,6 +8,7 @@ import androidx.navigation.navArgument
 import com.example.recipe_app.make_menu.select_conditions.SelectConditions
 import com.example.recipe_app.make_menu.select_recipes.SelectRecipes
 import com.example.recipe_app.recipe_detail.RecipeDetail
+import com.example.recipe_app.recipe_detail.rememberRecipeDetailState
 
 @Composable
 fun MakeMenuScreen(
@@ -19,12 +20,17 @@ fun MakeMenuScreen(
         navController = state.navController,
         startDestination = Screen.SelectConditions.route
     ) {
-        composable(Screen.SelectConditions.route) { SelectConditions() }
+        composable(Screen.SelectConditions.route) {
+            SelectConditions(
+                onSearchClicked = { state.navigateToSelectRecipes() },
+            )
+        }
         composable(Screen.SelectRecipes.route) { backStackEntry ->
             SelectRecipes(
                 onItemClicked = { recipeId ->
                     state.navigateToRecipeDetail(recipeId, backStackEntry)
-                }
+                },
+                onBackPressed = { state.navigateBack() }
             )
         }
         composable(
@@ -33,7 +39,10 @@ fun MakeMenuScreen(
                 navArgument("recipeId") { type = NavType.StringType }
             )
         ) { backStackEntry ->
-            RecipeDetail(recipeId = backStackEntry.arguments?.getString("recipeId"))
+            RecipeDetail(
+                state = rememberRecipeDetailState(recipeId = backStackEntry.arguments?.getString("recipeId")),
+                onBackPressed = { state.navigateBack() }
+            )
         }
     }
 }
