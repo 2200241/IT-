@@ -13,7 +13,8 @@ fun SelectRecipes(
 ) {
     LazyColumn() {
         item { Row() {
-            TextButton(onClick = { onItemClicked("testId") }) {
+            val testId = (0..10000).random()
+            TextButton(onClick = { onItemClicked(testId.toString()) }) {
                 Text(text = "TEST")
             }
         } }

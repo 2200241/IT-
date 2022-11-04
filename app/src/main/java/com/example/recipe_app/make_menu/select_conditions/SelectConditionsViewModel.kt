@@ -1,6 +1,5 @@
 package com.example.recipe_app.make_menu.select_conditions
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.recipe_app.R
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,7 +30,6 @@ class SelectConditionsViewModel(
 
     fun onTabClicked(selectedTab: ConditionTab) {
         _uiState.update { it.copy(selectedTab = selectedTab) }
-        Log.d("debug", uiState.value.selectedTab.toString())
     }
 }
 

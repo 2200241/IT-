@@ -1,5 +1,6 @@
 package com.example.recipe_app.recipe_detail
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
@@ -9,6 +10,10 @@ class RecipeDetailState(
 ) {
     val uiState: RecipeDetailUiState
         @Composable get() = viewModel.uiState.collectAsState().value
+
+    fun test() {
+        Log.d("debug", viewModel.toString())
+    }
 
 }
 

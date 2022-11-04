@@ -9,4 +9,5 @@ fun RecipeDetail(
     onBackPressed: () -> Unit = {}
 ) {
     Text(text = state.uiState.title)
+    state.test()
 }
