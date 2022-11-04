@@ -11,6 +11,11 @@ data class SelectConditionsUiState(
     val selectedTab: ConditionTab = ConditionTab.SelectTagsTab
 )
 
+private val TagList = listOf(
+    R.string.japanese,
+    R.string.western
+)
+
 class SelectConditionsViewModel(
 ): ViewModel() {
 
@@ -19,6 +24,8 @@ class SelectConditionsViewModel(
         selectedTab = ConditionTab.SelectTagsTab
     ))
     val uiState = _uiState.asStateFlow()
+
+    val selectedTags = emptyList<String>()
 
     suspend fun startLoading() {
         _uiState.update { it.copy(isLoading = true) }
