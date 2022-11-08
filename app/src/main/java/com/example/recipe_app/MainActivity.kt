@@ -5,9 +5,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.core.view.WindowCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -31,17 +33,17 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun MainScreen() {
     Surface() {
         val navController = rememberNavController()
         Scaffold(
             bottomBar = { MyBottomNavigation(navController = navController) }
-        ) {
-            NavHost(
+        ) { padding ->
+        NavHost(
                 navController = navController,
-                startDestination = Screen.MakeMenu.route
+                startDestination = Screen.MakeMenu.route,
+                modifier = Modifier.padding(padding)
             ) {
                 composable(Screen.MakeMenu.route) { MakeMenuScreen() }
                 composable(Screen.MenuList.route) {}

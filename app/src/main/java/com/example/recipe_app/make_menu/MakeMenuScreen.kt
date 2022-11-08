@@ -1,6 +1,8 @@
 package com.example.recipe_app.make_menu
 
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -12,13 +14,13 @@ import com.example.recipe_app.recipe_detail.rememberRecipeDetailState
 
 @Composable
 fun MakeMenuScreen(
-    state: MakeMenuScreenState = rememberMakeMenuScreenState()
+    state: MakeMenuScreenState = rememberMakeMenuScreenState(),
 ) {
     val uiState = state.uiState
 
     NavHost(
         navController = state.navController,
-        startDestination = Screen.SelectConditions.route
+        startDestination = Screen.SelectConditions.route,
     ) {
         composable(Screen.SelectConditions.route) {
             SelectConditions(
