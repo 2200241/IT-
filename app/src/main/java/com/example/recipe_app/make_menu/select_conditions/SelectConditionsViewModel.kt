@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.update
 data class SelectConditionsUiState(
     val isLoading: Boolean = false,
     val tagList: List<Int>,
+    val selectedTags: List<Int>,
     val selectedTab: ConditionTab = ConditionTab.SelectTagsTab
 )
 
@@ -23,12 +24,15 @@ class SelectConditionsViewModel(
     private val _uiState = MutableStateFlow(SelectConditionsUiState(
         isLoading = false,
         tagList = tagList,
+        selectedTags = emptyList(),
         selectedTab = ConditionTab.SelectTagsTab
     ))
     val uiState = _uiState.asStateFlow()
 
-    private val _selectedTags = MutableStateFlow(listOf<Int>())
-    //contain? stateFlow?
+/*
+    private val _selectedTags = MutableStateFlow(checkedTags)
+    val selectedTags = _selectedTags.asStateFlow()
+*/
 
     suspend fun startLoading() {
         _uiState.update { it.copy(isLoading = true) }
@@ -42,8 +46,14 @@ class SelectConditionsViewModel(
         _uiState.update { it.copy(selectedTab = selectedTab) }
     }
 
-    fun onTagSelected() {
+    fun onTagClicked(id: Int) {
+        if (_uiState.value.selectedTags.contains(id)) {
+            _uiState.update { it.copy(selectedTags = _uiState.value.selectedTags - id) }
+        } else {
+            _uiState.update { it.copy(selectedTags = _uiState.value.selectedTags + id) }
+        }
     }
+
 }
 
 sealed class ConditionTab(

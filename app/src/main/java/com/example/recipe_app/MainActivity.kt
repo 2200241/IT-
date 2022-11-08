@@ -40,7 +40,7 @@ fun MainScreen() {
         Scaffold(
             bottomBar = { MyBottomNavigation(navController = navController) }
         ) { padding ->
-        NavHost(
+            NavHost(
                 navController = navController,
                 startDestination = Screen.MakeMenu.route,
                 modifier = Modifier.padding(padding)
