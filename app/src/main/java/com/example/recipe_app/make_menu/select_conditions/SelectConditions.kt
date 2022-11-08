@@ -35,6 +35,7 @@ fun SelectConditions(
         when (uiState.selectedTab) {
             ConditionTab.SelectTagsTab -> {
                 SelectTags(
+                    tagList = uiState.tagList,
                     onSearchClicked = onSearchClicked
                 )
             }

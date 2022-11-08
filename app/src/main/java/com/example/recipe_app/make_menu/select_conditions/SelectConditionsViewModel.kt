@@ -8,7 +8,13 @@ import kotlinx.coroutines.flow.update
 
 data class SelectConditionsUiState(
     val isLoading: Boolean = false,
+    val tagList: List<Int>,
     val selectedTab: ConditionTab = ConditionTab.SelectTagsTab
+)
+
+private val tagList = listOf(
+    R.string.japanese,
+    R.string.western
 )
 
 class SelectConditionsViewModel(
@@ -16,9 +22,13 @@ class SelectConditionsViewModel(
 
     private val _uiState = MutableStateFlow(SelectConditionsUiState(
         isLoading = false,
+        tagList = tagList,
         selectedTab = ConditionTab.SelectTagsTab
     ))
     val uiState = _uiState.asStateFlow()
+
+    private val _selectedTags = MutableStateFlow(listOf<Int>())
+    //contain? stateFlow?
 
     suspend fun startLoading() {
         _uiState.update { it.copy(isLoading = true) }
@@ -30,6 +40,9 @@ class SelectConditionsViewModel(
 
     fun onTabClicked(selectedTab: ConditionTab) {
         _uiState.update { it.copy(selectedTab = selectedTab) }
+    }
+
+    fun onTagSelected() {
     }
 }
 
