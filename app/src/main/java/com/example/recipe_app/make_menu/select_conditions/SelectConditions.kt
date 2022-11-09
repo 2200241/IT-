@@ -15,12 +15,15 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun SelectConditions(
+    padding: PaddingValues = PaddingValues(),
     state: SelectConditionsState = rememberSelectConditionsState(),
     onSearchClicked: () -> Unit = {},
 ) {
     val uiState = state.uiState
 
-    Column() {
+    Column(
+        modifier = Modifier.padding(padding)
+    ) {
         SelectConditionsTabBar(
             selectedTab = uiState.selectedTab,
             onClick = state::onTabClicked
@@ -29,6 +32,7 @@ fun SelectConditions(
         when (uiState.selectedTab) {
             ConditionTab.SelectTagsTab -> {
                 SelectTags(
+                    modifier = Modifier.weight(1f),
                     tagList = uiState.tagList,
                     selectedTags = uiState.selectedTags,
                     onTagClicked = state::onTagClicked,
@@ -37,20 +41,18 @@ fun SelectConditions(
             }
             ConditionTab.SelectIngredientsTab -> {
                 SelectIngredients(
+                    modifier = Modifier.weight(1f),
                     onSearchClicked = onSearchClicked
                 )
             }
         }
 
-        LazyRow(
-            contentPadding = PaddingValues(all = 16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
+        Row(
         ) {
-            item { ClearButton() }
-            item { SearchButton({}) }
+            ClearButton()
+            SearchButton {
+            }
         }
-
-        Spacer(modifier = Modifier.padding(56.dp))
     }
 }
 

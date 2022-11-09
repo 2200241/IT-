@@ -4,8 +4,9 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -40,16 +41,17 @@ fun MainScreen() {
         Scaffold(
             bottomBar = { MyBottomNavigation(navController = navController) }
         ) { padding ->
-            NavHost(
-                navController = navController,
-                startDestination = Screen.MakeMenu.route,
-                modifier = Modifier.padding(padding)
-            ) {
-                composable(Screen.MakeMenu.route) { MakeMenuScreen() }
-                composable(Screen.MenuList.route) {}
-                composable(Screen.Favorites.route) {}
-                composable(Screen.Settings.route) {}
-            }
+                NavHost(
+                    navController = navController,
+                    startDestination = Screen.MakeMenu.route,
+                ) {
+                    composable(Screen.MakeMenu.route) {
+                        MakeMenuScreen(padding = padding)
+                    }
+                    composable(Screen.MenuList.route) {}
+                    composable(Screen.Favorites.route) {}
+                    composable(Screen.Settings.route) {}
+                }
         }
     }
 }

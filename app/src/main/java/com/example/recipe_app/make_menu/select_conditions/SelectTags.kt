@@ -2,7 +2,6 @@ package com.example.recipe_app.make_menu.select_conditions
 
 import android.util.Log
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -22,42 +21,20 @@ import com.google.accompanist.flowlayout.MainAxisAlignment
 
 @Composable
 fun SelectTags(
+    modifier: Modifier = Modifier,
     tagList: List<Int> = emptyList(),
     selectedTags: List<Int> = emptyList(),
     onTagClicked: (Int) -> Unit = {},
     onSearchClicked: () -> Unit = {}
 ) {
     Column(
-        modifier = Modifier.fillMaxSize()
-        //horizontalAlignment = Alignment.End
+        modifier = modifier
+            .verticalScroll(rememberScrollState())
     ) {
-        Column(
-            modifier = Modifier
-                .padding(10.dp)
-                .verticalScroll(rememberScrollState())
-            //.navigationBarsPadding()
-        ) {
-            for (i in 1..5) {
-                Title("Title$i")
-                SelectTagsButton()
-            }
+        for (i in 1..10) {
+            Title("Title$i")
+            SelectTagsButton()
         }
-        /*LazyRow(
-            contentPadding = PaddingValues(all = 16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-        ) {
-            item { ClearButton() }
-            item { SearchButton(onSearchClicked) }
-        }*/
-//        Row(
-//            verticalAlignment = Alignment.CenterVertically,
-//            modifier = Modifier
-//                .padding(16.dp)
-//                   .weight(weight = 1f, fill = false)
-//        ) {
-//            ClearButton()
-//            SearchButton(onSearchClicked)
-//        }
     }
 }
 
