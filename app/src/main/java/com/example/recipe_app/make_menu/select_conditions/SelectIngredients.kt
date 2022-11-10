@@ -9,14 +9,10 @@ import androidx.compose.ui.Modifier
 @Composable
 fun SelectIngredients(
     modifier: Modifier = Modifier,
-    onSearchClicked: () -> Unit = {}
 ) {
     Column(
         modifier = modifier
     ) {
         Text("Ingredients")
-        Button(onClick = onSearchClicked) {
-
-        }
     }
 }

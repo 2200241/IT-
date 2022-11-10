@@ -11,14 +11,11 @@ class SelectConditionsState(
     val uiState: SelectConditionsUiState
         @Composable get() = viewModel.uiState.collectAsState().value
 
-/*
-    val selectedTags: List<Int>
-        @Composable get() = viewModel.selectedTags.collectAsState().value
-*/
-
     fun onTabClicked(selectedTab: ConditionTab) = viewModel.onTabClicked(selectedTab)
 
     fun onTagClicked(id: Int) = viewModel.onTagClicked(id)
+
+    fun getConditions() = viewModel.getConditions()
 }
 
 @Composable

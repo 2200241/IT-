@@ -1,5 +1,6 @@
 package com.example.recipe_app.make_menu.select_conditions
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.recipe_app.R
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -8,22 +9,46 @@ import kotlinx.coroutines.flow.update
 
 data class SelectConditionsUiState(
     val isLoading: Boolean = false,
-    val tagList: List<Int>,
+    val largeCategories: List<LargeCategory>,
     val selectedTags: List<Int>,
     val selectedTab: ConditionTab = ConditionTab.SelectTagsTab
 )
 
-private val tagList = listOf(
+//呼び出すより先に記述しないと呼び出されなかった？
+private val categories = listOf(
+    R.string.staple_food,
+    R.string.main_dish,
+    R.string.side_dish,
+    R.string.soup,
+    R.string.sweets,
+    R.string.drink,
+    R.string.others
+)
+
+private val styles= listOf(
     R.string.japanese,
     R.string.western
 )
+
+private val largeCategories = listOf(
+    LargeCategory.Categories,
+    LargeCategory.Styles
+)
+
+sealed class LargeCategory(
+    val id: Int,
+    val items: List<Int>
+) {
+    object Categories: LargeCategory(R.string.category, categories)
+    object Styles: LargeCategory(R.string.style, styles)
+}
 
 class SelectConditionsViewModel(
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow(SelectConditionsUiState(
         isLoading = false,
-        tagList = tagList,
+        largeCategories = largeCategories,
         selectedTags = emptyList(),
         selectedTab = ConditionTab.SelectTagsTab
     ))
@@ -52,6 +77,14 @@ class SelectConditionsViewModel(
         } else {
             _uiState.update { it.copy(selectedTags = _uiState.value.selectedTags + id) }
         }
+    }
+
+    fun getConditions(): String {
+        // TODO: Add ingredients
+        val separator = "&"
+        val conditions = _uiState.value.selectedTags.joinToString(separator)
+        // TODO: Catch exceptions
+        return conditions
     }
 
 }

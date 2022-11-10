@@ -1,19 +1,19 @@
 package com.example.recipe_app.make_menu
 
-import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavBackStackEntry
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 
 internal sealed class Screen(val route: String) {
     object SelectConditions : Screen("selectConditions")
-    object SelectRecipes : Screen("selectRecipes")
-    object RecipeDetail : Screen("recipeDetail/{resipeId}") {
+    object SelectRecipes : Screen("selectRecipes/{conditions}") {
+        fun createRoute(conditions: String) = "selectRecipes/$conditions"
+    }
+    object RecipeDetail : Screen("recipeDetail/{recipeId}") {
         fun createRoute(recipeId: String) = "recipeDetail/$recipeId"
     }
 }
@@ -25,8 +25,10 @@ class MakeMenuScreenState(
     val uiState: MakeMenuUiState
         @Composable get() = viewModel.uiState.collectAsState().value
 
-    fun navigateToSelectRecipes() {
-        navController.navigate(Screen.SelectRecipes.route)
+    fun navigateToSelectRecipes(conditions: String, from: NavBackStackEntry) {
+        if (from.lifecycleIsResumed()) {
+            navController.navigate(Screen.SelectRecipes.createRoute(conditions))
+        }
     }
 
     fun navigateToRecipeDetail(recipeId: String, from: NavBackStackEntry) {
