@@ -1,103 +1,85 @@
 package com.example.recipe_app.make_menu.select_conditions
 
 import android.util.Log
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.LocalOverscrollConfiguration
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Divider
-import androidx.compose.material.ExtendedFloatingActionButton
+import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.recipe_app.R
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SelectTags(
     onSearchClicked: () -> Unit = {}
 ) {
-    Column(
-        modifier = Modifier.fillMaxSize()
-        //horizontalAlignment = Alignment.End
+    CompositionLocalProvider(
+        LocalOverscrollConfiguration provides null
     ) {
-        /*Text("Tags")
-        Button(onClick = onSearchClicked) {
-        }*/
-        Column(
-            modifier = Modifier
-                .padding(10.dp)
-                .verticalScroll(rememberScrollState())
-                //.navigationBarsPadding()
+        LazyColumn(
+            modifier = Modifier.padding(20.dp),
         ) {
-            for (i in 1..5) {
-                Title("Title$i")
-                SelectTagsButton()
+            /*Text("Tags")
+            Button(onClick = onSearchClicked) {
+            }*/
+            item {
+                for (i in 1..5) {
+                    Column(modifier = Modifier.padding(bottom = 30.dp)) {
+                        Title("タイトル名$i")
+                        SelectTagsButton()
+                    }
+                }
             }
         }
-        /*LazyRow(
-            contentPadding = PaddingValues(all = 16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-        ) {
-            item { ClearButton() }
-            item { SearchButton(onSearchClicked) }
-        }*/
-//        Row(
-//            verticalAlignment = Alignment.CenterVertically,
-//            modifier = Modifier
-//                .padding(16.dp)
-//                   .weight(weight = 1f, fill = false)
-//        ) {
-//            ClearButton()
-//            SearchButton(onSearchClicked)
-//        }
     }
 }
 
 @Composable
 fun Title(text: String) {
-    Column(modifier = Modifier.padding(15.dp)) {
-        Text(text = text, fontSize = 20.sp)
-        Divider(
-            color = colorResource(id = R.color.gray),
-            thickness = 1.dp
-        )
-    }
+    Text(
+        modifier = Modifier.padding(start = 5.dp),
+        text = text,
+        fontSize = 16.sp,
+        fontWeight = FontWeight.Bold,
+        color = Color(0xFF333333)
+    )
 }
 
 @Composable
-fun SelectTagsButton(/*items: List<String>*/) {
+fun SelectTagsButton() {
     FlowRow(
         mainAxisSpacing = 12.dp,
         mainAxisAlignment = MainAxisAlignment.Start,
         crossAxisSpacing = 5.dp,
     ) {
         for (i in 1..6) {
-            Button(
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
+            OutlinedButton(
+                border = BorderStroke(1.5.dp, Color(0xFFE7E7E7)),
+                //border = BorderStroke(1.5.dp, Color(0xFFE7D0A9)),
+                shape = RoundedCornerShape(50),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = Color(0xFF333333),
+                    //backgroundColor = Color(0xFFE7D0A9)
+                ),
                 onClick = { Log.d("Button", "onClick") }
             ) {
                 Text(
-                    text = "tag$i",
-                    color = Color.Black,
-                    fontSize = 14.sp
+                    text = "タグ名$i",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
                 )
             }
         }

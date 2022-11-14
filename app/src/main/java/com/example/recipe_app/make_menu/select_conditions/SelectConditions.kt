@@ -1,12 +1,12 @@
 package com.example.recipe_app.make_menu.select_conditions
 
 import android.util.Log
-import android.widget.Space
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.ExtendedFloatingActionButton
@@ -16,8 +16,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun SelectConditions(
@@ -53,7 +55,7 @@ fun SelectConditions(
             item { ClearButton() }
             item { SearchButton({}) }
         }
-        
+
         Spacer(modifier = Modifier.padding(56.dp))
     }
 }
@@ -66,16 +68,23 @@ private fun SelectConditionsTabBar(
 ) {
     TabRow(
         modifier = modifier,
-        selectedTabIndex = selectedTab.index
+        selectedTabIndex = selectedTab.index,
+        backgroundColor = Color.White,
+        contentColor = Color(0xFF333333)
     ) {
         ConditionTabs.forEach { item ->
             Tab(
+                modifier = Modifier.height(50.dp),
                 selected = item.index == selectedTab.index,
                 onClick = {
                     onClick(item)
                 }
             ) {
-                Text(text = stringResource(id = item.titleId))
+                Text(
+                    text = stringResource(id = item.titleId),
+                    fontSize = 20.sp,
+                    color = Color(0xFF333333)
+                )
             }
         }
     }

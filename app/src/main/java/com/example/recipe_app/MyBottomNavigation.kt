@@ -8,8 +8,10 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -18,16 +20,20 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 @Composable
 fun MyBottomNavigation(
     modifier: Modifier = Modifier,
-    navController: NavController
+    navController: NavController,
 ) {
     BottomNavigation(
-        modifier = modifier
+        modifier = modifier,
+        backgroundColor = Color.White,
+        elevation = 30.dp
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination
 
         MyBottomNavigationItems.forEach { item ->
             BottomNavigationItem(
+                selectedContentColor = Color(0xFF333333),
+                unselectedContentColor = Color.Gray,
                 icon = { Icon(
                     imageVector = item.icon,
                     contentDescription = stringResource(id = item.titleId)
