@@ -2,14 +2,12 @@ package com.example.recipe_app.make_menu.select_conditions
 
 import android.util.Log
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.Tab
 import androidx.compose.material.TabRow
@@ -55,11 +53,7 @@ fun SelectConditions(
             }
         }
 
-        Row(
-        ) {
-            ClearButton()
-            SearchButton(onSearchClicked = { onSearchClicked(state.getConditions()) })
-        }
+        BottomButtons(onSearchClicked = { onSearchClicked(state.getConditions()) })
     }
 }
 
@@ -99,29 +93,41 @@ private val ConditionTabs = listOf(
 )
 
 @Composable
-fun SearchButton(onSearchClicked: () -> Unit) {
-    Box(/*modifier = Modifier.fillMaxSize()*/) {
-        ExtendedFloatingActionButton(
-            modifier = Modifier
-                .padding(all = 16.dp)
-                .align(alignment = Alignment.BottomEnd),
-            onClick = onSearchClicked, // →レシピ一覧画面(→レシピ画面)
-            text = {
-                Text(text = stringResource(R.string.search))
-            }
-        )
-    }
+fun BottomButtonLayout(content: @Composable RowScope.()->Unit) {
+    Row { content() }
 }
 
 @Composable
-fun ClearButton() {
-    Box(/*modifier = Modifier.fillMaxSize()*/) {
-        ExtendedFloatingActionButton(
+fun BottomButtons(onSearchClicked: () -> Unit) {
+    BottomButtonLayout {
+        Row(
             modifier = Modifier
-                .padding(all = 16.dp)
-                .align(alignment = Alignment.BottomEnd),
-            onClick = { Log.d("Button", "onClick") },
-            text = { Text(stringResource(R.string.clear)) }
-        )
+                .fillMaxWidth()
+                .padding(all = 12.dp)
+        ) {
+            ExtendedFloatingActionButton(
+                modifier = Modifier.weight(1f),
+                text = {
+                    Text(
+                        text = "クリア",
+                        color = Color.White,
+                        fontSize = 20.sp
+                    )
+                },
+                onClick = { Log.d("Button", "onClick") }
+            )
+            Spacer(modifier = Modifier.width(30.dp))
+            ExtendedFloatingActionButton(
+                modifier = Modifier.weight(1f),
+                text = {
+                    Text(
+                        text = "検索",
+                        color = Color.White,
+                        fontSize = 20.sp
+                    )
+                },
+                onClick = onSearchClicked
+            )
+        }
     }
 }

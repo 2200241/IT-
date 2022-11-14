@@ -49,27 +49,13 @@ fun SelectIngredients(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
+        modifier = modifier.padding(20.dp)
     ) {
-        Text("Ingredients")
-    CompositionLocalProvider(
-        LocalOverscrollConfiguration provides null
-    ) {
-        LazyColumn(
-            modifier = Modifier.padding(20.dp)
-        ) {
-            /*Text("Ingredients")
-            Button(onClick = onSearchClicked) {
-            }*/
-            //item { SearchTextField() }
-            item { SearchTextField() }
-            item { Title() }
-            item {
-                for (i in 1..5) {
-                    Column(modifier = Modifier.padding(bottom = 10.dp)) {
-                        CategoryTitleCard("カテゴリー名$i")
-                    }
-                }
+        SearchTextField()
+        IngredientsTitle()
+        for (i in 1..5) {
+            Column(modifier = Modifier.padding(bottom = 10.dp)) {
+                CategoryTitleCard("カテゴリー名$i")
             }
         }
     }
@@ -85,11 +71,12 @@ fun SearchTextField() {
         },
         singleLine = true,
         decorationBox = { innerTextField ->
-            Row(modifier = Modifier
-                .fillMaxWidth()
-                .background(Color(0xFFE7E7E7), RoundedCornerShape(50))
-                .padding(16.dp)
-            ){
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color(0xFFE7E7E7), RoundedCornerShape(50))
+                    .padding(16.dp)
+            ) {
                 Icon(Icons.Sharp.Search, contentDescription = null)
                 Spacer(Modifier.width(5.dp))
                 if (text.value.isEmpty()) {
@@ -107,12 +94,11 @@ fun SearchTextField() {
 }
 
 @Composable
-fun Title() {
+fun IngredientsTitle() {
     Text(
         modifier = Modifier.padding(start = 5.dp, top = 20.dp, bottom = 10.dp),
         text = "カテゴリー",
         fontSize = 20.sp,
-        //fontWeight = FontWeight.Bold,
         color = Color(0xFF333333)
     )
 }
@@ -183,7 +169,6 @@ fun CategoryTitleCard(title: String) {
         }
     }
 }
-
 @Composable
 fun IngredientsList() {
     for (i in 1..5) {
