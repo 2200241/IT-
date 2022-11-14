@@ -1,6 +1,7 @@
 package com.example.recipe_app.make_menu.select_conditions
 
 import android.util.Log
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,16 +20,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.recipe_app.R
 import androidx.compose.ui.unit.sp
 
 @Composable
 fun SelectConditions(
     state: SelectConditionsState = rememberSelectConditionsState(),
-    onSearchClicked: () -> Unit = {},
+    padding: PaddingValues,
+    onSearchClicked: (String) -> Unit,
 ) {
     val uiState = state.uiState
 
-    Column() {
+    Column(
+        modifier = Modifier.padding(padding)
+    ) {
         SelectConditionsTabBar(
             selectedTab = uiState.selectedTab,
             onClick = state::onTabClicked
@@ -37,26 +42,24 @@ fun SelectConditions(
         when (uiState.selectedTab) {
             ConditionTab.SelectTagsTab -> {
                 SelectTags(
-                    //tagList = uiState.tagList,
-                    onSearchClicked = onSearchClicked
+                    modifier = Modifier.weight(1f),
+                    largeCategories = uiState.largeCategories,
+                    selectedTags = uiState.selectedTags,
+                    onTagClicked = state::onTagClicked
                 )
             }
             ConditionTab.SelectIngredientsTab -> {
                 SelectIngredients(
-                    onSearchClicked = onSearchClicked
+                    modifier = Modifier.weight(1f)
                 )
             }
         }
 
-        LazyRow(
-            contentPadding = PaddingValues(all = 16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
+        Row(
         ) {
-            item { ClearButton() }
-            item { SearchButton({}) }
+            ClearButton()
+            SearchButton(onSearchClicked = { onSearchClicked(state.getConditions()) })
         }
-
-        Spacer(modifier = Modifier.padding(56.dp))
     }
 }
 
@@ -64,7 +67,7 @@ fun SelectConditions(
 private fun SelectConditionsTabBar(
     modifier: Modifier = Modifier,
     selectedTab: ConditionTab,
-    onClick: (ConditionTab) -> Unit = {}
+    onClick: (ConditionTab) -> Unit
 ) {
     TabRow(
         modifier = modifier,
@@ -104,9 +107,7 @@ fun SearchButton(onSearchClicked: () -> Unit) {
                 .align(alignment = Alignment.BottomEnd),
             onClick = onSearchClicked, // →レシピ一覧画面(→レシピ画面)
             text = {
-                Text(
-                    text = "検索",
-                )
+                Text(text = stringResource(R.string.search))
             }
         )
     }
@@ -120,7 +121,7 @@ fun ClearButton() {
                 .padding(all = 16.dp)
                 .align(alignment = Alignment.BottomEnd),
             onClick = { Log.d("Button", "onClick") },
-            text = { Text("クリア") }
+            text = { Text(stringResource(R.string.clear)) }
         )
     }
 }

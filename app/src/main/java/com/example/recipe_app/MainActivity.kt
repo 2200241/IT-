@@ -13,9 +13,7 @@ import androidx.core.view.WindowCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.recipe_app.favorite_list.FavoriteListScreen
 import com.example.recipe_app.make_menu.MakeMenuScreen
-import com.example.recipe_app.settings.SettingsScreen
 import com.example.recipe_app.ui.theme.RecipeappTheme
 
 class MainActivity : ComponentActivity() {
@@ -45,13 +43,23 @@ fun MainScreen() {
         NavHost(
                 navController = navController,
                 startDestination = Screen.MakeMenu.route,
-                modifier = Modifier.padding(padding)
             ) {
                 composable(Screen.MakeMenu.route) { MakeMenuScreen() }
                 composable(Screen.MenuList.route) {}
                 composable(Screen.Favorites.route) { FavoriteListScreen() }
                 composable(Screen.Settings.route) { SettingsScreen() }
             }
+                NavHost(
+                    navController = navController,
+                    startDestination = Screen.MakeMenu.route,
+                ) {
+                    composable(Screen.MakeMenu.route) {
+                        MakeMenuScreen(padding = padding)
+                    }
+                    composable(Screen.MenuList.route) {}
+                    composable(Screen.Favorites.route) {}
+                    composable(Screen.Settings.route) {}
+                }
         }
     }
 }

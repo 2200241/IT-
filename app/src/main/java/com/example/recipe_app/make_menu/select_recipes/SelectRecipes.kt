@@ -21,14 +21,15 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun SelectRecipes(
-    onItemClicked: (String) -> Unit = {},   // →レシピ詳細画面(RecipeDetail)
-    onBackPressed: () -> Unit = {}
+    state: SelectRecipesState,
+    onItemClicked: (String) -> Unit,
+    onBackPressed: () -> Unit
 ) {
     LazyColumn() {
         item { Row() {
             val testId = (0..10000).random()
             TextButton(onClick = { onItemClicked(testId.toString()) }) {
-                Text(text = "TEST")
+                Text(text = state.uiState.testString)
             }
         } }
         //item { SelectedRecipe() }

@@ -30,11 +30,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.sharp.Search
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
@@ -46,8 +46,12 @@ import androidx.compose.ui.unit.sp
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SelectIngredients(
-    onSearchClicked: () -> Unit = {}
+    modifier: Modifier = Modifier,
 ) {
+    Column(
+        modifier = modifier
+    ) {
+        Text("Ingredients")
     CompositionLocalProvider(
         LocalOverscrollConfiguration provides null
     ) {

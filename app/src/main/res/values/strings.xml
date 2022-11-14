@@ -6,6 +6,20 @@
     <string name="settings_title">設定</string>
     <string name="select_tags">条件選択</string>
     <string name="select_ingredients">食材選択</string>
+
+    <string name="search">検索</string>
+    <string name="clear">クリア</string>
+
+    <string name="category">カテゴリー</string>
+    <string name="staple_food">主食</string>
+    <string name="main_dish">主菜</string>
+    <string name="side_dish">副菜</string>
+    <string name="soup">汁物</string>
+    <string name="sweets">スイーツ</string>
+    <string name="drink">飲み物</string>
+    <string name="others">その他</string>
+
+    <string name="style">スタイル</string>
     <string name="japanese">和食</string>
     <string name="western">洋食</string>
 
