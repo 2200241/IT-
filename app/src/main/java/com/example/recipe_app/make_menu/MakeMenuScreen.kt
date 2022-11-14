@@ -17,7 +17,7 @@ import com.example.recipe_app.recipe_detail.rememberRecipeDetailState
 fun MakeMenuScreen(
     modifier: Modifier = Modifier,
     padding: PaddingValues,
-    state: MakeMenuScreenState = rememberMakeMenuScreenState(),
+    state: MakeMenuScreenState
 ) {
     val uiState = state.uiState
 

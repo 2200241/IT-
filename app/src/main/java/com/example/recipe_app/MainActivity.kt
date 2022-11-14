@@ -15,6 +15,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.recipe_app.favorite_list.FavoriteListScreen
 import com.example.recipe_app.make_menu.MakeMenuScreen
+import com.example.recipe_app.make_menu.rememberMakeMenuScreenState
 import com.example.recipe_app.settings.SettingsScreen
 import com.example.recipe_app.ui.theme.RecipeappTheme
 
@@ -37,9 +38,12 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainScreen() {
-    Surface() {
+    Surface {
         val navController = rememberNavController()
+        val scaffoldState = rememberScaffoldState()
+
         Scaffold(
+            snackbarHost = { SnackbarHost(hostState = scaffoldState.snackbarHostState) },
             bottomBar = { MyBottomNavigation(navController = navController) }
         ) { padding ->
             NavHost(
@@ -47,7 +51,10 @@ fun MainScreen() {
                 startDestination = Screen.MakeMenu.route,
             ) {
                 composable(Screen.MakeMenu.route) {
-                    MakeMenuScreen(padding = padding)
+                    MakeMenuScreen(
+                        padding = padding,
+                        state = rememberMakeMenuScreenState(scaffoldState = scaffoldState)
+                    )
                 }
                 composable(Screen.MenuList.route) {}
                 composable(Screen.Favorites.route) { FavoriteListScreen() }
