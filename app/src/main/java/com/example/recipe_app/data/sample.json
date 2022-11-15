@@ -1,0 +1,69 @@
+{
+  "menus": [
+    {
+      "id": "1",
+      "date": "2022-1-1",
+      "recipes": [
+        {
+          "id": "1",
+          "title": "test",
+          "thumbs": ""
+        },
+        {
+          "id": "2",
+          "title": "tst",
+          "thumbs": ""
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "date": "2022-1-1",
+      "recipes": [
+        {
+          "id": "2",
+          "title": "tst",
+          "thumbs": ""
+        },
+        {
+          "id": "3",
+          "title": "Test",
+          "thumbs": ""
+        }
+      ]
+    }
+  ],
+  "categories": [
+    {
+      "staple_food": [
+        {
+          "id": "1",
+          "title": "test",
+          "thumb": ""
+        }
+      ],
+      "main_dish": [
+        {
+          "id": "2",
+          "title": "tst",
+          "thumb": ""
+        }
+      ],
+      "side_dish": [
+
+      ],
+      "soup": [
+
+      ],
+      "sweets": [
+
+      ],
+      "drink": [
+
+      ],
+      "others": [
+
+      ]
+    }
+  ]
+}

@@ -4,7 +4,7 @@ package com.example.recipe_app.make_menu.select_recipes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.recipe_app.recipe_detail.RecipeDetailViewModel
+import com.example.recipe_app.data.Recipe
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -14,12 +14,6 @@ data class SelectRecipesUiState(
     val isLoading: Boolean = false,
     val recipes: List<Recipe> = emptyList(),
     val testString: String = ""
-)
-
-data class Recipe(
-    val title: String,
-    val thumb: String,
-    val isFavorite: Boolean
 )
 
 class SelectRecipesViewModel(

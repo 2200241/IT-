@@ -33,7 +33,7 @@ class MakeMenuScreenState(
 
     fun navigateToSelectRecipes(conditions: String, from: NavBackStackEntry) {
         if (from.lifecycleIsResumed()) {
-            if (conditions.isNullOrBlank()) {
+            if (conditions.isBlank()) {
                 coroutineScope.launch {
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = "条件を選択してください",
@@ -48,7 +48,7 @@ class MakeMenuScreenState(
 
     fun navigateToRecipeDetail(recipeId: String, from: NavBackStackEntry) {
         if (from.lifecycleIsResumed()) {
-            if (recipeId.isNullOrBlank()) {
+            if (recipeId.isBlank()) {
                 coroutineScope.launch {
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = "No recipe is selected.",
