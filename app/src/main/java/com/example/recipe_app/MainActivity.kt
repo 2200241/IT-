@@ -45,19 +45,23 @@ fun MainScreen() {
         Scaffold(
             snackbarHost = { SnackbarHost(hostState = scaffoldState.snackbarHostState) },
             bottomBar = { MyBottomNavigation(navController = navController) }
-        ) { padding ->
+        ) { paddingValues ->
             NavHost(
                 navController = navController,
                 startDestination = Screen.MakeMenu.route,
             ) {
                 composable(Screen.MakeMenu.route) {
                     MakeMenuScreen(
-                        padding = padding,
+                        paddingValues = paddingValues,
                         state = rememberMakeMenuScreenState(scaffoldState = scaffoldState)
                     )
                 }
                 composable(Screen.MenuList.route) {}
-                composable(Screen.Favorites.route) { FavoriteListScreen() }
+                composable(Screen.FavoriteList.route) {
+                    FavoriteListScreen(
+                        paddingValues = paddingValues
+                    )
+                }
                 composable(Screen.Settings.route) { SettingsScreen() }
             }
         }
@@ -67,6 +71,6 @@ fun MainScreen() {
 internal sealed class Screen(val route: String) {
     object MakeMenu : Screen("makeMenu")
     object MenuList : Screen("menuList")
-    object Favorites : Screen("favorites")
+    object FavoriteList : Screen("favoriteList")
     object Settings : Screen("settings")
 }

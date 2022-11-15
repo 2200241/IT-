@@ -47,11 +47,16 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun SelectIngredients(
     modifier: Modifier = Modifier,
+    keywords: String,
+    setKeywords: (String) -> Unit
 ) {
     Column(
         modifier = modifier.padding(20.dp)
     ) {
-        SearchTextField()
+        SearchTextField(
+            keywords = keywords,
+            setKeywords = setKeywords
+        )
         IngredientsTitle()
         for (i in 1..5) {
             Column(modifier = Modifier.padding(bottom = 10.dp)) {
@@ -62,13 +67,14 @@ fun SelectIngredients(
 }
 
 @Composable
-fun SearchTextField() {
-    val text = remember { mutableStateOf("") }
+fun SearchTextField(
+    keywords: String = "",
+    setKeywords: (String) -> Unit
+) {
+//    val text = remember { mutableStateOf("") }
     BasicTextField(
-        value = text.value,
-        onValueChange = {
-            text.value = it
-        },
+        value = keywords,
+        onValueChange = { setKeywords(it) },
         singleLine = true,
         decorationBox = { innerTextField ->
             Row(
@@ -79,7 +85,7 @@ fun SearchTextField() {
             ) {
                 Icon(Icons.Sharp.Search, contentDescription = null)
                 Spacer(Modifier.width(5.dp))
-                if (text.value.isEmpty()) {
+                if (keywords.isEmpty()) {
                     Text(
                         text = "検索",
                         fontWeight = FontWeight.Bold,

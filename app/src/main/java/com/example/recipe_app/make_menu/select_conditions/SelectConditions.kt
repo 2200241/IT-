@@ -48,7 +48,9 @@ fun SelectConditions(
             }
             ConditionTab.SelectIngredientsTab -> {
                 SelectIngredients(
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    keywords = uiState.keywords,
+                    setKeywords = state::setKeywords
                 )
             }
         }
