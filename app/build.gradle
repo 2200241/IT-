@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt' //追加
 }
 
 android {
@@ -66,4 +67,11 @@ dependencies {
     implementation 'androidx.compose.material:material-icons-extended:1.1.1'
     implementation 'com.google.accompanist:accompanist-systemuicontroller:0.24.13-rc'
     implementation "com.google.accompanist:accompanist-flowlayout:0.24.2-alpha"
+
+    // Room components
+    def Room_version = "2.2.0"
+    implementation "androidx.room:room-runtime:$Room_version"
+    kapt "androidx.room:room-compiler:$Room_version"
+    implementation "androidx.room:room-ktx:$Room_version"
+    androidTestImplementation "androidx.room:room-testing:$Room_version"
 }
