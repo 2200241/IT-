@@ -5,12 +5,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.LocalOverscrollConfiguration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
@@ -26,11 +21,16 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun FavoriteListScreen() {
+fun FavoriteListScreen(
+    state: FavoriteListState = rememberFavoriteListState(),
+    paddingValues: PaddingValues
+) {
+/*
     CompositionLocalProvider(
         LocalOverscrollConfiguration provides null
     ) {
-        LazyColumn(modifier = Modifier.padding(10.dp)) {
+*/
+        LazyColumn(modifier = Modifier.padding(paddingValues)) {
             item {
                 for (i in 1..10) {
                     FavoriteListItems("料理名$i")
@@ -38,7 +38,7 @@ fun FavoriteListScreen() {
                 }
             }
         }
-    }
+//    }
 }
 
 @Composable

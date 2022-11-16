@@ -1,6 +1,5 @@
 package com.example.recipe_app.make_menu.select_conditions
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.recipe_app.R
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,6 +10,7 @@ data class SelectConditionsUiState(
     val isLoading: Boolean = false,
     val largeCategories: List<LargeCategory>,
     val selectedTags: List<Int>,
+    val keywords: String,
     val selectedTab: ConditionTab = ConditionTab.SelectTagsTab
 )
 
@@ -50,6 +50,7 @@ class SelectConditionsViewModel(
         isLoading = false,
         largeCategories = largeCategories,
         selectedTags = emptyList(),
+        keywords = "",
         selectedTab = ConditionTab.SelectTagsTab
     ))
     val uiState = _uiState.asStateFlow()
@@ -77,6 +78,14 @@ class SelectConditionsViewModel(
         } else {
             _uiState.update { it.copy(selectedTags = _uiState.value.selectedTags + id) }
         }
+    }
+
+    fun setKeywords(text: String) {
+        _uiState.update { it.copy(keywords = text) }
+    }
+
+    fun getSuggestions(keywords: String) {
+
     }
 
     fun getConditions(): String {

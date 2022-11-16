@@ -67,7 +67,7 @@ private sealed class MyBottomNavigationItem(
 ) {
     object MakeMenu: MyBottomNavigationItem(Screen.MakeMenu, R.string.makeMenu_title, Icons.Filled.Fastfood)
     object MenuList: MyBottomNavigationItem(Screen.MenuList, R.string.menuList_title, Icons.Filled.List)
-    object Favorites: MyBottomNavigationItem(Screen.Favorites, R.string.favorites_title, Icons.Filled.Favorite)
+    object Favorites: MyBottomNavigationItem(Screen.FavoriteList, R.string.favoriteList_title, Icons.Filled.Favorite)
     object Settings: MyBottomNavigationItem(Screen.Settings, R.string.settings_title, Icons.Filled.Settings)
 }
 

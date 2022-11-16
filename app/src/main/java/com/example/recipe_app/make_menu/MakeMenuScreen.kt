@@ -16,8 +16,8 @@ import com.example.recipe_app.recipe_detail.rememberRecipeDetailState
 @Composable
 fun MakeMenuScreen(
     modifier: Modifier = Modifier,
-    padding: PaddingValues,
-    state: MakeMenuScreenState = rememberMakeMenuScreenState(),
+    paddingValues: PaddingValues,
+    state: MakeMenuScreenState
 ) {
     val uiState = state.uiState
 
@@ -27,7 +27,7 @@ fun MakeMenuScreen(
     ) {
         composable(Screen.SelectConditions.route) { backStackEntry ->
             SelectConditions(
-                padding = padding,
+                padding = paddingValues,
                 onSearchClicked = { conditions ->
                     state.navigateToSelectRecipes(conditions, backStackEntry)
                 },
