@@ -69,7 +69,7 @@ dependencies {
     implementation "com.google.accompanist:accompanist-flowlayout:0.24.2-alpha"
 
     // Room components
-    def Room_version = "2.2.0"
+    def Room_version = "2.4.2"
     implementation "androidx.room:room-runtime:$Room_version"
     kapt "androidx.room:room-compiler:$Room_version"
     implementation "androidx.room:room-ktx:$Room_version"
