@@ -91,7 +91,7 @@ fun SelectTagsButton(
         crossAxisSpacing = 5.dp,
     ) {
         items.forEach { item ->
-            val backgroundColor = if (selectedTags.contains(item)) Color.Blue else Color.White
+            val backgroundColor = if (selectedTags.contains(item)) Color(0xFFE7E7E7) else Color.White
             OutlinedButton(
                 border = BorderStroke(1.5.dp, Color(0xFFE7E7E7)),
                 shape = RoundedCornerShape(50),

@@ -15,6 +15,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.recipe_app.favorite_list.FavoriteListScreen
 import com.example.recipe_app.make_menu.MakeMenuScreen
+import com.example.recipe_app.menu_list.MenuListScreen
 import com.example.recipe_app.settings.SettingsScreen
 import com.example.recipe_app.ui.theme.RecipeappTheme
 
@@ -49,7 +50,7 @@ fun MainScreen() {
                 composable(Screen.MakeMenu.route) {
                     MakeMenuScreen(padding = padding)
                 }
-                composable(Screen.MenuList.route) {}
+                composable(Screen.MenuList.route) { MenuListScreen() }
                 composable(Screen.Favorites.route) { FavoriteListScreen() }
                 composable(Screen.Settings.route) { SettingsScreen() }
             }

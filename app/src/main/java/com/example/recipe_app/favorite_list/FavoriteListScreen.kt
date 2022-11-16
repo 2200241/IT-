@@ -33,7 +33,7 @@ fun FavoriteListScreen() {
         LazyColumn(modifier = Modifier.padding(10.dp)) {
             item {
                 for (i in 1..10) {
-                    FavoriteList("料理名$i")
+                    FavoriteListItems("料理名$i")
                     Divider(color = Color.Gray)
                 }
             }
@@ -42,7 +42,7 @@ fun FavoriteListScreen() {
 }
 
 @Composable
-fun FavoriteList(title: String) {
+fun FavoriteListItems(title: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
