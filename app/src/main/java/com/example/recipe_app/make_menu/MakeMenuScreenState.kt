@@ -25,7 +25,7 @@ internal sealed class Screen(val route: String) {
 class MakeMenuScreenState(
     private val viewModel: MakeMenuViewModel,
     private val scaffoldState: ScaffoldState,
-    val coroutineScope: CoroutineScope,
+    private val coroutineScope: CoroutineScope,
     val navController: NavHostController
 ) {
     val uiState: MakeMenuUiState
