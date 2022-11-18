@@ -13,7 +13,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.recipe_app.favorite_list.FavoriteListScreen
 import com.example.recipe_app.make_menu.MakeMenuScreen
 import com.example.recipe_app.make_menu.rememberMakeMenuScreenState
-import com.example.recipe_app.menu_list.menu_list.MenuListScreen
+import com.example.recipe_app.menu_list.MenuListScreen
 import com.example.recipe_app.settings.SettingsScreen
 import com.example.recipe_app.ui.theme.RecipeappTheme
 

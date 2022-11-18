@@ -1,4 +1,4 @@
-package com.example.recipe_app.favorite_list
+package com.example.recipe_app.favorite_list.select_favorite
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,18 +11,20 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-data class FavoriteListUiState(
+data class SelectFavoriteUiState(
     val isLoading: Boolean = false,
     val favorites: Favorites = Favorites()
 )
 
-class FavoriteListViewModel(
+class SelectFavoriteViewModel(
 //    useCase: GetFavoritesUseCase = GetFavoritesUseCase()
 ): ViewModel() {
 
-    private val _uiState = MutableStateFlow(FavoriteListUiState(
+    private val _uiState = MutableStateFlow(
+        SelectFavoriteUiState(
         isLoading = false,
-    ))
+    )
+    )
     val uiState = _uiState.asStateFlow()
 
     init {

@@ -18,56 +18,11 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.recipe_app.favorite_list.select_favorite.SelectFavorite
 
 @Composable
 fun FavoriteListScreen(
-    state: FavoriteListState = rememberFavoriteListState(),
     paddingValues: PaddingValues
 ) {
-    LazyColumn(modifier = Modifier.padding(paddingValues)) {
-        item {
-            for (i in 1..10) {
-                FavoriteListItems("料理名$i")
-                Divider(color = Color.Gray)
-            }
-        }
-    }
-}
-
-@Composable
-fun FavoriteListItems(title: String) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp)
-            .clickable { Log.d("favoriteListItem", "onClick") },
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Row() {
-            Box( // ->image
-                modifier = Modifier
-                    .size(100.dp, 60.dp)
-                    .background(color = Color.Gray)
-            ) {
-                Text(
-                    text = "料理画像",
-                    color = Color.White
-                )
-            }
-            Text(
-                modifier = Modifier.padding(start = 8.dp),
-                text = title,
-                color = Color.DarkGray
-            )
-        }
-        IconButton(
-            onClick = { Log.d("Button", "onClick") }
-        ) {
-            Icon(
-                Icons.Sharp.Star,
-                contentDescription = null,
-                tint = Color.LightGray
-            )
-        }
-    }
+    SelectFavorite(paddingValues = paddingValues)
 }
