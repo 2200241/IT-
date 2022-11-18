@@ -52,18 +52,18 @@ class FavoriteListViewModel(
     }
 
     private fun setTestList() {
-        val testArray = emptyArray<Recipe>()
-        for (i in 0..9) {
-            testArray[i] = Recipe(
+        var testArray = emptyArray<Recipe>()
+        for (i in 1..10) {
+            testArray += Recipe(
                 title = "料理$i",
                 thumb = "url",
                 isFavorite = true
             )
         }
         val testList = testArray.asList()
-        val testMenus = emptyArray<Menu>()
-        for (i in 0..9) {
-            testMenus[i] = Menu(id = "1", date = "2022-1-1", recipes = testList)
+        var testMenus = emptyArray<Menu>()
+        for (i in 1..10) {
+            testMenus += Menu(id = "1", date = "2022-1-1", recipes = testList)
         }
         val testCategories = Categories(
             stapleFood = testList,

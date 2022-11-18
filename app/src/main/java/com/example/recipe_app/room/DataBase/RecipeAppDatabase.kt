@@ -1,13 +1,13 @@
-package com.example.recipe_app.Room.DataBase
+package com.example.recipe_app.room.DataBase
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.recipe_app.Room.Allergy.Allergy
-import com.example.recipe_app.Room.Allergy.AllergyDao
-import com.example.recipe_app.Room.Favorite.Favorite
-import com.example.recipe_app.Room.Favorite.FavoriteDao
+import com.example.recipe_app.room.Allergy.Allergy
+import com.example.recipe_app.room.Allergy.AllergyDao
+import com.example.recipe_app.room.Favorite.Favorite
+import com.example.recipe_app.room.Favorite.FavoriteDao
 
 @Database(entities = arrayOf(Favorite::class, Allergy::class), version = 1, exportSchema = false)
 abstract class RecipeAppDatabase: RoomDatabase() {

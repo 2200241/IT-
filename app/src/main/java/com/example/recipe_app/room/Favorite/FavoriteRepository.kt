@@ -1,7 +1,7 @@
-package com.example.recipe_app.Room.Favorite
+package com.example.recipe_app.room.Favorite
 
-import com.example.recipe_app.Room.Favorite.Favorite
-import com.example.recipe_app.Room.Favorite.FavoriteDao
+import com.example.recipe_app.room.Favorite.Favorite
+import com.example.recipe_app.room.Favorite.FavoriteDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

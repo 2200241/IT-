@@ -1,7 +1,7 @@
-package com.example.recipe_app.Room.Allergy
+package com.example.recipe_app.room.Allergy
 
-import com.example.recipe_app.Room.Allergy.Allergy
-import com.example.recipe_app.Room.Allergy.AllergyDao
+import com.example.recipe_app.room.Allergy.Allergy
+import com.example.recipe_app.room.Allergy.AllergyDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

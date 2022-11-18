@@ -1,4 +1,4 @@
-package com.example.recipe_app.Room.Favorite
+package com.example.recipe_app.room.Favorite
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
