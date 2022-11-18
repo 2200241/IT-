@@ -4,6 +4,7 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.LocalOverscrollConfiguration
 import androidx.compose.foundation.background
@@ -21,6 +22,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Card
 import androidx.compose.material.Checkbox
 import androidx.compose.material.ContentAlpha
+import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -38,29 +40,40 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.recipe_app.R
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SelectIngredients(
     modifier: Modifier = Modifier,
     keywords: String,
     setKeywords: (String) -> Unit
 ) {
-    Column(
-        modifier = modifier.padding(20.dp)
+    LazyColumn(
+        modifier = modifier
     ) {
-        SearchTextField(
-            keywords = keywords,
-            setKeywords = setKeywords
-        )
-        IngredientsTitle()
+        item {
+            SearchTextField(
+                keywords = keywords,
+                setKeywords = setKeywords
+            )
+        }
+        item { Divider(color = Color.LightGray) }
+        item {
+            Text(
+                modifier = Modifier.padding(start = 20.dp, top = 20.dp, bottom = 10.dp),
+                text = "食材一覧",
+                fontSize = 20.sp,
+                color = Color(0xFF333333)
+            )
+        }
         for (i in 1..5) {
-            Column(modifier = Modifier.padding(bottom = 10.dp)) {
-                CategoryTitleCard("カテゴリー名$i")
+            item {
+                Column { CategoryTitle("カテゴリー名$i") }
             }
         }
     }
@@ -73,6 +86,7 @@ fun SearchTextField(
 ) {
 //    val text = remember { mutableStateOf("") }
     BasicTextField(
+        modifier = Modifier.padding(15.dp),
         value = keywords,
         onValueChange = { setKeywords(it) },
         singleLine = true,
@@ -80,16 +94,20 @@ fun SearchTextField(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color(0xFFE7E7E7), RoundedCornerShape(50))
+                    .background(colorResource(id = R.color.gray), RoundedCornerShape(50))
                     .padding(16.dp)
             ) {
-                Icon(Icons.Sharp.Search, contentDescription = null)
+                Icon(
+                    Icons.Sharp.Search,
+                    contentDescription = null,
+                    tint = Color.DarkGray
+                )
                 Spacer(Modifier.width(5.dp))
                 if (keywords.isEmpty()) {
                     Text(
                         text = "検索",
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFF333333)
+                        color = Color.DarkGray
                     )
                 } else {
                     innerTextField()
@@ -99,19 +117,10 @@ fun SearchTextField(
     )
 }
 
-@Composable
-fun IngredientsTitle() {
-    Text(
-        modifier = Modifier.padding(start = 5.dp, top = 20.dp, bottom = 10.dp),
-        text = "カテゴリー",
-        fontSize = 20.sp,
-        color = Color(0xFF333333)
-    )
-}
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun CategoryTitleCard(title: String) {
+fun CategoryTitle(title: String) {
     val expandedState = remember { mutableStateOf(false) }
     val rotationState = animateFloatAsState(
         targetValue = if (expandedState.value) 180f else 0f
@@ -120,17 +129,17 @@ fun CategoryTitleCard(title: String) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
+            //.padding(10.dp)
             .animateContentSize(
                 animationSpec = tween(
                     durationMillis = 300,
                     easing = LinearOutSlowInEasing
                 )
             ),
-        backgroundColor = Color.LightGray,
-        //backgroundColor = Color(0xFFEFE0B5),
-        //contentColor = Color.White,
-        shape = MaterialTheme.shapes.medium,
-        //elevation = 20.dp,
+        //backgroundColor = colorResource(id = R.color.gray),
+        border = BorderStroke(1.5.dp, colorResource(id = R.color.gray)),
+        //shape = MaterialTheme.shapes.medium,
+        //elevation = 10.dp,
         onClick = {
             expandedState.value = !expandedState.value
         }
@@ -146,9 +155,9 @@ fun CategoryTitleCard(title: String) {
                 Text(
                     modifier = Modifier
                         .weight(6f)
-                        .padding(start = 8.dp),
+                        .padding(start = 15.dp),
                     text = title,
-                    fontSize = 16.sp,
+                    fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color(0xFF333333),
                     maxLines = 1,
@@ -170,26 +179,26 @@ fun CategoryTitleCard(title: String) {
                 }
             }
             if (expandedState.value) {
-                IngredientsList()
+                Ingredients()
             }
         }
     }
 }
 @Composable
-fun IngredientsList() {
+fun Ingredients() {
     for (i in 1..5) {
         val checkedState = remember { mutableStateOf(false) }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 8.dp),
+                .padding(horizontal = 15.dp, vertical = 5.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
                 text = "食材名$i",
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                //fontWeight = FontWeight.Bold,
                 color = Color(0xFF333333)
             )
             Checkbox(

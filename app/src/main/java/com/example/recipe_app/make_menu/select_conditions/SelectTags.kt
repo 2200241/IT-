@@ -38,9 +38,7 @@ fun SelectTags(
     onTagClicked: (Int) -> Unit,
 ) {
     Column(
-        modifier = modifier
-            .verticalScroll(rememberScrollState())
-            .padding(20.dp)
+        modifier = modifier.verticalScroll(rememberScrollState())
     ) {
         largeCategories.forEach { item ->
             TagCategory(
@@ -71,9 +69,9 @@ fun TagCategory(
 @Composable
 fun Title(id: Int) {
     Text(
-        modifier = Modifier.padding(start = 5.dp),
+        modifier = Modifier.padding(start = 20.dp, top = 20.dp, bottom = 10.dp),
         text = stringResource(id),
-        fontSize = 16.sp,
+        fontSize = 18.sp,
         fontWeight = FontWeight.Bold,
         color = Color(0xFF333333)
     )
@@ -86,23 +84,24 @@ fun SelectTagsButton(
     onTagClicked: (Int) -> Unit
 ) {
     FlowRow(
+        modifier = Modifier.padding(start = 20.dp),
         mainAxisSpacing = 12.dp,
         mainAxisAlignment = MainAxisAlignment.Start,
         crossAxisSpacing = 5.dp,
     ) {
         items.forEach { item ->
-            val backgroundColor = if (selectedTags.contains(item)) Color(0xFFE7E7E7) else Color.White
+            val backgroundColor = if (selectedTags.contains(item)) colorResource(id = R.color.gray) else Color.White
             OutlinedButton(
-                border = BorderStroke(1.5.dp, Color(0xFFE7E7E7)),
+                border = BorderStroke(1.5.dp, colorResource(id = R.color.gray)),
                 shape = RoundedCornerShape(50),
                 colors = ButtonDefaults.buttonColors(backgroundColor = backgroundColor),
                 onClick = { onTagClicked(item) }
             ) {
                 Text(
+                    modifier = Modifier.padding(3.dp),
                     text = stringResource(item),
                     color = Color(0xFF333333),
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
                 )
             }
         }

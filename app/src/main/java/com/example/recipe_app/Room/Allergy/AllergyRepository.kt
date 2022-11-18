@@ -38,4 +38,3 @@ class AllergyRepository(private val AllergyDao : AllergyDao) {
         }
     }
 }
-

@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Card
+import androidx.compose.material.Divider
 import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -23,12 +25,15 @@ import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.sharp.Star
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.recipe_app.R
 
 @Composable
 fun RecipeDetail(
@@ -66,7 +71,8 @@ fun RecipeDetail(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 15.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 ExtendedFloatingActionButton(
                     text = {
@@ -79,6 +85,7 @@ fun RecipeDetail(
                     onClick = {}
                 )
                 IconButton(
+                    //modifier = Modifier.size(150.dp),
                     onClick = { Log.d("Button", "onClick") }
                 ) {
                     Icon(
@@ -103,10 +110,11 @@ fun Material() {
         )
         for (i in 1..5) {
             Text(
-                text = "***********",
+                text = "材料名$i",
                 fontSize = 20.sp,
                 color = Color(0xFF333333)
             )
+            Divider(color = Color.LightGray)
         }
     }
 }
@@ -122,8 +130,7 @@ fun CookingProcedure() {
         )
         for (i in 1..5) {
             Text(
-                text = "$i.**************************************************" +
-                        "***************",
+                text = "$i. 手順$i",
                 fontSize = 20.sp,
                 color = Color(0xFF333333)
             )

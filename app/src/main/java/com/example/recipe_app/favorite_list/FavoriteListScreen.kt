@@ -19,26 +19,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun FavoriteListScreen(
     state: FavoriteListState = rememberFavoriteListState(),
     paddingValues: PaddingValues
 ) {
-/*
-    CompositionLocalProvider(
-        LocalOverscrollConfiguration provides null
-    ) {
-*/
-        LazyColumn(modifier = Modifier.padding(paddingValues)) {
-            item {
-                for (i in 1..10) {
-                    FavoriteListItems("料理名$i")
-                    Divider(color = Color.Gray)
-                }
+    LazyColumn(modifier = Modifier.padding(paddingValues)) {
+        item {
+            for (i in 1..10) {
+                FavoriteListItems("料理名$i")
+                Divider(color = Color.Gray)
             }
         }
-//    }
+    }
 }
 
 @Composable

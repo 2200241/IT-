@@ -13,7 +13,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Divider
+import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -23,10 +27,14 @@ import androidx.compose.material.icons.sharp.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.recipe_app.R
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
 
@@ -37,7 +45,6 @@ fun SelectRecipes(
     onBackPressed: () -> Unit
 ) {
     LazyColumn(
-        //modifier = Modifier.padding(15.dp)
     ) {
         /*item { Row() {
             val testId = (0..10000).random()
@@ -56,7 +63,7 @@ fun SelectRecipes(
         item { Divider(color = Color.LightGray) }
         item { SelectedRecipes() }
         item { Divider(color = Color.LightGray) }
-        item { ResultRecipes(state, onItemClicked) }
+        item { SearchResultRecipes(state, onItemClicked) }
     }
 }
 
@@ -73,19 +80,20 @@ fun SelectedRecipes() {
                         .size(110.dp, 75.dp)
                         .background(color = Color.LightGray)
                 ) {
-                    Text(
-                        text = "料理画像",
-                        color = Color.White,
-                    )
-                    /*IconButton(
-                        onClick = { Log.d("Button", "onClick") }
+                    Text(text = "料理画像", color = Color.White)
+                    FloatingActionButton(
+                        modifier = Modifier
+                            .size(18.dp)
+                            .align(alignment = Alignment.TopEnd),
+                        backgroundColor = Color(0xFF333333),
+                        onClick = { /*TODO*/ }
                     ) {
                         Icon(
                             Icons.Sharp.Clear,
                             contentDescription = null,
-                            tint = Color(0xFF333333)
+                            tint = Color.White
                         )
-                    }*/
+                    }
                 }
             }
         }
@@ -93,7 +101,7 @@ fun SelectedRecipes() {
 }
 
 @Composable
-fun ResultRecipes(
+fun SearchResultRecipes(
     state: SelectRecipesState,
     onItemClicked: (String) -> Unit
 ) {
@@ -102,6 +110,7 @@ fun ResultRecipes(
 
     Box(modifier = Modifier.padding(10.dp)) {
         FlowRow(
+            modifier = Modifier.padding(start = 10.dp),
             mainAxisSpacing = 12.dp,
             mainAxisAlignment = MainAxisAlignment.Center,
             crossAxisSpacing = 5.dp,
