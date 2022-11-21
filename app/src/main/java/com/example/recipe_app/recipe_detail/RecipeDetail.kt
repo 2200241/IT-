@@ -57,10 +57,7 @@ fun RecipeDetail(
                         .size(120.dp, 80.dp)
                         .background(color = Color.LightGray)
                 ) {
-                    Text(
-                        text = "料理画像",
-                        color = Color.White
-                    )
+                    Text(text = "料理画像", color = Color.White)
                 }
             }
         }
@@ -85,8 +82,7 @@ fun RecipeDetail(
                     onClick = {}
                 )
                 IconButton(
-                    //modifier = Modifier.size(150.dp),
-                    onClick = { Log.d("Button", "onClick") }
+                    onClick = {}
                 ) {
                     Icon(
                         Icons.Sharp.Star,
@@ -103,6 +99,7 @@ fun RecipeDetail(
 fun Material() {
     Column(modifier = Modifier.padding(horizontal = 15.dp, vertical = 10.dp)) {
         Text(
+            modifier = Modifier.padding(bottom = 10.dp),
             text = "材料",
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
@@ -114,15 +111,19 @@ fun Material() {
                 fontSize = 20.sp,
                 color = Color(0xFF333333)
             )
-            Divider(color = Color.LightGray)
+            Divider(
+                modifier = Modifier.padding(bottom = 10.dp),
+                color = Color.LightGray
+            )
         }
     }
 }
 
 @Composable
 fun CookingProcedure() {
-    Column(modifier = Modifier.padding(horizontal = 15.dp, vertical = 10.dp)) {
+    Column(modifier = Modifier.padding(horizontal = 15.dp)) {
         Text(
+            modifier = Modifier.padding(bottom = 10.dp),
             text = "作り方",
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
@@ -130,6 +131,7 @@ fun CookingProcedure() {
         )
         for (i in 1..5) {
             Text(
+                modifier = Modifier.padding(bottom = 10.dp),
                 text = "$i. 手順$i",
                 fontSize = 20.sp,
                 color = Color(0xFF333333)

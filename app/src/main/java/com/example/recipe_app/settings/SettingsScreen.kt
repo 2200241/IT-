@@ -1,5 +1,6 @@
 package com.example.recipe_app.settings
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -47,6 +48,7 @@ fun AllergyList() {
         for (i in 1..15) {
             val checkedState = remember { mutableStateOf(false) }
             Row(
+                modifier = Modifier.clickable { checkedState.value = !checkedState.value },
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Checkbox(

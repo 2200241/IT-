@@ -86,7 +86,6 @@ private fun SelectConditionsTabBar(
                 Text(
                     text = stringResource(id = item.titleId),
                     fontSize = 18.sp,
-                    //fontWeight = FontWeight.Bold,
                 )
             }
         }
