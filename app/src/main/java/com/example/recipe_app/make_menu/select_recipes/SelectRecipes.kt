@@ -32,6 +32,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.recipe_app.R
@@ -41,27 +42,34 @@ import com.google.accompanist.flowlayout.MainAxisAlignment
 @Composable
 fun SelectRecipes(
     state: SelectRecipesState,
+    paddingValues: PaddingValues,
     onItemClicked: (String) -> Unit,
     onBackPressed: () -> Unit
 ) {
-    LazyColumn() {
+    val uiState = state.uiState
+
+    LazyColumn(
+        modifier = Modifier.padding(paddingValues)
+    ) {
         item {
             Text(
                 modifier = Modifier.padding(15.dp),
-                text = "検索結果",
+                text = stringResource(id = R.string.result),
                 fontSize = 18.sp,
                 color = Color(0xFF333333)
             )
         }
         item { Divider(color = Color.LightGray) }
-        item { SelectedRecipes() }
+        item { SelectedRecipes(onItemClicked) }
         item { Divider(color = Color.LightGray) }
-        item { SearchResultRecipes(state, onItemClicked) }
+        item { SearchResultRecipes(uiState, onItemClicked) }
     }
 }
 
 @Composable
-fun SelectedRecipes() {
+fun SelectedRecipes(
+    onItemClicked: (String) -> Unit
+) {
     LazyRow(
         contentPadding = PaddingValues(all = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
@@ -72,6 +80,7 @@ fun SelectedRecipes() {
                     modifier = Modifier
                         .size(110.dp, 75.dp)
                         .background(color = Color.LightGray)
+                        .clickable { onItemClicked("testId") }
                 ) {
                     Text(text = "料理画像", color = Color.White)
                     FloatingActionButton(
@@ -95,7 +104,7 @@ fun SelectedRecipes() {
 
 @Composable
 fun SearchResultRecipes(
-    state: SelectRecipesState,
+    uiState: SelectRecipesUiState,
     onItemClicked: (String) -> Unit
 ) {
     val screenWidth = LocalConfiguration.current.screenWidthDp
@@ -132,7 +141,7 @@ fun SearchResultRecipes(
                         }
                         Text(
                             modifier = Modifier.padding(8.dp),
-                            text = state.uiState.testString,
+                            text = uiState.testString,
                             color = Color.White,
                         )
                     }

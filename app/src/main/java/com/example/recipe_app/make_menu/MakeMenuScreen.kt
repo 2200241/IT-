@@ -39,6 +39,7 @@ fun MakeMenuScreen(
         ) { backStackEntry ->
             SelectRecipes(
                 state = rememberSelectRecipesState(conditions = backStackEntry.arguments?.getString("conditions")),
+                paddingValues = paddingValues,
                 onItemClicked = { recipeId ->
                     state.navigateToRecipeDetail(recipeId, backStackEntry)
                 },

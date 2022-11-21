@@ -14,6 +14,7 @@ import com.example.recipe_app.favorite_list.FavoriteListScreen
 import com.example.recipe_app.make_menu.MakeMenuScreen
 import com.example.recipe_app.make_menu.rememberMakeMenuScreenState
 import com.example.recipe_app.menu_list.MenuListScreen
+import com.example.recipe_app.menu_list.rememberMenuListScreenState
 import com.example.recipe_app.settings.SettingsScreen
 import com.example.recipe_app.ui.theme.RecipeappTheme
 
@@ -56,7 +57,8 @@ fun MainScreen() {
                 }
                 composable(Screen.MenuList.route) {
                     MenuListScreen(
-                        paddingValues = paddingValues
+                        paddingValues = paddingValues,
+                        state = rememberMenuListScreenState(scaffoldState = scaffoldState)
                     )
                 }
                 composable(Screen.FavoriteList.route) {

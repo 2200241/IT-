@@ -17,12 +17,13 @@ import com.example.recipe_app.make_menu.select_recipes.SelectedRecipes
 
 @Composable
 fun ShoppingList(
-    state: ShoppingListState
+    state: ShoppingListState,
+    onThumbClicked: (String) -> Unit
 ) {
     val uiState = state.uiState
 
     Column() {
-        SelectedRecipes()
+        SelectedRecipes(onThumbClicked)
         Divider(color = Color.LightGray)
         Text(
             modifier = Modifier.padding(start = 20.dp, top = 20.dp, bottom = 10.dp),
