@@ -22,11 +22,16 @@ import androidx.compose.ui.unit.sp
 import com.example.recipe_app.make_menu.select_recipes.SelectedRecipes
 
 @Composable
-fun SelectMenu() {
-    LazyColumn() {
+fun SelectMenu(
+    paddingValues: PaddingValues,
+    onItemClicked: (String) -> Unit
+) {
+    LazyColumn(
+        modifier = Modifier.padding(paddingValues)
+    ) {
         item {
             for (i in 1..10) {
-                MenuListItem()
+                MenuListItem(onItemClicked = onItemClicked)
                 Divider(color = Color.Gray)
             }
         }
@@ -34,7 +39,9 @@ fun SelectMenu() {
 }
 
 @Composable
-fun MenuListItem() {
+fun MenuListItem(
+    onItemClicked: (String) -> Unit
+) {
     val screenWidth = LocalConfiguration.current.screenWidthDp
 
     Row(
@@ -45,7 +52,7 @@ fun MenuListItem() {
             modifier = Modifier.size((screenWidth-60).dp, 100.dp)
         ) {
             LazyRow(
-                modifier = Modifier.clickable {  },
+                modifier = Modifier.clickable { onItemClicked("testId") },
                 contentPadding = PaddingValues(all = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
@@ -74,44 +81,6 @@ fun MenuListItem() {
                 contentDescription = null,
                 tint = Color.LightGray
             )
-        }
-    }
-}
-
-@Composable
-fun ShoppingList() {
-    Column() {
-        SelectedRecipes()
-        Divider(color = Color.LightGray)
-        Text(
-            modifier = Modifier.padding(start = 20.dp, top = 20.dp, bottom = 10.dp),
-            text = "材料",
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color(0xFF333333)
-        )
-        for (i in 1..10) {
-            val checkedState = remember { mutableStateOf(false) }
-            Column(/*modifier = Modifier.padding(vertical = 10.dp)*/) {
-                Row(
-                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Checkbox(
-                        modifier = Modifier.size(32.dp),
-                        checked = checkedState.value,
-                        onCheckedChange = { checkedState.value = it }
-                    )
-                    Text(
-                        modifier = Modifier.padding(start = 3.dp),
-                        text = "材料名$i",
-                        fontSize = 18.sp,
-                        color = Color(0xFF333333)
-                    )
-                }
-                Divider(color = Color.LightGray)
-                Spacer(Modifier.width(10.dp))
-            }
         }
     }
 }

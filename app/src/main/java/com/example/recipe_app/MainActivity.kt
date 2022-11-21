@@ -54,7 +54,11 @@ fun MainScreen() {
                         state = rememberMakeMenuScreenState(scaffoldState = scaffoldState)
                     )
                 }
-                composable(Screen.MenuList.route) { MenuListScreen() }
+                composable(Screen.MenuList.route) {
+                    MenuListScreen(
+                        paddingValues = paddingValues
+                    )
+                }
                 composable(Screen.FavoriteList.route) {
                     FavoriteListScreen(
                         paddingValues = paddingValues
