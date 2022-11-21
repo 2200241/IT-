@@ -8,6 +8,8 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.LocalOverscrollConfiguration
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -94,8 +96,9 @@ fun SearchTextField(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(colorResource(id = R.color.gray), RoundedCornerShape(50))
-                    .padding(16.dp)
+                    .background(Color(0xFFF2F2F2), RoundedCornerShape(50))
+                    .padding(12.dp),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Icon(
                     Icons.Sharp.Search,
@@ -107,7 +110,7 @@ fun SearchTextField(
                     Text(
                         text = "検索",
                         fontWeight = FontWeight.Bold,
-                        color = Color.DarkGray
+                        color = Color.Gray
                     )
                 } else {
                     innerTextField()
@@ -191,18 +194,19 @@ fun Ingredients() {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 15.dp, vertical = 5.dp),
+                .padding(horizontal = 15.dp, vertical = 6.dp)
+                .clickable { checkedState.value = !checkedState.value },
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
                 text = "食材名$i",
-                fontSize = 18.sp,
+                fontSize = 20.sp,
                 //fontWeight = FontWeight.Bold,
                 color = Color(0xFF333333)
             )
             Checkbox(
-                modifier = Modifier.size(32.dp),
+                modifier = Modifier.size(40.dp),
                 checked = checkedState.value,
                 onCheckedChange = { checkedState.value = it }
             )
