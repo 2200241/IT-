@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.recipe_app.data.Recipe
+import com.example.recipe_app.data.RecipeThumb
 import com.example.recipe_app.use_cases.TestUseCase
 import com.github.michaelbull.result.flatMap
 import com.github.michaelbull.result.mapBoth
@@ -20,6 +21,7 @@ data class SelectRecipesUiState(
     val isLoading: Boolean = false,
     val error: String = "",
     val recipes: List<Recipe> = emptyList(),
+    val selectedRecipes: List<RecipeThumb> = emptyList()
 )
 
 @HiltViewModel
@@ -33,7 +35,9 @@ class SelectRecipesViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(SelectRecipesUiState(
         isLoading = false,
-        recipes = emptyList()
+        error = "",
+        recipes = emptyList(),
+        selectedRecipes = emptyList()
     ))
     val uiState = _uiState.asStateFlow()
 
@@ -54,6 +58,18 @@ class SelectRecipesViewModel @Inject constructor(
 
     private fun endLoading() {
         _uiState.update { it.copy(isLoading = false) }
+    }
+
+    fun selectRecipe(id: String, thumb: String) {
+        _uiState.update { it.copy(selectedRecipes = _uiState.value.selectedRecipes + listOf(RecipeThumb(id, thumb))) }
+    }
+
+    fun removeRecipe() {
+
+    }
+
+    fun addMenu() {
+
     }
 
 /*

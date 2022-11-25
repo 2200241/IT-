@@ -16,7 +16,12 @@ data class Favorites(
 data class Menu(
     val id: String = "",
     val date: String = "",
-    val recipes: List<Recipe> = emptyList()
+    val recipes: List<RecipeThumb> = emptyList()
+)
+
+data class RecipeThumb(
+    val id: String = "",
+    val thumb: String = ""
 )
 
 // 表示するときにmapでfilterすればいい
