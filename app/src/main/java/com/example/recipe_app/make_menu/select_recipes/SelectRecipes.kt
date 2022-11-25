@@ -15,12 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Divider
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.sharp.Clear
 import androidx.compose.material.icons.sharp.Star
@@ -36,33 +31,43 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.recipe_app.R
+import com.example.recipe_app.data.Recipe
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
 
 @Composable
 fun SelectRecipes(
-    state: SelectRecipesState,
+    state: SelectRecipesState = rememberSelectRecipesState(),
     paddingValues: PaddingValues,
     onItemClicked: (String) -> Unit,
     onBackPressed: () -> Unit
 ) {
     val uiState = state.uiState
 
-    LazyColumn(
-        modifier = Modifier.padding(paddingValues)
-    ) {
-        item {
-            Text(
-                modifier = Modifier.padding(15.dp),
-                text = stringResource(id = R.string.result),
-                fontSize = 18.sp,
-                color = Color(0xFF333333)
-            )
+    if (uiState.isLoading) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
         }
-        item { Divider(color = Color.LightGray) }
-        item { SelectedRecipes(onItemClicked) }
-        item { Divider(color = Color.LightGray) }
-        item { SearchResultRecipes(uiState, onItemClicked) }
+    } else {
+        LazyColumn(
+            modifier = Modifier.padding(paddingValues)
+        ) {
+            item {
+                Text(
+                    modifier = Modifier.padding(15.dp),
+                    text = stringResource(id = R.string.result),
+                    fontSize = 18.sp,
+                    color = Color(0xFF333333)
+                )
+            }
+            item { Divider(color = Color.LightGray) }
+            item { SelectedRecipes(onItemClicked) }
+            item { Divider(color = Color.LightGray) }
+            item { SearchResultRecipes(uiState.recipes, onItemClicked) }
+        }
     }
 }
 
@@ -104,11 +109,10 @@ fun SelectedRecipes(
 
 @Composable
 fun SearchResultRecipes(
-    uiState: SelectRecipesUiState,
+    recipes: List<Recipe>,
     onItemClicked: (String) -> Unit
 ) {
     val screenWidth = LocalConfiguration.current.screenWidthDp
-    val testId = (0..10000).random()
 
     Box(modifier = Modifier.padding(10.dp)) {
         FlowRow(
@@ -117,13 +121,13 @@ fun SearchResultRecipes(
             mainAxisAlignment = MainAxisAlignment.Center,
             crossAxisSpacing = 5.dp,
         ) {
-            for (i in 1..10) {
+            recipes.map { recipe ->
                 Box(
                     modifier = Modifier
                         //.padding(horizontal = 10.dp)
                         .size((screenWidth / 2 - 25).dp, 120.dp)
                         .background(color = Color.LightGray)
-                        .clickable { onItemClicked(testId.toString()) }
+                        .clickable { onItemClicked(recipe.id) }
                 ) {
                     Column(
                         modifier = Modifier.fillMaxSize(),
@@ -141,7 +145,7 @@ fun SearchResultRecipes(
                         }
                         Text(
                             modifier = Modifier.padding(8.dp),
-                            text = uiState.testString,
+                            text = recipe.title,
                             color = Color.White,
                         )
                     }

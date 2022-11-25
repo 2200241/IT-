@@ -1,13 +1,16 @@
 package com.example.recipe_app.recipe_detail
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.recipe_app.use_cases.GetRecipeDetailUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 data class RecipeDetailUiState(
     val isLoading: Boolean = false,
@@ -15,10 +18,14 @@ data class RecipeDetailUiState(
     val title: String = ""
 )
 
-class RecipeDetailViewModel(
-    private val recipeId: String?,
-    private val useCase: GetRecipeDetailUseCase = GetRecipeDetailUseCase()
+@HiltViewModel
+class RecipeDetailViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
+//    private val recipeId: String?,
+//    private val useCase: GetRecipeDetailUseCase = GetRecipeDetailUseCase()
 ): ViewModel() {
+
+    private val recipeId = savedStateHandle.get<String>("recipeId")
 
     private val _uiState = MutableStateFlow(RecipeDetailUiState(
         isLoading = false,
@@ -47,6 +54,7 @@ class RecipeDetailViewModel(
         _uiState.update { it.copy(isLoading = false) }
     }
 
+/*
     class Factory(
         private val recipeId: String?
     ): ViewModelProvider.Factory {
@@ -54,5 +62,6 @@ class RecipeDetailViewModel(
             return RecipeDetailViewModel(recipeId = recipeId) as T
         }
     }
+*/
 
 }

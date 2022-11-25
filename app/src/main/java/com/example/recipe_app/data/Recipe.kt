@@ -1,6 +1,7 @@
 package com.example.recipe_app.data
 
 data class Recipe(
+    val id: String = "",
     val title: String = "",
     val thumb: String = "",
     val isFavorite: Boolean = false

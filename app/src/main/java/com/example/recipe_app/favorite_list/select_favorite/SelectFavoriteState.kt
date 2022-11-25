@@ -3,6 +3,7 @@ package com.example.recipe_app.favorite_list.select_favorite
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
+import androidx.hilt.navigation.compose.hiltViewModel
 
 class SelectFavoriteState(
     private val viewModel: SelectFavoriteViewModel
@@ -14,7 +15,7 @@ class SelectFavoriteState(
 
 @Composable
 fun rememberSelectFavoriteState(
-    viewModel: SelectFavoriteViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+    viewModel: SelectFavoriteViewModel = hiltViewModel()
 ): SelectFavoriteState = remember {
     SelectFavoriteState(viewModel)
 }

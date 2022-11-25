@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt' //追加
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -67,6 +68,10 @@ dependencies {
     implementation 'androidx.compose.material:material-icons-extended:1.1.1'
     implementation 'com.google.accompanist:accompanist-systemuicontroller:0.24.13-rc'
     implementation "com.google.accompanist:accompanist-flowlayout:0.24.2-alpha"
+    implementation 'com.google.dagger:hilt-android:2.44.2'
+    kapt 'com.google.dagger:hilt-compiler:2.44.2'
+    implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
+    implementation "com.michael-bull.kotlin-result:kotlin-result:1.1.16"
 
     // Room components
     def Room_version = "2.4.2"
@@ -74,4 +79,8 @@ dependencies {
     kapt "androidx.room:room-compiler:$Room_version"
     implementation "androidx.room:room-ktx:$Room_version"
     androidTestImplementation "androidx.room:room-testing:$Room_version"
+}
+
+kapt {
+    correctErrorTypes true
 }
