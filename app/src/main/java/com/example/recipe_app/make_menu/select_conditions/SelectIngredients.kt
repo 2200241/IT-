@@ -70,7 +70,7 @@ fun SelectIngredients(
                 modifier = Modifier.padding(start = 20.dp, top = 20.dp, bottom = 10.dp),
                 text = "食材一覧",
                 fontSize = 20.sp,
-                color = Color(0xFF333333)
+                color = colorResource(id = R.color.fontColor)
             )
         }
         for (i in 1..5) {
@@ -96,7 +96,10 @@ fun SearchTextField(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color(0xFFF2F2F2), RoundedCornerShape(50))
+                    .background(
+                        colorResource(id = R.color.searchTextFieldColor),
+                        RoundedCornerShape(50)
+                    )
                     .padding(12.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -132,17 +135,13 @@ fun CategoryTitle(title: String) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            //.padding(10.dp)
             .animateContentSize(
                 animationSpec = tween(
                     durationMillis = 300,
                     easing = LinearOutSlowInEasing
                 )
             ),
-        //backgroundColor = colorResource(id = R.color.gray),
-        border = BorderStroke(1.5.dp, colorResource(id = R.color.gray)),
-        //shape = MaterialTheme.shapes.medium,
-        //elevation = 10.dp,
+        border = BorderStroke(1.5.dp, colorResource(id = R.color.borderLightColor)),
         onClick = {
             expandedState.value = !expandedState.value
         }
@@ -152,9 +151,7 @@ fun CategoryTitle(title: String) {
                 .fillMaxWidth()
                 .padding(5.dp)
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     modifier = Modifier
                         .weight(6f)
@@ -162,7 +159,7 @@ fun CategoryTitle(title: String) {
                     text = title,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFF333333),
+                    color = colorResource(id = R.color.fontColor),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -177,7 +174,7 @@ fun CategoryTitle(title: String) {
                     Icon(
                         imageVector = Icons.Default.ArrowDropDown,
                         contentDescription = "Drop-Down Arrow",
-                        tint = Color(0xFF333333)
+                        tint = Color.DarkGray
                     )
                 }
             }
@@ -202,8 +199,7 @@ fun Ingredients() {
             Text(
                 text = "食材名$i",
                 fontSize = 20.sp,
-                //fontWeight = FontWeight.Bold,
-                color = Color(0xFF333333)
+                color = colorResource(id = R.color.fontColor)
             )
             Checkbox(
                 modifier = Modifier.size(40.dp),

@@ -10,6 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -31,7 +32,7 @@ fun MyBottomNavigation(
 
         MyBottomNavigationItems.forEach { item ->
             BottomNavigationItem(
-                selectedContentColor = Color(0xFF333333),
+                selectedContentColor = colorResource(id = R.color.bottomNavigationColor),
                 unselectedContentColor = Color.Gray,
                 icon = { Icon(
                     imageVector = item.icon,

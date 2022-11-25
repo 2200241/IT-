@@ -1,6 +1,7 @@
 package com.example.recipe_app.settings
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,8 +16,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.recipe_app.R
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
 
@@ -26,20 +30,20 @@ fun SettingsScreen() {
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Column(modifier = Modifier.padding(20.dp)) {
+        Column(modifier = Modifier.padding(18.dp)) {
             Text(
                 text = "アレルギー登録",
-                fontSize = 20.sp,
-                //fontWeight = FontWeight.Bold,
-                color = Color(0xFF333333)
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                color = colorResource(id = R.color.fontColor)
             )
-            Divider(color = Color.Gray)
+            Divider(color = Color.LightGray)
         }
-        AllergyList()
+        Allergys()
     }
 }
 @Composable
-fun AllergyList() {
+fun Allergys() {
     FlowRow(
         mainAxisSpacing = 12.dp,
         mainAxisAlignment = MainAxisAlignment.Start,
@@ -52,15 +56,14 @@ fun AllergyList() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Checkbox(
-                    modifier = Modifier.size(35.dp),
+                    modifier = Modifier.size(40.dp),
                     checked = checkedState.value,
                     onCheckedChange = { checkedState.value = it }
                 )
                 Text(
                     text = "アレルギー名$i",
                     fontSize = 18.sp,
-                    //fontWeight = FontWeight.Bold,
-                    color = Color(0xFF333333)
+                    color = colorResource(id = R.color.fontColor)
                 )
             }
         }

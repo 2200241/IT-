@@ -20,9 +20,11 @@ import androidx.compose.material.Divider
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.TabRow
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.sharp.Clear
+import androidx.compose.material.icons.sharp.Favorite
 import androidx.compose.material.icons.sharp.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -33,6 +35,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.recipe_app.R
@@ -56,7 +59,8 @@ fun SelectRecipes(
                 modifier = Modifier.padding(15.dp),
                 text = stringResource(id = R.string.result),
                 fontSize = 18.sp,
-                color = Color(0xFF333333)
+                fontWeight = FontWeight.Bold,
+                color = colorResource(id = R.color.fontColor)
             )
         }
         item { Divider(color = Color.LightGray) }
@@ -80,14 +84,13 @@ fun SelectedRecipes(
                     modifier = Modifier
                         .size(110.dp, 75.dp)
                         .background(color = Color.LightGray)
-                        .clickable { onItemClicked("testId") }
                 ) {
                     Text(text = "料理画像", color = Color.White)
                     FloatingActionButton(
                         modifier = Modifier
                             .size(18.dp)
                             .align(alignment = Alignment.TopEnd),
-                        backgroundColor = Color(0xFF333333),
+                        backgroundColor = Color.DarkGray,
                         onClick = { /*TODO*/ }
                     ) {
                         Icon(
@@ -110,41 +113,38 @@ fun SearchResultRecipes(
     val screenWidth = LocalConfiguration.current.screenWidthDp
     val testId = (0..10000).random()
 
-    Box(modifier = Modifier.padding(10.dp)) {
-        FlowRow(
-            modifier = Modifier.padding(start = 10.dp),
-            mainAxisSpacing = 12.dp,
-            mainAxisAlignment = MainAxisAlignment.Center,
-            crossAxisSpacing = 5.dp,
-        ) {
-            for (i in 1..10) {
-                Box(
-                    modifier = Modifier
-                        //.padding(horizontal = 10.dp)
-                        .size((screenWidth / 2 - 25).dp, 120.dp)
-                        .background(color = Color.LightGray)
-                        .clickable { onItemClicked(testId.toString()) }
+    FlowRow(
+        modifier = Modifier.padding(start = 7.5.dp),
+        mainAxisSpacing = 5.dp,
+        mainAxisAlignment = MainAxisAlignment.Center,
+        crossAxisSpacing = 5.dp,
+    ) {
+        for (i in 1..10) {
+            Box(
+                modifier = Modifier
+                    .size(((screenWidth / 2) - 10).dp, 140.dp)
+                    .background(color = Color.LightGray)
+                    .clickable { onItemClicked(testId.toString()) }
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.SpaceBetween
+                    IconButton(
+                        modifier = Modifier.align(alignment = Alignment.End),
+                        onClick = { Log.d("Button", "onClick") }
                     ) {
-                        IconButton(
-                            modifier = Modifier.align(alignment = Alignment.End),
-                            onClick = { Log.d("Button", "onClick") }
-                        ) {
-                            Icon(
-                                Icons.Sharp.Star,
-                                contentDescription = null,
-                                tint = Color.White
-                            )
-                        }
-                        Text(
-                            modifier = Modifier.padding(8.dp),
-                            text = uiState.testString,
-                            color = Color.White,
+                        Icon(
+                            Icons.Sharp.Favorite,
+                            contentDescription = null,
+                            tint = Color.White
                         )
                     }
+                    Text(
+                        modifier = Modifier.padding(8.dp),
+                        text = uiState.testString,
+                        color = Color.White,
+                    )
                 }
             }
         }

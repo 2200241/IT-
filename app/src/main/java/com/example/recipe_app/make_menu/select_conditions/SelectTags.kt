@@ -73,7 +73,7 @@ fun Title(id: Int) {
         text = stringResource(id),
         fontSize = 18.sp,
         fontWeight = FontWeight.Bold,
-        color = Color(0xFF333333)
+        color = colorResource(id = R.color.fontColor)
     )
 }
 
@@ -90,13 +90,14 @@ fun SelectTagsButton(
         crossAxisSpacing = 5.dp,
     ) {
         items.forEach { item ->
-            val backgroundColor = if (selectedTags.contains(item)) Color.LightGray else Color.White
+            val backgroundColor = if (selectedTags.contains(item)) colorResource(id = R.color.buttonColor) else Color.White
+            val contentColor = if (selectedTags.contains(item)) Color.White else colorResource(id = R.color.fontColor)
             val fontWeight = if (selectedTags.contains(item)) FontWeight.Bold else FontWeight.Normal
             OutlinedButton(
-                border = BorderStroke(1.5.dp, colorResource(id = R.color.gray)),
+                border = BorderStroke(1.5.dp, colorResource(id = R.color.borderLightColor)),
                 shape = RoundedCornerShape(50),
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = backgroundColor, contentColor = Color(0xFF333333)),
+                    backgroundColor = backgroundColor, contentColor = contentColor),
                 onClick = { onTagClicked(item) }
             ) {
                 Text(

@@ -9,6 +9,12 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material.icons.sharp.Clear
+import androidx.compose.material.icons.sharp.Favorite
+import androidx.compose.material.icons.sharp.FavoriteBorder
+import androidx.compose.material.icons.sharp.Star
+import androidx.compose.material.icons.sharp.StarBorder
+import androidx.compose.material.icons.sharp.StarRate
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -60,7 +66,7 @@ fun MenuListItem(
                     item {
                         Box(
                             modifier = Modifier
-                                .size(100.dp, 80.dp)
+                                .size(110.dp, 75.dp)
                                 .background(color = Color.LightGray)
                         ) {
                             Text(text = "料理画像", color = Color.White)
@@ -69,18 +75,15 @@ fun MenuListItem(
                 }
             }
         }
-        IconButton(
+        Icon(
+            Icons.Sharp.Favorite,
+            contentDescription = null,
             modifier = Modifier
-                .fillMaxSize()
-                .size(100.dp),
-            //.align(alignment = Alignment.Bottom),
-            onClick = { Log.d("Button", "onClick") }
-        ) {
-            Icon(
-                Icons.Outlined.Star,
-                contentDescription = null,
-                tint = Color.LightGray
-            )
-        }
+                .padding(bottom = 16.dp, end = 16.dp)
+                .size(30.dp)
+                .align(alignment = Alignment.Bottom)
+                .clickable {  },
+            tint = Color.LightGray
+        )
     }
 }
