@@ -41,7 +41,7 @@ import com.example.recipe_app.R
 
 @Composable
 fun RecipeDetail(
-    state: RecipeDetailState,
+    state: RecipeDetailState = rememberRecipeDetailState(),
     onBackPressed: () -> Unit = {}
 ) {
     LazyColumn(

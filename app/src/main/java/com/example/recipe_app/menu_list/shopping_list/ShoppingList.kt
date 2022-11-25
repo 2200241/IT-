@@ -27,7 +27,7 @@ import com.example.recipe_app.make_menu.select_recipes.SelectedRecipes
 
 @Composable
 fun ShoppingList(
-    state: ShoppingListState,
+    state: ShoppingListState = rememberShoppingListState(),
     onThumbClicked: (String) -> Unit
 ) {
     val uiState = state.uiState

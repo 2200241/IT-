@@ -1,6 +1,8 @@
 package com.example.recipe_app.data
 
 data class Recipe(
+    val id: String = "",
+    val categoryId: String = "",
     val title: String = "",
     val thumb: String = "",
     val isFavorite: Boolean = false
@@ -8,7 +10,7 @@ data class Recipe(
 
 data class Favorites(
     val menus: List<Menu> = emptyList(),
-    val categories: Categories = Categories()
+    val recipes: List<Recipe> = emptyList()
 )
 
 data class Menu(
@@ -17,6 +19,8 @@ data class Menu(
     val recipes: List<Recipe> = emptyList()
 )
 
+// 表示するときにmapでfilterすればいい
+/*
 data class Categories(
     val stapleFood: List<Recipe> = emptyList(),
     val mainDish: List<Recipe> = emptyList(),
@@ -25,4 +29,4 @@ data class Categories(
     val sweets: List<Recipe> = emptyList(),
     val drink: List<Recipe> = emptyList(),
     val others: List<Recipe> = emptyList()
-)
+)*/

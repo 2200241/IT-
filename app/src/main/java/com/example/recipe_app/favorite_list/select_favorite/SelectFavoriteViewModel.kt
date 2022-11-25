@@ -6,17 +6,20 @@ import com.example.recipe_app.data.Categories
 import com.example.recipe_app.data.Favorites
 import com.example.recipe_app.data.Menu
 import com.example.recipe_app.data.Recipe
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 data class SelectFavoriteUiState(
     val isLoading: Boolean = false,
     val favorites: Favorites = Favorites()
 )
 
-class SelectFavoriteViewModel(
+@HiltViewModel
+class SelectFavoriteViewModel @Inject constructor(
 //    useCase: GetFavoritesUseCase = GetFavoritesUseCase()
 ): ViewModel() {
 

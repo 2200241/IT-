@@ -2,9 +2,11 @@ package com.example.recipe_app.make_menu.select_conditions
 
 import androidx.lifecycle.ViewModel
 import com.example.recipe_app.R
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import javax.inject.Inject
 
 data class SelectConditionsUiState(
     val isLoading: Boolean = false,
@@ -43,7 +45,8 @@ sealed class LargeCategory(
     object Styles: LargeCategory(R.string.style, styles)
 }
 
-class SelectConditionsViewModel(
+@HiltViewModel
+class SelectConditionsViewModel @Inject constructor(
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow(SelectConditionsUiState(

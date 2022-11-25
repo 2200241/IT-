@@ -3,6 +3,7 @@ package com.example.recipe_app.make_menu.select_conditions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
+import androidx.hilt.navigation.compose.hiltViewModel
 
 class SelectConditionsState(
     private val viewModel: SelectConditionsViewModel,
@@ -22,7 +23,7 @@ class SelectConditionsState(
 
 @Composable
 fun rememberSelectConditionsState(
-    viewModel: SelectConditionsViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
+    viewModel: SelectConditionsViewModel = hiltViewModel(),
 ): SelectConditionsState = remember {
     SelectConditionsState(
         viewModel,

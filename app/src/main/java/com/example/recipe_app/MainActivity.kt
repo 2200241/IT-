@@ -21,7 +21,9 @@ import com.example.recipe_app.menu_list.rememberMenuListScreenState
 import com.example.recipe_app.settings.SettingsScreen
 import com.example.recipe_app.ui.theme.RecipeappTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

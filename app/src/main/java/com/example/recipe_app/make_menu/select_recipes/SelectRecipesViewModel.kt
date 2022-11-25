@@ -1,27 +1,39 @@
 
 package com.example.recipe_app.make_menu.select_recipes
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.recipe_app.R
 import com.example.recipe_app.data.Recipe
 import com.example.recipe_app.make_menu.select_conditions.ConditionTab
+import com.example.recipe_app.use_cases.TestUseCase
+import com.github.michaelbull.result.flatMap
+import com.github.michaelbull.result.mapBoth
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 data class SelectRecipesUiState(
     val isLoading: Boolean = false,
+    val error: String = "",
     val recipes: List<Recipe> = emptyList(),
     val testString: String = "",
     val selectedTab: CategoryTab = CategoryTab.SelectStapleFoodTab
 )
 
-class SelectRecipesViewModel(
-    private val conditions: String?
+@HiltViewModel
+class SelectRecipesViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
+    private val useCase: TestUseCase
+//    private val conditions: String?
 ): ViewModel() {
+
+    private val conditions = savedStateHandle.get<String>("conditions")
 
     private val _uiState = MutableStateFlow(SelectRecipesUiState(
         isLoading = false,
@@ -32,24 +44,20 @@ class SelectRecipesViewModel(
 
     init {
         viewModelScope.launch {
-/*
-            useCase.fetch(conditions)
-                .onSuccess { recipes ->
-                    _uiState.update { it.copy(
-                        recipes = recipes
-                    ) }
-                }
-*/
-//            _uiState.update { it.copy(recipes = emptyList()) }
-            _uiState.update { it.copy(testString = conditions ?: "") }
+            startLoading()
+            useCase.fetchRecipes(conditions ?: "").mapBoth(
+                success = { recipes -> _uiState.update { it.copy(recipes = recipes) }},
+                failure = { error -> _uiState.update { it.copy(error = error) } }
+            )
+            endLoading()
         }
     }
 
-    suspend fun startLoading() {
+    private fun startLoading() {
         _uiState.update { it.copy(isLoading = true) }
     }
 
-    suspend fun endLoading() {
+    private fun endLoading() {
         _uiState.update { it.copy(isLoading = false) }
     }
 
@@ -57,6 +65,7 @@ class SelectRecipesViewModel(
         _uiState.update { it.copy(selectedTab = selectedTab) }
     }
 
+/*
     class Factory(
         private val conditions: String?
     ): ViewModelProvider.Factory {
@@ -64,6 +73,7 @@ class SelectRecipesViewModel(
             return SelectRecipesViewModel(conditions = conditions) as T
         }
     }
+*/
 }
 
 sealed class CategoryTab(

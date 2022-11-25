@@ -3,6 +3,7 @@ package com.example.recipe_app.menu_list.shopping_list
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
+import androidx.hilt.navigation.compose.hiltViewModel
 
 class ShoppingListState(
     private val viewModel: ShoppingListViewModel,
@@ -13,10 +14,13 @@ class ShoppingListState(
 
 @Composable
 fun rememberShoppingListState(
+    viewModel: ShoppingListViewModel = hiltViewModel()
+/*
     menuId: String?,
     viewModel: ShoppingListViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
         factory = ShoppingListViewModel.Factory(menuId)
     ),
+*/
 ): ShoppingListState = remember {
     ShoppingListState(viewModel)
 }

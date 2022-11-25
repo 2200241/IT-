@@ -38,7 +38,7 @@ fun MakeMenuScreen(
             arguments = listOf(navArgument("conditions") { type = NavType.StringType })
         ) { backStackEntry ->
             SelectRecipes(
-                state = rememberSelectRecipesState(conditions = backStackEntry.arguments?.getString("conditions")),
+//                state = rememberSelectRecipesState(conditions = backStackEntry.arguments?.getString("conditions")),
                 paddingValues = paddingValues,
                 onItemClicked = { recipeId ->
                     state.navigateToRecipeDetail(recipeId, backStackEntry)
@@ -51,7 +51,7 @@ fun MakeMenuScreen(
             arguments = listOf(navArgument("recipeId") { type = NavType.StringType })
         ) { backStackEntry ->
             RecipeDetail(
-                state = rememberRecipeDetailState(recipeId = backStackEntry.arguments?.getString("recipeId")),
+//                state = rememberRecipeDetailState(recipeId = backStackEntry.arguments?.getString("recipeId")),
                 onBackPressed = { state.navigateBack() }
             )
         }

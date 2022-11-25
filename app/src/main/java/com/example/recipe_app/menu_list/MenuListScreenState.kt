@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
@@ -59,7 +60,7 @@ class MenuListScreenState(
 
 @Composable
 fun rememberMenuListScreenState(
-    viewModel: MenuListViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
+    viewModel: MenuListViewModel = hiltViewModel(),
     scaffoldState: ScaffoldState,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     navController: NavHostController = rememberNavController()
