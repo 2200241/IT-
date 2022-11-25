@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.recipe_app.R
+import com.example.recipe_app.make_menu.select_conditions.rippleClickable
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
 
@@ -39,11 +40,11 @@ fun SettingsScreen() {
             )
             Divider(color = Color.LightGray)
         }
-        Allergys()
+        Allergies()
     }
 }
 @Composable
-fun Allergys() {
+fun Allergies() {
     FlowRow(
         mainAxisSpacing = 12.dp,
         mainAxisAlignment = MainAxisAlignment.Start,
@@ -52,7 +53,7 @@ fun Allergys() {
         for (i in 1..15) {
             val checkedState = remember { mutableStateOf(false) }
             Row(
-                modifier = Modifier.clickable { checkedState.value = !checkedState.value },
+                modifier = Modifier.rippleClickable { checkedState.value = !checkedState.value },
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Checkbox(
