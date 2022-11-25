@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,6 +22,8 @@ import androidx.compose.material.Divider
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.ScrollableTabRow
+import androidx.compose.material.Tab
 import androidx.compose.material.TabRow
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -27,6 +31,8 @@ import androidx.compose.material.icons.sharp.Clear
 import androidx.compose.material.icons.sharp.Favorite
 import androidx.compose.material.icons.sharp.Star
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,6 +45,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.recipe_app.R
+import com.example.recipe_app.make_menu.select_conditions.ConditionTab
+import com.example.recipe_app.make_menu.select_conditions.SelectTags
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
 
@@ -66,7 +74,37 @@ fun SelectRecipes(
         item { Divider(color = Color.LightGray) }
         item { SelectedRecipes(onItemClicked) }
         item { Divider(color = Color.LightGray) }
-        item { SearchResultRecipes(uiState, onItemClicked) }
+        item {
+            SelectCategoriesTabBar(
+                selectedTab = uiState.selectedTab,
+                onClick = state::onTabClicked
+            )
+
+            when (uiState.selectedTab) {
+                CategoryTab.SelectStapleFoodTab -> {
+                    SearchResultRecipes(uiState, onItemClicked)
+                }
+                CategoryTab.SelectMainDishTab -> {
+                    SearchResultRecipes(uiState, onItemClicked)
+                }
+                CategoryTab.SelectSideDishTab -> {
+                    SearchResultRecipes(uiState, onItemClicked)
+                }
+                CategoryTab.SelectSoupTab -> {
+                    SearchResultRecipes(uiState, onItemClicked)
+                }
+                CategoryTab.SelectSweetsTab -> {
+                    SearchResultRecipes(uiState, onItemClicked)
+                }
+                CategoryTab.SelectDrinkTab -> {
+                    SearchResultRecipes(uiState, onItemClicked)
+                }
+                CategoryTab.SelectOthersTab -> {
+                    SearchResultRecipes(uiState, onItemClicked)
+                }
+            }
+        }
+        //item { SearchResultRecipes(uiState, onItemClicked) }
     }
 }
 
@@ -104,6 +142,48 @@ fun SelectedRecipes(
         }
     }
 }
+
+@Composable
+fun SelectCategoriesTabBar(
+    modifier: Modifier = Modifier,
+    selectedTab: CategoryTab,
+    onClick: (CategoryTab) -> Unit
+) {
+    ScrollableTabRow(
+        modifier = modifier,
+        selectedTabIndex = selectedTab.index,
+        backgroundColor = Color.White,
+        edgePadding = 0.dp
+    ) {
+        CategoryTabs.forEach { item ->
+            Tab(
+                modifier = Modifier.height(50.dp),
+                selected = item.index == selectedTab.index,
+                selectedContentColor = colorResource(id = R.color.fontColor),
+                unselectedContentColor = Color.Gray,
+                onClick = {
+                    onClick(item)
+                }
+            ) {
+                Text(
+                    text = stringResource(id = item.titleId),
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+    }
+}
+
+private val CategoryTabs = listOf(
+    CategoryTab.SelectStapleFoodTab,
+    CategoryTab.SelectMainDishTab,
+    CategoryTab.SelectSideDishTab,
+    CategoryTab.SelectSoupTab,
+    CategoryTab.SelectSweetsTab,
+    CategoryTab.SelectDrinkTab,
+    CategoryTab.SelectOthersTab
+)
 
 @Composable
 fun SearchResultRecipes(
