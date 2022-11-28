@@ -8,6 +8,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.Tab
+import androidx.compose.material.TabRow
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.sharp.Favorite
@@ -18,6 +20,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.recipe_app.R
@@ -27,18 +31,72 @@ fun SelectFavorite(
     state: SelectFavoriteState = rememberSelectFavoriteState(),
     paddingValues: PaddingValues
 ) {
-    LazyColumn(modifier = Modifier.padding(paddingValues)) {
-        item {
-            for (i in 1..10) {
-                FavoriteListItems("料理名$i")
-                Divider(color = Color.LightGray)
+    val uiState = state.uiState
+
+    Column(modifier = Modifier.padding(paddingValues)) {
+        SelectFavoritesTabBar(
+            selectedTab = uiState.selectedTab,
+            onClick = state::onTabClicked
+        )
+
+        LazyColumn() {
+            when (uiState.selectedTab) {
+                FavoriteTab.SelectRecipeTab -> {
+                    for (i in 1..10) {
+                        item {
+                            FavoriteRecipes("料理名$i")
+                            Divider(color = Color.LightGray)
+                        }
+                    }
+                }
+                FavoriteTab.SelectMenuTab -> {
+                    item {
+                        FavoriteMenus()
+                    }
+                }
             }
         }
     }
 }
 
 @Composable
-fun FavoriteListItems(title: String) {
+fun SelectFavoritesTabBar(
+    modifier: Modifier = Modifier,
+    selectedTab: FavoriteTab,
+    onClick: (FavoriteTab) -> Unit
+) {
+    TabRow(
+        modifier = modifier,
+        selectedTabIndex = selectedTab.index,
+        backgroundColor = Color.White,
+    ) {
+        FavoriteTabs.forEach { item ->
+            Tab(
+                modifier = Modifier.height(50.dp),
+                selected = item.index == selectedTab.index,
+                selectedContentColor = colorResource(id = R.color.fontColor),
+                unselectedContentColor = Color.Gray,
+                onClick = {
+                    onClick(item)
+                }
+            ) {
+                Text(
+                    text = stringResource(id = item.titleId),
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+    }
+}
+
+private val FavoriteTabs = listOf(
+    FavoriteTab.SelectRecipeTab,
+    FavoriteTab.SelectMenuTab
+)
+
+@Composable
+fun FavoriteRecipes(title: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -67,8 +125,13 @@ fun FavoriteListItems(title: String) {
             modifier = Modifier
                 .size(30.dp)
                 .align(alignment = Alignment.Bottom)
-                .clickable {  },
+                .clickable { },
             tint = colorResource(id = R.color.favoriteIconColor)
         )
     }
+}
+
+@Composable
+fun FavoriteMenus() {
+
 }

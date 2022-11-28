@@ -2,10 +2,12 @@ package com.example.recipe_app.favorite_list.select_favorite
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.recipe_app.data.Categories
+import com.example.recipe_app.R
+//import com.example.recipe_app.data.Categories
 import com.example.recipe_app.data.Favorites
 import com.example.recipe_app.data.Menu
 import com.example.recipe_app.data.Recipe
+import com.example.recipe_app.data.RecipeThumb
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,7 +17,8 @@ import javax.inject.Inject
 
 data class SelectFavoriteUiState(
     val isLoading: Boolean = false,
-    val favorites: Favorites = Favorites()
+    val favorites: Favorites = Favorites(),
+    val selectedTab: FavoriteTab = FavoriteTab.SelectRecipeTab
 )
 
 @HiltViewModel
@@ -26,6 +29,7 @@ class SelectFavoriteViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(
         SelectFavoriteUiState(
             isLoading = false,
+            selectedTab = FavoriteTab.SelectRecipeTab
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -56,6 +60,10 @@ class SelectFavoriteViewModel @Inject constructor(
 
     }
 
+    fun onTabClicked(selectedTab: FavoriteTab) {
+        _uiState.update { it.copy(selectedTab = selectedTab) }
+    }
+
     private fun setTestList() {
         var testArray = emptyArray<Recipe>()
         for (i in 1..10) {
@@ -81,4 +89,13 @@ class SelectFavoriteViewModel @Inject constructor(
         )
         _uiState.update { it.copy(favorites = testFavorites) }
     }
+}
+
+sealed class FavoriteTab(
+    val titleId: Int,
+    val index: Int
+) {
+    object SelectRecipeTab: FavoriteTab(R.string.recipe, 0)
+
+    object SelectMenuTab: FavoriteTab(R.string.menu, 1)
 }

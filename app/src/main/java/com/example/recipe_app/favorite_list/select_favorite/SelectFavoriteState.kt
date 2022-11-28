@@ -11,6 +11,8 @@ class SelectFavoriteState(
     val uiState: SelectFavoriteUiState
         @Composable get() = viewModel.uiState.collectAsState().value
 
+    fun onTabClicked(selectedTab: FavoriteTab) = viewModel.onTabClicked(selectedTab)
+
 }
 
 @Composable

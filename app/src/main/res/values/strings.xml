@@ -24,4 +24,7 @@
     <string name="japanese">和食</string>
     <string name="western">洋食</string>
 
+    <string name="recipe">レシピ</string>
+    <string name="menu">献立</string>
+
 </resources>
