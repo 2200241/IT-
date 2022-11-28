@@ -25,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.recipe_app.R
+import com.example.recipe_app.menu_list.select_menu.MenuListItem
 
 @Composable
 fun SelectFavorite(
@@ -50,8 +51,11 @@ fun SelectFavorite(
                     }
                 }
                 FavoriteTab.SelectMenuTab -> {
-                    item {
-                        FavoriteMenus()
+                    for (i in 1 .. 10) {
+                        item {
+                            FavoriteMenus()
+                            Divider(color = Color.LightGray)
+                        }
                     }
                 }
             }
@@ -133,5 +137,5 @@ fun FavoriteRecipes(title: String) {
 
 @Composable
 fun FavoriteMenus() {
-
+    MenuListItem(onItemClicked = {})
 }

@@ -7,8 +7,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -42,17 +44,18 @@ import com.example.recipe_app.R
 @Composable
 fun RecipeDetail(
     state: RecipeDetailState = rememberRecipeDetailState(),
+    paddingValues: PaddingValues,
     onBackPressed: () -> Unit = {}
 ) {
     Column(
-        modifier = Modifier.padding(vertical = 15.dp),
+        modifier = Modifier.padding(paddingValues),
     ) {
-        LazyColumn() {
+        LazyColumn(modifier = Modifier.padding(paddingValues)) {
             item {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 15.dp),
+                        .padding(15.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
@@ -73,10 +76,18 @@ fun RecipeDetail(
             item { Materials() }
             item { CookingProcedure() }
         }
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(paddingValues)
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 15.dp),
+                .padding(16.dp)
+                .align(Alignment.BottomCenter),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -113,7 +124,7 @@ fun Materials() {
             fontWeight = FontWeight.Bold,
             color = colorResource(id = R.color.fontColor)
         )
-        for (i in 1..5) {
+        for (i in 1..10) {
             Text(
                 text = "材料名$i",
                 fontSize = 20.sp,

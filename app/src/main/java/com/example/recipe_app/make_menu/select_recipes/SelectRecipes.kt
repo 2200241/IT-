@@ -250,6 +250,20 @@ fun SearchResultRecipes(
                             tint = Color.White
                         )
                     }
+                    /*FloatingActionButton(
+                        modifier = Modifier
+                            .size(20.dp)
+                            .align(alignment = Alignment.End)
+                            .padding(16.dp),
+                        backgroundColor = Color.White,
+                        contentColor = Color.LightGray,
+                        onClick = { /*TODO*/ }
+                    ) {
+                        Icon(
+                            Icons.Sharp.Favorite,
+                            contentDescription = null,
+                        )
+                    }*/
                     Text(
                         modifier = Modifier.padding(8.dp),
                         text = recipe.title,

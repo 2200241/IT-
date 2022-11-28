@@ -37,6 +37,7 @@ fun MenuListScreen(
         ) { backStackEntry ->
             ShoppingList(
 //                state = rememberShoppingListState(menuId = backStackEntry.arguments?.getString("menuId")),
+                paddingValues = paddingValues,
                 onThumbClicked = { id ->
                     state.navigateToRecipeDetail(id, backStackEntry)
                 }
@@ -48,6 +49,7 @@ fun MenuListScreen(
         ) { backStackEntry ->
             RecipeDetail(
 //                state = rememberRecipeDetailState(recipeId = backStackEntry.arguments?.getString("recipeId")),
+                paddingValues = paddingValues,
                 onBackPressed = { state.navigateBack() }
             )
         }

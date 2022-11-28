@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -14,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Checkbox
 import androidx.compose.material.CheckboxDefaults
 import androidx.compose.material.Divider
+import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -35,14 +37,16 @@ import com.example.recipe_app.make_menu.select_recipes.SelectedRecipes
 @Composable
 fun ShoppingList(
     state: ShoppingListState = rememberShoppingListState(),
+    paddingValues: PaddingValues,
     onThumbClicked: (String) -> Unit
 ) {
     val uiState = state.uiState
+
     Column() {
         SelectedRecipes(onThumbClicked)
         Divider(color = Color.LightGray)
 
-        LazyColumn() {
+        LazyColumn(modifier = Modifier.padding(paddingValues)) {
             item {
                 Text(
                     modifier = Modifier.padding(start = 15.dp, top = 15.dp, bottom = 10.dp),
@@ -53,7 +57,7 @@ fun ShoppingList(
                 )
             }
             item {
-                for (i in 1..10) {
+                for (i in 1..15) {
                     val checkedState = remember { mutableStateOf(false) }
                     Column(modifier = Modifier.padding(horizontal = 15.dp)) {
                         Row(
@@ -82,17 +86,24 @@ fun ShoppingList(
                 }
             }
         }
+    }
 
-        Box(Modifier.fillMaxWidth()) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(paddingValues)
+    ) {
+        FloatingActionButton(
+            modifier = Modifier
+                .align(alignment = Alignment.BottomEnd)
+                .padding(16.dp),
+            backgroundColor = Color.White,
+            contentColor = Color.LightGray,
+            onClick = { /*TODO*/ }
+        ) {
             Icon(
                 Icons.Sharp.Favorite,
                 contentDescription = null,
-                modifier = Modifier
-                    .align(alignment = Alignment.BottomEnd)
-                    .padding(15.dp)
-                    .size(30.dp)
-                    .clickable { },
-                tint = Color.LightGray
             )
         }
     }
