@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.recipe_app.R
+import com.example.recipe_app.data.Menu
 import com.example.recipe_app.data.Recipe
 import com.example.recipe_app.data.RecipeThumb
 import com.example.recipe_app.make_menu.select_conditions.ConditionTab
@@ -68,12 +69,16 @@ class SelectRecipesViewModel @Inject constructor(
         _uiState.update { it.copy(selectedRecipes = _uiState.value.selectedRecipes + listOf(RecipeThumb(id, thumb))) }
     }
 
-    fun removeRecipe() {
-
+    fun removeRecipe(id: String) {
+        _uiState.update { it.copy(
+            selectedRecipes = _uiState.value.selectedRecipes.filter { recipe -> recipe.id != id }
+        ) }
     }
 
     fun addMenu() {
-
+        viewModelScope.launch {
+            useCase.addMenu(Menu(id = "", date = "", recipes = _uiState.value.selectedRecipes))
+        }
     }
 
     fun onTabClicked(selectedTab: CategoryTab) {

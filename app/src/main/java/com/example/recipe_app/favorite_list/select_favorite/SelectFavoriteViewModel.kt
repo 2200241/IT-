@@ -2,8 +2,7 @@ package com.example.recipe_app.favorite_list.select_favorite
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.recipe_app.R
-//import com.example.recipe_app.data.Categories
+import com.example.recipe_app.data.Categories
 import com.example.recipe_app.data.Favorites
 import com.example.recipe_app.data.Menu
 import com.example.recipe_app.data.Recipe
@@ -66,25 +65,20 @@ class SelectFavoriteViewModel @Inject constructor(
                 isFavorite = true
             )
         }
-        val testList = testArray.asList()
-        var testMenus = emptyArray<Menu>()
+
+        var testRecipeThumbArray = emptyArray<RecipeThumb>()
         for (i in 1..10) {
-            //testMenus += Menu(id = "1", date = "2022-1-1", recipes = testList)
+            testRecipeThumbArray += RecipeThumb(id = "id@$i", thumb = "url@$i")
         }
-        /*val testCategories = Categories(
-            stapleFood = testList,
-            mainDish = testList,
-            sideDish = testList,
-            soup = testList,
-            sweets = testList,
-            drink = testList,
-            others = testList
-        )
+        var testMenuArray = emptyArray<Menu>()
+        for (i in 1..10) {
+            testMenuArray += Menu(id = "1", date = "2022-1-1", recipes = testRecipeThumbArray.asList())
+        }
 
         val testFavorites = Favorites(
-            menus = testMenus.asList(),
-            categories = testCategories
+            menus = testMenuArray.asList(),
+            recipes = testArray.asList()
         )
-        _uiState.update { it.copy(favorites = testFavorites) }*/
+        _uiState.update { it.copy(favorites = testFavorites) }
     }
 }
