@@ -3,6 +3,7 @@ package com.example.recipe_app.recipe_detail
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,7 +24,10 @@ import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.sharp.Favorite
+import androidx.compose.material.icons.sharp.FavoriteBorder
 import androidx.compose.material.icons.sharp.Star
+import androidx.compose.material.icons.sharp.StarBorder
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,76 +44,80 @@ fun RecipeDetail(
     state: RecipeDetailState = rememberRecipeDetailState(),
     onBackPressed: () -> Unit = {}
 ) {
-    LazyColumn(
+    Column(
         modifier = Modifier.padding(vertical = 15.dp),
     ) {
-        item {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 15.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(text = state.uiState.title, fontSize = 18.sp) // 料理名
-                state.test()
-                Box( // ->image
+        LazyColumn() {
+            item {
+                Row(
                     modifier = Modifier
-                        .size(120.dp, 80.dp)
-                        .background(color = Color.LightGray)
+                        .fillMaxWidth()
+                        .padding(horizontal = 15.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = "料理画像", color = Color.White)
-                }
-            }
-        }
-        item { Material() }
-        item { CookingProcedure() }
-        item {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 15.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                ExtendedFloatingActionButton(
-                    text = {
-                        Text(
-                            text = "買い物リストへ追加",
-                            color = Color.White,
-                            fontSize = 18.sp
-                        )
-                    },
-                    onClick = {}
-                )
-                IconButton(
-                    onClick = {}
-                ) {
-                    Icon(
-                        Icons.Sharp.Star,
-                        contentDescription = null,
-                        tint = Color.LightGray
+                    Text(
+                        text = state.uiState.title,
+                        fontSize = 18.sp,
+                        color = colorResource(id = R.color.fontColor)
                     )
+                    state.test()
+                    Box( // ->image
+                        modifier = Modifier
+                            .size(160.dp, 115.dp)
+                            .background(color = Color.LightGray)
+                    ) {
+                        Text(text = "料理画像", color = Color.White)
+                    }
                 }
             }
+            item { Materials() }
+            item { CookingProcedure() }
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 15.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            ExtendedFloatingActionButton(
+                backgroundColor = colorResource(id = R.color.addListButtonColor),
+                contentColor = Color.White ,
+                text = {
+                    Text(
+                        text = "買い物リストへ追加",
+                        fontSize = 18.sp
+                    )
+                },
+                onClick = {}
+            )
+            Icon(
+                Icons.Sharp.Favorite,
+                contentDescription = null,
+                modifier = Modifier
+                    .size(32.dp)
+                    .clickable { },
+                tint = Color.LightGray
+            )
         }
     }
 }
 
 @Composable
-fun Material() {
-    Column(modifier = Modifier.padding(horizontal = 15.dp, vertical = 10.dp)) {
+fun Materials() {
+    Column(modifier = Modifier.padding(horizontal = 15.dp)) {
         Text(
             modifier = Modifier.padding(bottom = 10.dp),
             text = "材料",
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
-            color = Color(0xFF333333)
+            color = colorResource(id = R.color.fontColor)
         )
         for (i in 1..5) {
             Text(
                 text = "材料名$i",
                 fontSize = 20.sp,
-                color = Color(0xFF333333)
+                color = colorResource(id = R.color.fontColor)
             )
             Divider(
                 modifier = Modifier.padding(bottom = 10.dp),
@@ -121,20 +129,20 @@ fun Material() {
 
 @Composable
 fun CookingProcedure() {
-    Column(modifier = Modifier.padding(horizontal = 15.dp)) {
+    Column(modifier = Modifier.padding(horizontal = 15.dp, vertical = 10.dp)) {
         Text(
             modifier = Modifier.padding(bottom = 10.dp),
             text = "作り方",
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
-            color = Color(0xFF333333)
+            color = colorResource(id = R.color.fontColor)
         )
-        for (i in 1..5) {
+        for (i in 1..3) {
             Text(
                 modifier = Modifier.padding(bottom = 10.dp),
-                text = "$i. 手順$i",
+                text = "$i.",
                 fontSize = 20.sp,
-                color = Color(0xFF333333)
+                color = colorResource(id = R.color.fontColor)
             )
         }
     }

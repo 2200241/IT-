@@ -10,6 +10,7 @@ import androidx.compose.foundation.LocalOverscrollConfiguration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,6 +24,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Card
 import androidx.compose.material.Checkbox
+import androidx.compose.material.CheckboxDefaults
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
@@ -33,16 +35,19 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.sharp.Search
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -70,13 +75,15 @@ fun SelectIngredients(
                 modifier = Modifier.padding(start = 20.dp, top = 20.dp, bottom = 10.dp),
                 text = "食材一覧",
                 fontSize = 20.sp,
-                color = Color(0xFF333333)
+                color = colorResource(id = R.color.fontColor)
             )
         }
+        item { Divider(color = Color.LightGray) }
         for (i in 1..5) {
             item {
                 Column { CategoryTitle("カテゴリー名$i") }
             }
+            item { Divider(color = Color.LightGray) }
         }
     }
 }
@@ -96,7 +103,10 @@ fun SearchTextField(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color(0xFFF2F2F2), RoundedCornerShape(50))
+                    .background(
+                        colorResource(id = R.color.searchTextFieldColor),
+                        RoundedCornerShape(50)
+                    )
                     .padding(12.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -132,17 +142,13 @@ fun CategoryTitle(title: String) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            //.padding(10.dp)
+            //.padding(vertical = 5.dp)
             .animateContentSize(
                 animationSpec = tween(
                     durationMillis = 300,
                     easing = LinearOutSlowInEasing
                 )
             ),
-        //backgroundColor = colorResource(id = R.color.gray),
-        border = BorderStroke(1.5.dp, colorResource(id = R.color.gray)),
-        //shape = MaterialTheme.shapes.medium,
-        //elevation = 10.dp,
         onClick = {
             expandedState.value = !expandedState.value
         }
@@ -152,9 +158,7 @@ fun CategoryTitle(title: String) {
                 .fillMaxWidth()
                 .padding(5.dp)
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     modifier = Modifier
                         .weight(6f)
@@ -162,7 +166,7 @@ fun CategoryTitle(title: String) {
                     text = title,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFF333333),
+                    color = colorResource(id = R.color.fontColor),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -177,7 +181,7 @@ fun CategoryTitle(title: String) {
                     Icon(
                         imageVector = Icons.Default.ArrowDropDown,
                         contentDescription = "Drop-Down Arrow",
-                        tint = Color(0xFF333333)
+                        tint = Color.DarkGray
                     )
                 }
             }
@@ -187,6 +191,24 @@ fun CategoryTitle(title: String) {
         }
     }
 }
+
+@Composable
+fun Modifier.rippleClickable(
+    enabled: Boolean = true,
+    onClickLabel: String? = null,
+    role: Role? = null,
+    onClick: () -> Unit
+): Modifier = composed {
+    this.clickable(
+        interactionSource = remember { MutableInteractionSource() },
+        indication = null,
+        enabled = enabled,
+        onClickLabel = onClickLabel,
+        role = role,
+        onClick = onClick
+    )
+}
+
 @Composable
 fun Ingredients() {
     for (i in 1..5) {
@@ -195,20 +217,20 @@ fun Ingredients() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 15.dp, vertical = 6.dp)
-                .clickable { checkedState.value = !checkedState.value },
+                .rippleClickable { checkedState.value = !checkedState.value },
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
                 text = "食材名$i",
                 fontSize = 20.sp,
-                //fontWeight = FontWeight.Bold,
-                color = Color(0xFF333333)
+                color = colorResource(id = R.color.fontColor)
             )
             Checkbox(
                 modifier = Modifier.size(40.dp),
+                colors = CheckboxDefaults.colors(colorResource(id = R.color.selectButtonColor)),
                 checked = checkedState.value,
-                onCheckedChange = { checkedState.value = it }
+                onCheckedChange = { checkedState.value = it },
             )
         }
     }

@@ -1,6 +1,8 @@
 package com.example.recipe_app.make_menu.select_conditions
 
 import android.util.Log
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,7 +10,10 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.ExtendedFloatingActionButton
+import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Tab
 import androidx.compose.material.TabRow
 import androidx.compose.material.Text
@@ -22,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.recipe_app.R
 import androidx.compose.ui.unit.sp
+import com.example.recipe_app.ui.theme.Shapes
 
 @Composable
 fun SelectConditions(
@@ -70,14 +76,13 @@ private fun SelectConditionsTabBar(
     TabRow(
         modifier = modifier,
         selectedTabIndex = selectedTab.index,
-        backgroundColor = Color.White,
-        contentColor = Color(0xFF333333)
+        backgroundColor = Color.White
     ) {
         ConditionTabs.forEach { item ->
             Tab(
                 modifier = Modifier.height(50.dp),
                 selected = item.index == selectedTab.index,
-                selectedContentColor = Color.DarkGray,
+                selectedContentColor = colorResource(id = R.color.fontColor),
                 unselectedContentColor = Color.Gray,
                 onClick = {
                     onClick(item)
@@ -86,6 +91,7 @@ private fun SelectConditionsTabBar(
                 Text(
                     text = stringResource(id = item.titleId),
                     fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold
                 )
             }
         }
@@ -112,23 +118,27 @@ fun BottomButtons(onSearchClicked: () -> Unit) {
         ) {
             ExtendedFloatingActionButton(
                 modifier = Modifier.weight(1f),
+                backgroundColor = colorResource(id = R.color.clearButtonColor),
+                contentColor = Color.White,
                 text = {
                     Text(
                         text = "クリア",
-                        color = Color.White,
-                        fontSize = 20.sp
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold
                     )
                 },
                 onClick = { Log.d("Button", "onClick") }
             )
-            Spacer(modifier = Modifier.width(30.dp))
+            Spacer(modifier = Modifier.width(15.dp))
             ExtendedFloatingActionButton(
                 modifier = Modifier.weight(1f),
+                backgroundColor = colorResource(id = R.color.searchButtonColor),
+                contentColor = Color.White,
                 text = {
                     Text(
                         text = "検索",
-                        color = Color.White,
-                        fontSize = 20.sp
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold
                     )
                 },
                 onClick = onSearchClicked

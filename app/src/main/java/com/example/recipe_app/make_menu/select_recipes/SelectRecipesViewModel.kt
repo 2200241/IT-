@@ -5,9 +5,11 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.recipe_app.R
 import com.example.recipe_app.data.Menu
 import com.example.recipe_app.data.Recipe
 import com.example.recipe_app.data.RecipeThumb
+import com.example.recipe_app.make_menu.select_conditions.ConditionTab
 import com.example.recipe_app.use_cases.TestUseCase
 import com.github.michaelbull.result.flatMap
 import com.github.michaelbull.result.mapBoth
@@ -22,7 +24,8 @@ data class SelectRecipesUiState(
     val isLoading: Boolean = false,
     val error: String = "",
     val recipes: List<Recipe> = emptyList(),
-    val selectedRecipes: List<RecipeThumb> = emptyList()
+    val selectedRecipes: List<RecipeThumb> = emptyList(),
+    val selectedTab: CategoryTab = CategoryTab.SelectStapleFoodTab
 )
 
 @HiltViewModel
@@ -38,7 +41,8 @@ class SelectRecipesViewModel @Inject constructor(
         isLoading = false,
         error = "",
         recipes = emptyList(),
-        selectedRecipes = emptyList()
+        selectedRecipes = emptyList(),
+        selectedTab = CategoryTab.SelectStapleFoodTab
     ))
     val uiState = _uiState.asStateFlow()
 
@@ -77,6 +81,10 @@ class SelectRecipesViewModel @Inject constructor(
         }
     }
 
+    fun onTabClicked(selectedTab: CategoryTab) {
+        _uiState.update { it.copy(selectedTab = selectedTab) }
+    }
+
 /*
     class Factory(
         private val conditions: String?
@@ -86,4 +94,22 @@ class SelectRecipesViewModel @Inject constructor(
         }
     }
 */
+}
+
+sealed class CategoryTab(
+    val titleId: Int,
+    val index: Int
+) {
+    object SelectStapleFoodTab: CategoryTab(R.string.staple_food, 0)
+    object SelectMainDishTab: CategoryTab(R.string.main_dish, 1)
+
+    object SelectSideDishTab: CategoryTab(R.string.side_dish, 2)
+
+    object SelectSoupTab: CategoryTab(R.string.soup, 3)
+
+    object SelectSweetsTab: CategoryTab(R.string.sweets, 4)
+
+    object SelectDrinkTab: CategoryTab(R.string.drink, 5)
+
+    object SelectOthersTab: CategoryTab(R.string.others, 6)
 }

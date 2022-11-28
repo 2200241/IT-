@@ -6,7 +6,10 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -17,6 +20,7 @@ import com.example.recipe_app.menu_list.MenuListScreen
 import com.example.recipe_app.menu_list.rememberMenuListScreenState
 import com.example.recipe_app.settings.SettingsScreen
 import com.example.recipe_app.ui.theme.RecipeappTheme
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -26,6 +30,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             RecipeappTheme {
                 // A surface container using the 'background' color from the theme
+                StatusBarColor()
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
@@ -34,6 +39,15 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+}
+
+@Composable
+fun StatusBarColor() {
+    val systemUiController = rememberSystemUiController()
+    val statusBarColor = colorResource(id = R.color.statusBarColor)
+    SideEffect {
+        systemUiController.setStatusBarColor(statusBarColor)
     }
 }
 

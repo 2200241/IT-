@@ -2,10 +2,10 @@ package com.example.recipe_app.favorite_list.select_favorite
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.recipe_app.data.Categories
 import com.example.recipe_app.data.Favorites
 import com.example.recipe_app.data.Menu
 import com.example.recipe_app.data.Recipe
-import com.example.recipe_app.data.RecipeThumb
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -25,8 +25,8 @@ class SelectFavoriteViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(
         SelectFavoriteUiState(
-        isLoading = false,
-    )
+            isLoading = false,
+        )
     )
     val uiState = _uiState.asStateFlow()
 

@@ -7,5 +7,16 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="gray">#FFE7E7E7</color>
+
+    <color name="statusBarColor">#FF333333</color>
+    <color name="bottomNavigationColor">#FF333333</color>
+    <color name="fontColor">#FF333333</color>
+    <color name="borderLightColor">#FFE7E7E7</color>
+    <color name="selectButtonColor">#FF03DAC5</color>
+    <color name="searchButtonColor">#FF03DAC5</color>
+    <color name="clearButtonColor">#FF797979</color>
+    <color name="decisionButtonColor">#FF03DAC5</color>
+    <color name="addListButtonColor">#FF03DAC5</color>
+    <color name="searchTextFieldColor">#FFF2F2F2</color>
+    <color name="favoriteIconColor">#FFFF6666</color>
 </resources>

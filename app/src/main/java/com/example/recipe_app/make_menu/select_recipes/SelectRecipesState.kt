@@ -3,6 +3,7 @@ package com.example.recipe_app.make_menu.select_recipes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
+import com.example.recipe_app.make_menu.select_conditions.ConditionTab
 import androidx.hilt.navigation.compose.hiltViewModel
 
 class SelectRecipesState(
@@ -10,6 +11,8 @@ class SelectRecipesState(
 ) {
     val uiState: SelectRecipesUiState
         @Composable get() = viewModel.uiState.collectAsState().value
+
+    fun onTabClicked(selectedTab: CategoryTab) = viewModel.onTabClicked(selectedTab)
 
 }
 
