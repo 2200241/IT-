@@ -45,8 +45,9 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun StatusBarColor() {
     val systemUiController = rememberSystemUiController()
+    val statusBarColor = colorResource(id = R.color.statusBarColor)
     SideEffect {
-        systemUiController.setStatusBarColor(Color(0xFF333333))
+        systemUiController.setStatusBarColor(statusBarColor)
     }
 }
 

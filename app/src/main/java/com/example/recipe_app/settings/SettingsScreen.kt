@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Checkbox
+import androidx.compose.material.CheckboxDefaults
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -46,6 +47,7 @@ fun SettingsScreen() {
 @Composable
 fun Allergies() {
     FlowRow(
+        modifier = Modifier.padding(horizontal = 5.dp),
         mainAxisSpacing = 12.dp,
         mainAxisAlignment = MainAxisAlignment.Start,
         crossAxisSpacing = 5.dp,
@@ -58,11 +60,12 @@ fun Allergies() {
             ) {
                 Checkbox(
                     modifier = Modifier.size(40.dp),
+                    colors = CheckboxDefaults.colors(colorResource(id = R.color.selectButtonColor)),
                     checked = checkedState.value,
                     onCheckedChange = { checkedState.value = it }
                 )
                 Text(
-                    text = "アレルギー名$i",
+                    text = "アレルギー$i",
                     fontSize = 18.sp,
                     color = colorResource(id = R.color.fontColor)
                 )

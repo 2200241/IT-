@@ -10,7 +10,10 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.ExtendedFloatingActionButton
+import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Tab
 import androidx.compose.material.TabRow
 import androidx.compose.material.Text
@@ -24,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.recipe_app.R
 import androidx.compose.ui.unit.sp
+import com.example.recipe_app.ui.theme.Shapes
 
 @Composable
 fun SelectConditions(
@@ -114,7 +118,7 @@ fun BottomButtons(onSearchClicked: () -> Unit) {
         ) {
             ExtendedFloatingActionButton(
                 modifier = Modifier.weight(1f),
-                backgroundColor = colorResource(id = R.color.buttonColor),
+                backgroundColor = colorResource(id = R.color.clearButtonColor),
                 contentColor = Color.White,
                 text = {
                     Text(
@@ -125,10 +129,10 @@ fun BottomButtons(onSearchClicked: () -> Unit) {
                 },
                 onClick = { Log.d("Button", "onClick") }
             )
-            Spacer(modifier = Modifier.width(30.dp))
+            Spacer(modifier = Modifier.width(15.dp))
             ExtendedFloatingActionButton(
                 modifier = Modifier.weight(1f),
-                backgroundColor = colorResource(id = R.color.buttonColor),
+                backgroundColor = colorResource(id = R.color.searchButtonColor),
                 contentColor = Color.White,
                 text = {
                     Text(

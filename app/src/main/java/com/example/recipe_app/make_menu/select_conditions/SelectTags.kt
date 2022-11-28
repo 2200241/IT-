@@ -4,8 +4,11 @@ import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.LocalOverscrollConfiguration
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -90,7 +93,7 @@ fun SelectTagsButton(
         crossAxisSpacing = 5.dp,
     ) {
         items.forEach { item ->
-            val backgroundColor = if (selectedTags.contains(item)) colorResource(id = R.color.buttonColor) else Color.White
+            val backgroundColor = if (selectedTags.contains(item)) colorResource(id = R.color.selectButtonColor) else Color.White
             val contentColor = if (selectedTags.contains(item)) Color.White else colorResource(id = R.color.fontColor)
             val fontWeight = if (selectedTags.contains(item)) FontWeight.Bold else FontWeight.Normal
             OutlinedButton(

@@ -2,7 +2,8 @@ package com.example.recipe_app.favorite_list.select_favorite
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.recipe_app.data.Categories
+import com.example.recipe_app.R
+//import com.example.recipe_app.data.Categories
 import com.example.recipe_app.data.Favorites
 import com.example.recipe_app.data.Menu
 import com.example.recipe_app.data.Recipe
@@ -25,8 +26,8 @@ class SelectFavoriteViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(
         SelectFavoriteUiState(
-        isLoading = false,
-    )
+            isLoading = false,
+        )
     )
     val uiState = _uiState.asStateFlow()
 
@@ -68,9 +69,9 @@ class SelectFavoriteViewModel @Inject constructor(
         val testList = testArray.asList()
         var testMenus = emptyArray<Menu>()
         for (i in 1..10) {
-            testMenus += Menu(id = "1", date = "2022-1-1", recipes = testList)
+            //testMenus += Menu(id = "1", date = "2022-1-1", recipes = testList)
         }
-        val testCategories = Categories(
+        /*val testCategories = Categories(
             stapleFood = testList,
             mainDish = testList,
             sideDish = testList,
@@ -84,6 +85,6 @@ class SelectFavoriteViewModel @Inject constructor(
             menus = testMenus.asList(),
             categories = testCategories
         )
-        _uiState.update { it.copy(favorites = testFavorites) }
+        _uiState.update { it.copy(favorites = testFavorites) }*/
     }
 }

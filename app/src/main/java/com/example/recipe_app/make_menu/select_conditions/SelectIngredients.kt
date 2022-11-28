@@ -24,6 +24,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Card
 import androidx.compose.material.Checkbox
+import androidx.compose.material.CheckboxDefaults
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
@@ -77,10 +78,12 @@ fun SelectIngredients(
                 color = colorResource(id = R.color.fontColor)
             )
         }
+        item { Divider(color = Color.LightGray) }
         for (i in 1..5) {
             item {
                 Column { CategoryTitle("カテゴリー名$i") }
             }
+            item { Divider(color = Color.LightGray) }
         }
     }
 }
@@ -139,13 +142,13 @@ fun CategoryTitle(title: String) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
+            //.padding(vertical = 5.dp)
             .animateContentSize(
                 animationSpec = tween(
                     durationMillis = 300,
                     easing = LinearOutSlowInEasing
                 )
             ),
-        border = BorderStroke(1.5.dp, colorResource(id = R.color.borderLightColor)),
         onClick = {
             expandedState.value = !expandedState.value
         }
@@ -225,6 +228,7 @@ fun Ingredients() {
             )
             Checkbox(
                 modifier = Modifier.size(40.dp),
+                colors = CheckboxDefaults.colors(colorResource(id = R.color.selectButtonColor)),
                 checked = checkedState.value,
                 onCheckedChange = { checkedState.value = it },
             )

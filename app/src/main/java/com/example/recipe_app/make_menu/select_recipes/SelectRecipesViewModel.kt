@@ -23,7 +23,8 @@ data class SelectRecipesUiState(
     val isLoading: Boolean = false,
     val error: String = "",
     val recipes: List<Recipe> = emptyList(),
-    val selectedRecipes: List<RecipeThumb> = emptyList()
+    val selectedRecipes: List<RecipeThumb> = emptyList(),
+    val selectedTab: CategoryTab = CategoryTab.SelectStapleFoodTab
 )
 
 @HiltViewModel
@@ -39,8 +40,7 @@ class SelectRecipesViewModel @Inject constructor(
         isLoading = false,
         error = "",
         recipes = emptyList(),
-        selectedRecipes = emptyList()
-        recipes = emptyList(),
+        selectedRecipes = emptyList(),
         selectedTab = CategoryTab.SelectStapleFoodTab
     ))
     val uiState = _uiState.asStateFlow()

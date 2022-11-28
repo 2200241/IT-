@@ -69,52 +69,67 @@ fun SelectRecipes(
             CircularProgressIndicator()
         }
     } else {
-        LazyColumn(
-            modifier = Modifier.padding(paddingValues)
-        ) {
-            item {
-                Text(
-                    modifier = Modifier.padding(15.dp),
-                    text = stringResource(id = R.string.result),
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xFF333333)
-                )
-            }
-            item { Divider(color = Color.LightGray) }
-            item { SelectedRecipes(onItemClicked) }
-            item { Divider(color = Color.LightGray) }
-            item {
-                SelectCategoriesTabBar(
-                    selectedTab = uiState.selectedTab,
-                    onClick = state::onTabClicked
-                )
+        Column(modifier = Modifier.padding(paddingValues)) {
+            Text(
+                modifier = Modifier.padding(15.dp),
+                text = stringResource(id = R.string.result),
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                color = colorResource(id = R.color.fontColor)
+            )
 
+            Divider(color = Color.LightGray)
+            SelectedRecipes(onItemClicked)
+            Divider(color = Color.LightGray)
+
+            SelectCategoriesTabBar(
+                selectedTab = uiState.selectedTab,
+                onClick = state::onTabClicked
+            )
+
+            LazyColumn() {
                 when (uiState.selectedTab) {
                     CategoryTab.SelectStapleFoodTab -> {
-                        SearchResultRecipes(uiState, onItemClicked)
+                        item { SearchResultRecipes(uiState.recipes, onItemClicked) }
                     }
                     CategoryTab.SelectMainDishTab -> {
-                        SearchResultRecipes(uiState, onItemClicked)
+                        item { SearchResultRecipes(uiState.recipes, onItemClicked) }
                     }
                     CategoryTab.SelectSideDishTab -> {
-                        SearchResultRecipes(uiState, onItemClicked)
+                        item { SearchResultRecipes(uiState.recipes, onItemClicked) }
                     }
                     CategoryTab.SelectSoupTab -> {
-                        SearchResultRecipes(uiState, onItemClicked)
+                        item { SearchResultRecipes(uiState.recipes, onItemClicked) }
                     }
                     CategoryTab.SelectSweetsTab -> {
-                        SearchResultRecipes(uiState, onItemClicked)
+                        item { SearchResultRecipes(uiState.recipes, onItemClicked) }
                     }
                     CategoryTab.SelectDrinkTab -> {
-                        SearchResultRecipes(uiState, onItemClicked)
+                        item { SearchResultRecipes(uiState.recipes, onItemClicked) }
                     }
                     CategoryTab.SelectOthersTab -> {
-                        SearchResultRecipes(uiState, onItemClicked)
+                        item { SearchResultRecipes(uiState.recipes, onItemClicked) }
                     }
                 }
-            } }
+            }
         }
+
+        // 献立決定ボタン
+        /*Box() {
+            ExtendedFloatingActionButton(
+                modifier = Modifier.align(Alignment.BottomCenter),
+                backgroundColor = colorResource(id = R.color.decisionButtonColor),
+                contentColor = Color.White,
+                text = {
+                    Text(
+                        text = "献立を決定",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                },
+                onClick = {}
+            )
+        }*/
     }
 }
 
@@ -203,41 +218,38 @@ fun SearchResultRecipes(
 ) {
     val screenWidth = LocalConfiguration.current.screenWidthDp
 
-    Box(modifier = Modifier.padding(10.dp)) {
-        FlowRow(
-            modifier = Modifier.padding(start = 10.dp),
-            mainAxisSpacing = 12.dp,
-            mainAxisAlignment = MainAxisAlignment.Center,
-            crossAxisSpacing = 5.dp,
-        ) {
-            recipes.map { recipe ->
-                Box(
-                    modifier = Modifier
-                        //.padding(horizontal = 10.dp)
-                        .size((screenWidth / 2 - 25).dp, 120.dp)
-                        .background(color = Color.LightGray)
-                        .clickable { onItemClicked(recipe.id) }
+    FlowRow(
+        modifier = Modifier.padding(start = 7.5.dp),
+        mainAxisSpacing = 5.dp,
+        mainAxisAlignment = MainAxisAlignment.Start,
+        crossAxisSpacing = 5.dp,
+    ) {
+        recipes.map { recipe ->
+            Box(
+                modifier = Modifier
+                    .size(((screenWidth / 2) - 10).dp, 140.dp)
+                    .background(color = Color.LightGray)
+                    .clickable { onItemClicked(recipe.id) }
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.SpaceBetween
+                    IconButton(
+                        modifier = Modifier.align(alignment = Alignment.End),
+                        onClick = { Log.d("Button", "onClick") }
                     ) {
-                        IconButton(
-                            modifier = Modifier.align(alignment = Alignment.End),
-                            onClick = { Log.d("Button", "onClick") }
-                        ) {
-                            Icon(
-                                Icons.Sharp.Star,
-                                contentDescription = null,
-                                tint = Color.White
-                            )
-                        }
-                        Text(
-                            modifier = Modifier.padding(8.dp),
-                            text = recipe.title,
-                            color = Color.White,
+                        Icon(
+                            Icons.Sharp.Favorite,
+                            contentDescription = null,
+                            tint = Color.White
                         )
                     }
+                    Text(
+                        modifier = Modifier.padding(8.dp),
+                        text = recipe.title,
+                        color = Color.White,
+                    )
                 }
             }
         }

@@ -44,61 +44,61 @@ fun RecipeDetail(
     state: RecipeDetailState = rememberRecipeDetailState(),
     onBackPressed: () -> Unit = {}
 ) {
-    LazyColumn(
+    Column(
         modifier = Modifier.padding(vertical = 15.dp),
     ) {
-        item {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 15.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = state.uiState.title,
-                    fontSize = 18.sp,
-                    color = colorResource(id = R.color.fontColor)
-                )
-                state.test()
-                Box( // ->image
+        LazyColumn() {
+            item {
+                Row(
                     modifier = Modifier
-                        .size(160.dp, 115.dp)
-                        .background(color = Color.LightGray)
+                        .fillMaxWidth()
+                        .padding(horizontal = 15.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = "料理画像", color = Color.White)
+                    Text(
+                        text = state.uiState.title,
+                        fontSize = 18.sp,
+                        color = colorResource(id = R.color.fontColor)
+                    )
+                    state.test()
+                    Box( // ->image
+                        modifier = Modifier
+                            .size(160.dp, 115.dp)
+                            .background(color = Color.LightGray)
+                    ) {
+                        Text(text = "料理画像", color = Color.White)
+                    }
                 }
             }
+            item { Materials() }
+            item { CookingProcedure() }
         }
-        item { Materials() }
-        item { CookingProcedure() }
-        item {
-            Row(
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 15.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            ExtendedFloatingActionButton(
+                backgroundColor = colorResource(id = R.color.addListButtonColor),
+                contentColor = Color.White ,
+                text = {
+                    Text(
+                        text = "買い物リストへ追加",
+                        fontSize = 18.sp
+                    )
+                },
+                onClick = {}
+            )
+            Icon(
+                Icons.Sharp.Favorite,
+                contentDescription = null,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 15.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                ExtendedFloatingActionButton(
-                    backgroundColor = colorResource(id = R.color.buttonColor),
-                    contentColor = Color.White ,
-                    text = {
-                        Text(
-                            text = "買い物リストへ追加",
-                            fontSize = 18.sp
-                        )
-                    },
-                    onClick = {}
-                )
-                Icon(
-                    Icons.Sharp.Favorite,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(32.dp)
-                        .clickable { },
-                    tint = Color.LightGray
-                )
-            }
+                    .size(32.dp)
+                    .clickable { },
+                tint = Color.LightGray
+            )
         }
     }
 }
