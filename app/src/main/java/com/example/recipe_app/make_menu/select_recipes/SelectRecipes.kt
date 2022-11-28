@@ -114,22 +114,27 @@ fun SelectRecipes(
             }
         }
 
-        // 献立決定ボタン
-        /*Box() {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
             ExtendedFloatingActionButton(
-                modifier = Modifier.align(Alignment.BottomCenter),
+                modifier = Modifier
+                    .padding(16.dp)
+                    .align(Alignment.BottomCenter),
                 backgroundColor = colorResource(id = R.color.decisionButtonColor),
                 contentColor = Color.White,
                 text = {
                     Text(
-                        text = "献立を決定",
+                        text = "この献立で決定",
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold
                     )
                 },
                 onClick = {}
             )
-        }*/
+        }
     }
 }
 
