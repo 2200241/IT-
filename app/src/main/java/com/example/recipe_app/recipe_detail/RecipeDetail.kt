@@ -1,6 +1,7 @@
 package com.example.recipe_app.recipe_detail
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,6 +21,7 @@ import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.sharp.Clear
 import androidx.compose.material.icons.sharp.Favorite
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -41,7 +43,7 @@ fun RecipeDetail(
         modifier = Modifier.padding(paddingValues),
     ) {
         LazyColumn() {
-            item { Header(state) }
+            item { CookingImage(state) }
             item { RecipeDetailTitle("材料") }
             item { RecipeDetailMaterials() }
             item { RecipeDetailTitle("作り方") }
@@ -53,26 +55,21 @@ fun RecipeDetail(
 }
 
 @Composable
-fun Header(state: RecipeDetailState) {
-    Row(
+fun CookingImage(state: RecipeDetailState) {
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(15.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
+            .height(220.dp)
+            .background(color = Color.LightGray)
     ) {
         Text(
-            text = state.uiState.title,
-            fontSize = 18.sp,
-            color = colorResource(id = R.color.fontColor)
-        )
-        state.test()
-        Box( // ->image
             modifier = Modifier
-                .size(160.dp, 115.dp)
-                .background(color = Color.LightGray)
-        ) {
-            Text(text = "料理画像", color = Color.White)
-        }
+                .padding(10.dp)
+                .align(Alignment.BottomStart),
+            text = state.uiState.title,
+            color = Color.White,
+            fontSize = 20.sp
+        )
     }
 }
 

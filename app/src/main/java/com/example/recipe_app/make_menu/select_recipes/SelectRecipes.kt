@@ -148,8 +148,8 @@ fun SelectedRecipes(
     onItemClicked: (String) -> Unit
 ) {
     LazyRow(
-        contentPadding = PaddingValues(all = 16.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
+        contentPadding = PaddingValues(12.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         for (i in 1..5) {
             item {

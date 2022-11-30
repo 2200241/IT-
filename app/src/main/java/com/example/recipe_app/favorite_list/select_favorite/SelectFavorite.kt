@@ -25,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.recipe_app.R
+import com.example.recipe_app.make_menu.select_recipes.SearchResultRecipes
 import com.example.recipe_app.menu_list.select_menu.MenuListItem
 
 @Composable
