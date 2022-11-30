@@ -45,7 +45,7 @@ fun SelectFavorite(
                 FavoriteTab.SelectRecipeTab -> {
                     for (i in 1..10) {
                         item {
-                            FavoriteRecipes("料理名$i")
+                            FavoriteRecipeListItem("料理名$i")
                             Divider(color = Color.LightGray)
                         }
                     }
@@ -53,7 +53,7 @@ fun SelectFavorite(
                 FavoriteTab.SelectMenuTab -> {
                     for (i in 1 .. 10) {
                         item {
-                            FavoriteMenus()
+                            FavoriteMenuListItem()
                             Divider(color = Color.LightGray)
                         }
                     }
@@ -100,7 +100,7 @@ private val FavoriteTabs = listOf(
 )
 
 @Composable
-fun FavoriteRecipes(title: String) {
+fun FavoriteRecipeListItem(title: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -136,6 +136,6 @@ fun FavoriteRecipes(title: String) {
 }
 
 @Composable
-fun FavoriteMenus() {
+fun FavoriteMenuListItem() {
     MenuListItem(onItemClicked = {})
 }

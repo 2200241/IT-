@@ -1,6 +1,5 @@
 package com.example.recipe_app.menu_list.shopping_list
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -8,9 +7,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Checkbox
 import androidx.compose.material.CheckboxDefaults
@@ -42,11 +41,11 @@ fun ShoppingList(
 ) {
     val uiState = state.uiState
 
-    Column() {
+    Column(modifier = Modifier.padding(paddingValues)) {
         SelectedRecipes(onThumbClicked)
         Divider(color = Color.LightGray)
 
-        LazyColumn(modifier = Modifier.padding(paddingValues)) {
+        LazyColumn() {
             item {
                 Text(
                     modifier = Modifier.padding(start = 15.dp, top = 15.dp, bottom = 10.dp),
@@ -56,35 +55,7 @@ fun ShoppingList(
                     color = colorResource(id = R.color.fontColor)
                 )
             }
-            item {
-                for (i in 1..15) {
-                    val checkedState = remember { mutableStateOf(false) }
-                    Column(modifier = Modifier.padding(horizontal = 15.dp)) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .rippleClickable { checkedState.value = !checkedState.value },
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Checkbox(
-                                modifier = Modifier.size(40.dp),
-                                colors = CheckboxDefaults.colors(colorResource(id = R.color.selectButtonColor)),
-                                checked = checkedState.value,
-                                onCheckedChange = { checkedState.value = it }
-                            )
-                            Text(
-                                text = "材料名$i",
-                                fontSize = 20.sp,
-                                color = colorResource(id = R.color.fontColor)
-                            )
-                        }
-                        Divider(
-                            modifier = Modifier.padding(bottom = 8.dp),
-                            color = Color.LightGray
-                        )
-                    }
-                }
-            }
+            item { ShoppingListMaterials() }
         }
     }
 
@@ -96,7 +67,7 @@ fun ShoppingList(
         FloatingActionButton(
             modifier = Modifier
                 .align(alignment = Alignment.BottomEnd)
-                .padding(16.dp),
+                .padding(horizontal = 12.dp, vertical = 8.dp),
             backgroundColor = Color.White,
             contentColor = Color.LightGray,
             onClick = { /*TODO*/ }
@@ -107,4 +78,36 @@ fun ShoppingList(
             )
         }
     }
+}
+
+@Composable
+fun ShoppingListMaterials() {
+    for (i in 1..15) {
+        val checkedState = remember { mutableStateOf(false) }
+        Column(modifier = Modifier.padding(horizontal = 15.dp)) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .rippleClickable { checkedState.value = !checkedState.value },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Checkbox(
+                    modifier = Modifier.size(40.dp),
+                    colors = CheckboxDefaults.colors(colorResource(id = R.color.selectButtonColor)),
+                    checked = checkedState.value,
+                    onCheckedChange = { checkedState.value = it }
+                )
+                Text(
+                    text = "材料$i",
+                    fontSize = 20.sp,
+                    color = colorResource(id = R.color.fontColor)
+                )
+            }
+            Divider(
+                modifier = Modifier.padding(bottom = 8.dp),
+                color = Color.LightGray
+            )
+        }
+    }
+    Spacer(Modifier.height(100.dp))
 }

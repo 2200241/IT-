@@ -60,7 +60,7 @@ fun TagCategory(
     onTagClicked: (Int) -> Unit
 ) {
     Column(modifier = Modifier.padding(bottom = 10.dp)) {
-        Title(largeCategory.id)
+        SelectTagsTitle(largeCategory.id)
         SelectTagsButton(
             items = largeCategory.items,
             selectedTags = selectedTags,
@@ -70,7 +70,7 @@ fun TagCategory(
 }
 
 @Composable
-fun Title(id: Int) {
+fun SelectTagsTitle(id: Int) {
     Text(
         modifier = Modifier.padding(start = 20.dp, top = 20.dp, bottom = 10.dp),
         text = stringResource(id),

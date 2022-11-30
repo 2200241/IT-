@@ -22,9 +22,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.recipe_app.R
 import com.example.recipe_app.make_menu.select_recipes.SelectedRecipes
 
 @Composable
@@ -32,13 +35,22 @@ fun SelectMenu(
     paddingValues: PaddingValues,
     onItemClicked: (String) -> Unit
 ) {
-    LazyColumn(
-        modifier = Modifier.padding(paddingValues)
-    ) {
-        item {
-            for (i in 1..10) {
-                MenuListItem(onItemClicked = onItemClicked)
-                Divider(color = Color.Gray)
+    Column(modifier = Modifier.padding(paddingValues)) {
+        Text(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
+            text = stringResource(id = R.string.menuList_title),
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            color = colorResource(id = R.color.fontColor)
+        )
+
+        LazyColumn() {
+            item {
+                for (i in 1..10) {
+                    Divider(color = Color.Gray)
+                    MenuListItem(onItemClicked = onItemClicked)
+                    Divider(color = Color.Gray)
+                }
             }
         }
     }
@@ -82,7 +94,7 @@ fun MenuListItem(
                 .padding(bottom = 16.dp, end = 16.dp)
                 .size(30.dp)
                 .align(alignment = Alignment.Bottom)
-                .clickable {  },
+                .clickable { },
             tint = Color.LightGray
         )
     }
