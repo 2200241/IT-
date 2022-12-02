@@ -42,7 +42,8 @@ fun ShoppingList(
     val uiState = state.uiState
 
     Column(modifier = Modifier.padding(paddingValues)) {
-        SelectedRecipes(onThumbClicked)
+        // TODO
+//        SelectedRecipes(emptyList(), {}, {})
         Divider(color = Color.LightGray)
 
         LazyColumn() {

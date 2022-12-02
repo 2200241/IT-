@@ -63,11 +63,11 @@ class SelectConditionsViewModel @Inject constructor(
     val selectedTags = _selectedTags.asStateFlow()
 */
 
-    suspend fun startLoading() {
+    private fun startLoading() {
         _uiState.update { it.copy(isLoading = true) }
     }
 
-    suspend fun endLoading() {
+    private fun endLoading() {
         _uiState.update { it.copy(isLoading = false) }
     }
 

@@ -3,20 +3,17 @@ package com.example.recipe_app.make_menu.select_recipes
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.recipe_app.R
+import com.example.recipe_app.data.Favorites
 import com.example.recipe_app.data.Menu
 import com.example.recipe_app.data.Recipe
 import com.example.recipe_app.data.RecipeThumb
-import com.example.recipe_app.make_menu.select_conditions.ConditionTab
 import com.example.recipe_app.use_cases.TestUseCase
-import com.github.michaelbull.result.flatMap
+import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.mapBoth
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -46,6 +43,12 @@ class SelectRecipesViewModel @Inject constructor(
     ))
     val uiState = _uiState.asStateFlow()
 
+    val favoriteRecipeIds = useCase.fetchFavorites().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = Ok(Favorites())
+    )
+
     init {
         viewModelScope.launch {
             startLoading()
@@ -65,8 +68,8 @@ class SelectRecipesViewModel @Inject constructor(
         _uiState.update { it.copy(isLoading = false) }
     }
 
-    fun selectRecipe(id: String, thumb: String) {
-        _uiState.update { it.copy(selectedRecipes = _uiState.value.selectedRecipes + listOf(RecipeThumb(id, thumb))) }
+    fun selectRecipe(recipe: RecipeThumb) {
+        _uiState.update { it.copy(selectedRecipes = _uiState.value.selectedRecipes + listOf(recipe)) }
     }
 
     fun removeRecipe(id: String) {
@@ -78,6 +81,18 @@ class SelectRecipesViewModel @Inject constructor(
     fun addMenu() {
         viewModelScope.launch {
             useCase.addMenu(Menu(id = "", date = "", recipes = _uiState.value.selectedRecipes))
+        }
+    }
+
+    fun addFavorite(recipe: Recipe) {
+        viewModelScope.launch {
+            useCase.addFavoriteRecipe(recipe)
+        }
+    }
+
+    fun removeFavorite(id: String) {
+        viewModelScope.launch {
+            useCase.removeFavoriteRecipe(id)
         }
     }
 

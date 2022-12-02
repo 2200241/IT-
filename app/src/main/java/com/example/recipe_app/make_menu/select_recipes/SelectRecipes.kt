@@ -54,6 +54,7 @@ import com.example.recipe_app.R
 import com.example.recipe_app.make_menu.select_conditions.ConditionTab
 import com.example.recipe_app.make_menu.select_conditions.SelectTags
 import com.example.recipe_app.data.Recipe
+import com.example.recipe_app.data.RecipeThumb
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
 
@@ -61,10 +62,11 @@ import com.google.accompanist.flowlayout.MainAxisAlignment
 fun SelectRecipes(
     state: SelectRecipesState = rememberSelectRecipesState(),
     paddingValues: PaddingValues,
-    onItemClicked: (String) -> Unit,
+    onItemClicked: (String, String) -> Unit,
     onBackPressed: () -> Unit
 ) {
     val uiState = state.uiState
+    val favoriteRecipeIds = state.favoriteRecipeIds
 
     if (uiState.isLoading) {
         Box(
@@ -84,7 +86,7 @@ fun SelectRecipes(
             )
 
             Divider(color = Color.LightGray)
-            SelectedRecipes(onItemClicked)
+            SelectedRecipes(uiState.selectedRecipes, onItemClicked, state::removeRecipe)
             Divider(color = Color.LightGray)
 
             SelectCategoriesTabBar(
@@ -92,29 +94,90 @@ fun SelectRecipes(
                 onClick = state::onTabClicked
             )
 
+            // TODO
             LazyColumn() {
+/*
                 when (uiState.selectedTab) {
                     CategoryTab.SelectStapleFoodTab -> {
-                        item { SearchResultRecipes(uiState.recipes, onItemClicked) }
+                        item {
+                            SearchResultRecipes(
+                                recipes = uiState.recipes.filter { it.categoryId == uiState.selectedTab.index + 1 },
+                                favoriteRecipeIds = favoriteRecipeIds,
+                                onItemClicked = onItemClicked,
+                                onLikeClicked = state::addFavorite
+                            )
+                        }
                     }
                     CategoryTab.SelectMainDishTab -> {
-                        item { SearchResultRecipes(uiState.recipes, onItemClicked) }
+                        item {
+                            SearchResultRecipes(
+                                recipes = uiState.recipes.filter { it.categoryId == uiState.selectedTab.index + 1 },
+                                favoriteRecipeIds = favoriteRecipeIds,
+                                onItemClicked = onItemClicked,
+                                onLikeClicked = state::addFavorite
+                            )
+                        }
                     }
                     CategoryTab.SelectSideDishTab -> {
-                        item { SearchResultRecipes(uiState.recipes, onItemClicked) }
+                        item {
+                            SearchResultRecipes(
+                                recipes = uiState.recipes.filter { it.categoryId == uiState.selectedTab.index + 1 },
+                                favoriteRecipeIds = favoriteRecipeIds,
+                                onItemClicked = onItemClicked,
+                                onLikeClicked = state::addFavorite
+                            )
+                        }
                     }
                     CategoryTab.SelectSoupTab -> {
-                        item { SearchResultRecipes(uiState.recipes, onItemClicked) }
+                        item {
+                            SearchResultRecipes(
+                                recipes = uiState.recipes.filter { it.categoryId == uiState.selectedTab.index + 1 },
+                                favoriteRecipeIds = favoriteRecipeIds,
+                                onItemClicked = onItemClicked,
+                                onLikeClicked = state::addFavorite
+                            )
+                        }
                     }
                     CategoryTab.SelectSweetsTab -> {
-                        item { SearchResultRecipes(uiState.recipes, onItemClicked) }
+                        item {
+                            SearchResultRecipes(
+                                recipes = uiState.recipes.filter { it.categoryId == uiState.selectedTab.index + 1 },
+                                favoriteRecipeIds = favoriteRecipeIds,
+                                onItemClicked = onItemClicked,
+                                onLikeClicked = state::addFavorite
+                            )
+                        }
                     }
                     CategoryTab.SelectDrinkTab -> {
-                        item { SearchResultRecipes(uiState.recipes, onItemClicked) }
+                        item {
+                            SearchResultRecipes(
+                                recipes = uiState.recipes.filter { it.categoryId == uiState.selectedTab.index + 1 },
+                                favoriteRecipeIds = favoriteRecipeIds,
+                                onItemClicked = onItemClicked,
+                                onLikeClicked = state::addFavorite
+                            )
+                        }
                     }
                     CategoryTab.SelectOthersTab -> {
-                        item { SearchResultRecipes(uiState.recipes, onItemClicked) }
+                        item {
+                            SearchResultRecipes(
+                                recipes = uiState.recipes.filter { it.categoryId == uiState.selectedTab.index + 1 },
+                                favoriteRecipeIds = favoriteRecipeIds,
+                                onItemClicked = onItemClicked,
+                                onLikeClicked = state::addFavorite
+                            )
+                        }
                     }
+                }
+*/
+                item {
+                    SearchResultRecipes(
+                        recipes = uiState.recipes.filter { it.categoryId == uiState.selectedTab.index + 1 },
+                        favoriteRecipeIds = favoriteRecipeIds,
+                        onItemClicked = onItemClicked,
+                        onRecipeLiked = state::addFavorite,
+                        onRecipeUnLiked = state::removeFavorite
+                    )
                 }
             }
         }
@@ -137,7 +200,7 @@ fun SelectRecipes(
                         fontWeight = FontWeight.Bold
                     )
                 },
-                onClick = {}
+                onClick = { state.addMenu() }
             )
         }
     }
@@ -145,19 +208,21 @@ fun SelectRecipes(
 
 @Composable
 fun SelectedRecipes(
-    onItemClicked: (String) -> Unit
+    selectedRecipes: List<RecipeThumb>,
+    onItemClicked: (String, String) -> Unit,
+    onXClicked: (String) -> Unit
 ) {
     LazyRow(
         contentPadding = PaddingValues(12.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        for (i in 1..5) {
+        selectedRecipes.forEach { recipe ->
             item {
                 Box(
                     modifier = Modifier
                         .size(110.dp, 75.dp)
                         .background(color = Color.LightGray)
-                        .clickable { onItemClicked("testId") }
+                        .clickable { onItemClicked(recipe.id, recipe.thumb) }
                 ) {
                     Text(text = "料理画像", color = Color.White)
                     FloatingActionButton(
@@ -166,7 +231,7 @@ fun SelectedRecipes(
                             .align(alignment = Alignment.TopEnd),
                         backgroundColor = Color.DarkGray,
                         contentColor = Color.White,
-                        onClick = { /*TODO*/ }
+                        onClick = { onXClicked(recipe.id) }
                     ) {
                         Icon(
                             Icons.Sharp.Clear,
@@ -225,7 +290,10 @@ private val CategoryTabs = listOf(
 @Composable
 fun SearchResultRecipes(
     recipes: List<Recipe>,
-    onItemClicked: (String) -> Unit
+    favoriteRecipeIds: List<String>,
+    onItemClicked: (String, String) -> Unit,
+    onRecipeLiked: (Recipe) -> Unit,
+    onRecipeUnLiked: (String) -> Unit
 ) {
     val screenWidth = LocalConfiguration.current.screenWidthDp
 
@@ -240,7 +308,7 @@ fun SearchResultRecipes(
                 modifier = Modifier
                     .size(((screenWidth / 2) - 10).dp, 140.dp)
                     .background(color = Color.LightGray)
-                    .clickable { onItemClicked(recipe.id) }
+                    .clickable { onItemClicked(recipe.id, recipe.thumb) }
             ) {
                 Column(
                     modifier = Modifier.fillMaxSize(),
@@ -253,12 +321,21 @@ fun SearchResultRecipes(
                             .padding(8.dp),
                         backgroundColor = Color.White,
                         contentColor = Color.LightGray,
-                        onClick = { /*TODO*/ }
+                        onClick = {
+                            if (favoriteRecipeIds.contains(recipe.id)) {
+                                onRecipeUnLiked(recipe.id)
+                            } else {
+                                onRecipeLiked(recipe)
+                            }
+                        }
                     ) {
                         Icon(
                             Icons.Sharp.Favorite,
                             contentDescription = null,
-                            modifier = Modifier.size(20.dp)
+                            modifier = Modifier.size(20.dp),
+                            tint = if (favoriteRecipeIds.contains(recipe.id))
+                                colorResource(id = R.color.favoriteIconColor)
+                                else Color.LightGray
                         )
                     }
 

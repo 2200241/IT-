@@ -25,6 +25,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.recipe_app.R
+import com.example.recipe_app.data.Favorites
+import com.example.recipe_app.data.Menu
+import com.example.recipe_app.data.Recipe
 import com.example.recipe_app.make_menu.select_recipes.SearchResultRecipes
 import com.example.recipe_app.menu_list.select_menu.MenuListItem
 
@@ -34,6 +37,7 @@ fun SelectFavorite(
     paddingValues: PaddingValues
 ) {
     val uiState = state.uiState
+    val favorites = state.favorites
 
     Column(modifier = Modifier.padding(paddingValues)) {
         SelectFavoritesTabBar(
@@ -44,17 +48,17 @@ fun SelectFavorite(
         LazyColumn() {
             when (uiState.selectedTab) {
                 FavoriteTab.SelectRecipeTab -> {
-                    for (i in 1..10) {
+                    favorites.recipes.forEach { recipe ->
                         item {
-                            FavoriteRecipeListItem("料理名$i")
+                            FavoriteRecipeListItem(recipe, favorites.recipes)
                             Divider(color = Color.LightGray)
                         }
                     }
                 }
                 FavoriteTab.SelectMenuTab -> {
-                    for (i in 1 .. 10) {
+                    favorites.menus.forEach { menu ->
                         item {
-                            FavoriteMenuListItem()
+                            FavoriteMenuListItem(menu, favorites.menus)
                             Divider(color = Color.LightGray)
                         }
                     }
@@ -101,7 +105,10 @@ private val FavoriteTabs = listOf(
 )
 
 @Composable
-fun FavoriteRecipeListItem(title: String) {
+fun FavoriteRecipeListItem(
+    recipe: Recipe,
+    recipes: List<Recipe>
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -115,11 +122,11 @@ fun FavoriteRecipeListItem(title: String) {
                     .size(115.dp, 75.dp)
                     .background(color = Color.LightGray)
             ) {
-                Text(text = "料理画像", color = Color.White)
+                Text(text = recipe.thumb, color = Color.White)
             }
             Text(
                 modifier = Modifier.padding(start = 8.dp),
-                text = title,
+                text = recipe.title,
                 fontSize = 18.sp,
                 color = colorResource(id = R.color.fontColor)
             )
@@ -131,12 +138,17 @@ fun FavoriteRecipeListItem(title: String) {
                 .size(30.dp)
                 .align(alignment = Alignment.Bottom)
                 .clickable { },
-            tint = colorResource(id = R.color.favoriteIconColor)
+            tint = if (recipes.contains(recipe))
+                colorResource(id = R.color.favoriteIconColor)
+                else Color.Gray
         )
     }
 }
 
 @Composable
-fun FavoriteMenuListItem() {
+fun FavoriteMenuListItem(
+    menu: Menu,
+    menus: List<Menu>
+) {
     MenuListItem(onItemClicked = {})
 }

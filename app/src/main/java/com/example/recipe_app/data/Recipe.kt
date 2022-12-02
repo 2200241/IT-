@@ -2,10 +2,29 @@ package com.example.recipe_app.data
 
 data class Recipe(
     val id: String = "",
-    val categoryId: String = "",
+    val categoryId: Int = 0,
     val title: String = "",
     val thumb: String = "",
-    val isFavorite: Boolean = false
+//    val isFavorite: Boolean = false
+)
+
+data class RecipeDetail(
+    val id: String = "",
+    val categoryId: Int = 0,
+    val title: String = "",
+    val image: String = "",
+    val ingredients:List<Ingredient> = emptyList(),
+    val instructions: List<Instruction> = emptyList()
+)
+
+data class Ingredient(
+    val name: String = "",
+    val quantity: String = ""
+)
+
+data class Instruction(
+    val order: Int = 0,
+    val content: String = ""
 )
 
 data class Favorites(
@@ -19,12 +38,13 @@ data class Menu(
     val recipes: List<RecipeThumb> = emptyList()
 )
 
+// For Menu property
 data class RecipeThumb(
     val id: String = "",
     val thumb: String = ""
 )
 
-// 表示するときにmapでfilterすればいい
+// 表示するときにfilterすればいい
 /*
 data class Categories(
     val stapleFood: List<Recipe> = emptyList(),

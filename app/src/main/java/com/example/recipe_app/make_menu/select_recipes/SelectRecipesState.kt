@@ -5,6 +5,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import com.example.recipe_app.make_menu.select_conditions.ConditionTab
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.recipe_app.data.Recipe
+import com.example.recipe_app.data.RecipeThumb
+import com.github.michaelbull.result.mapBoth
 
 class SelectRecipesState(
     private val viewModel: SelectRecipesViewModel,
@@ -12,7 +15,23 @@ class SelectRecipesState(
     val uiState: SelectRecipesUiState
         @Composable get() = viewModel.uiState.collectAsState().value
 
+    val favoriteRecipeIds: List<String>
+        @Composable get() = viewModel.favoriteRecipeIds.collectAsState().value.mapBoth(
+            success = { favorites ->  favorites.recipes.map { it.id } },
+            failure = { emptyList<String>() }
+        )
+
     fun onTabClicked(selectedTab: CategoryTab) = viewModel.onTabClicked(selectedTab)
+
+    fun selectRecipe(recipe: RecipeThumb) = viewModel.selectRecipe(recipe)
+
+    fun removeRecipe(id: String) = viewModel.removeRecipe(id)
+
+    fun addMenu() = viewModel.addMenu()
+
+    fun addFavorite(recipe:Recipe) = viewModel.addFavorite(recipe)
+
+    fun removeFavorite(id: String) = viewModel.removeFavorite(id)
 
 }
 
