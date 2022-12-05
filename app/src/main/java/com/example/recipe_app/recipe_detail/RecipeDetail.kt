@@ -48,55 +48,27 @@ fun RecipeDetail(
         modifier = Modifier.padding(paddingValues),
     ) {
         LazyColumn() {
-            item { CookingImage(
-                recipe = uiState.recipeDetail,
-                favoriteRecipeIds = state.favoriteRecipeIds,
-                addButtonIsDisplayed = addButtonIsDisplayed,
-                onAddButtonClicked = state::addToTempMenu,
-                onRecipeLiked = state::addFavoriteRecipe,
-                onRecipeUnLiked = state::removeFavoriteRecipe
-            ) }
+            item { CookingImage(recipe = uiState.recipeDetail) }
             item { RecipeDetailTitle("材料") }
             item { RecipeDetailMaterials() }
             item { RecipeDetailTitle("作り方") }
-            item {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 15.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = uiState.recipeDetail.title,
-                        fontSize = 18.sp,
-                        color = colorResource(id = R.color.fontColor)
-                    )
-                    Box( // ->image
-                        modifier = Modifier
-                            .size(160.dp, 115.dp)
-                            .background(color = Color.LightGray)
-                    ) {
-                        Text(text = "料理画像", color = Color.White)
-                    }
-                }
-            }
-            item { RecipeDetailMaterials() }
             item { CookingProcedure() }
         }
     }
 
-    RecipeDetailBottomButtons(paddingValues, uiState.recipeDetail.id, state.favoriteRecipeIds, state::addToTempMenu, state::onLikeClicked)
+    RecipeDetailBottomButtons(
+        paddingValues = paddingValues,
+        recipeId = uiState.recipeDetail.id,
+        favoriteRecipeIds = state.favoriteRecipeIds,
+        addButtonIsDisplayed = addButtonIsDisplayed,
+        onAddButtonClicked = state::addToTempMenu,
+        onLiked = state::addFavoriteRecipe,
+        onUnliked = state::removeFavoriteRecipe
+    )
 }
 
 @Composable
-fun CookingImage(
-    recipe: RecipeDetail,
-    favoriteRecipeIds: List<String>,
-    addButtonIsDisplayed: Boolean,
-    onAddButtonClicked: () -> Unit,
-    onRecipeLiked: () -> Unit,
-    onRecipeUnLiked: () -> Unit
-) {
+fun CookingImage(recipe: RecipeDetail) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -111,43 +83,6 @@ fun CookingImage(
             color = Color.White,
             fontSize = 20.sp
         )
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 15.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            if (addButtonIsDisplayed) {
-                ExtendedFloatingActionButton(
-                    backgroundColor = colorResource(id = R.color.addListButtonColor),
-                    contentColor = Color.White,
-                    text = {
-                        Text(
-                            text = "買い物リストへ追加",
-                            fontSize = 18.sp
-                        )
-                    },
-                    onClick = onAddButtonClicked
-                )
-            }
-            Icon(
-                Icons.Sharp.Favorite,
-                contentDescription = null,
-                modifier = Modifier
-                    .size(32.dp)
-                    .clickable {
-                        if (favoriteRecipeIds.contains(recipe.id)) {
-                            onRecipeUnLiked()
-                        } else {
-                            onRecipeLiked()
-                        }
-                    },
-                tint = if (favoriteRecipeIds.contains(recipe.id))
-                    colorResource(id = R.color.favoriteIconColor)
-                    else Color.LightGray
-            )
-        }
     }
 }
 
@@ -199,8 +134,10 @@ fun RecipeDetailBottomButtons(
     paddingValues: PaddingValues,
     recipeId: String,
     favoriteRecipeIds: List<String>,
+    addButtonIsDisplayed: Boolean,
     onAddButtonClicked: () -> Unit,
-    onLikeClicked: () -> Unit
+    onLiked: () -> Unit,
+    onUnliked: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -215,21 +152,23 @@ fun RecipeDetailBottomButtons(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            ExtendedFloatingActionButton(
-                backgroundColor = colorResource(id = R.color.addListButtonColor),
-                contentColor = Color.White ,
-                text = {
-                    Text(
-                        text = "買い物リストへ追加",
-                        fontSize = 18.sp
-                    )
-                },
-                onClick = onAddButtonClicked
-            )
+            if (addButtonIsDisplayed) {
+                ExtendedFloatingActionButton(
+                    backgroundColor = colorResource(id = R.color.addListButtonColor),
+                    contentColor = Color.White,
+                    text = {
+                        Text(
+                            text = "買い物リストへ追加",
+                            fontSize = 18.sp
+                        )
+                    },
+                    onClick = onAddButtonClicked
+                )
+            }
             FloatingActionButton(
                 backgroundColor = Color.White,
                 contentColor = Color.LightGray,
-                onClick = onLikeClicked
+                onClick = if (favoriteRecipeIds.contains(recipeId)) onUnliked else onLiked
             ) {
                 Icon(
                     Icons.Sharp.Favorite,

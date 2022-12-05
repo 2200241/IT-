@@ -17,6 +17,8 @@ interface TestUseCase {
     suspend fun addFavoriteMenu(menu: Menu): Result<String, String>
     suspend fun removeFavoriteMenu(id: String): Result<String, String>
     suspend fun fetchMenus(): Flow<Result<List<Menu>, String>>
+    suspend fun fetchMenu(id: String): Result<List<RecipeThumb>, String>
+    suspend fun fetchShoppingList(id: String): Result<List<Ingredient>, String>
     suspend fun addMenu(menu: Menu): Result<String, String>
     suspend fun removeMenu(id: String): Result<String, String>
     suspend fun getTempMenu(): Flow<Result<List<RecipeThumb>, String>>
@@ -59,6 +61,14 @@ class TestUseCaseImpl @Inject constructor(
 
     override suspend fun fetchMenus(): Flow<Result<List<Menu>, String>> {
         return testRepository.fetchMenus()
+    }
+
+    override suspend fun fetchMenu(id: String): Result<List<RecipeThumb>, String> {
+        return testRepository.fetchMenu(id)
+    }
+
+    override suspend fun fetchShoppingList(id: String): Result<List<Ingredient>, String> {
+        return testRepository.fetchShoppingList(id)
     }
 
     override suspend fun addMenu(menu: Menu): Result<String, String> {

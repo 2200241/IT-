@@ -86,7 +86,7 @@ fun SelectRecipes(
             )
 
             Divider(color = Color.LightGray)
-            SelectedRecipes(uiState.selectedRecipes, onItemClicked, state::removeRecipe)
+            SelectedRecipes(true, uiState.selectedRecipes, onItemClicked, state::removeRecipe)
             Divider(color = Color.LightGray)
 
             SelectCategoriesTabBar(
@@ -208,9 +208,10 @@ fun SelectRecipes(
 
 @Composable
 fun SelectedRecipes(
+    deleteButtonIsDisplayed: Boolean = false,
     selectedRecipes: List<RecipeThumb>,
     onItemClicked: (String, String) -> Unit,
-    onXClicked: (String) -> Unit
+    onDeleteClicked: (String) -> Unit = {}
 ) {
     LazyRow(
         contentPadding = PaddingValues(12.dp),
@@ -225,19 +226,22 @@ fun SelectedRecipes(
                         .clickable { onItemClicked(recipe.id, recipe.thumb) }
                 ) {
                     Text(text = "料理画像", color = Color.White)
-                    FloatingActionButton(
-                        modifier = Modifier
-                            .size(20.dp)
-                            .align(alignment = Alignment.TopEnd),
-                        backgroundColor = Color.DarkGray,
-                        contentColor = Color.White,
-                        onClick = { onXClicked(recipe.id) }
-                    ) {
-                        Icon(
-                            Icons.Sharp.Clear,
-                            contentDescription = null,
-                            modifier = Modifier.size(18.dp)
-                        )
+
+                    if (deleteButtonIsDisplayed) {
+                        FloatingActionButton(
+                            modifier = Modifier
+                                .size(20.dp)
+                                .align(alignment = Alignment.TopEnd),
+                            backgroundColor = Color.DarkGray,
+                            contentColor = Color.White,
+                            onClick = { onDeleteClicked(recipe.id) }
+                        ) {
+                            Icon(
+                                Icons.Sharp.Clear,
+                                contentDescription = null,
+                                modifier = Modifier.size(18.dp)
+                            )
+                        }
                     }
                 }
             }

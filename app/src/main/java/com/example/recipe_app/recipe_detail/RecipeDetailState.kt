@@ -20,8 +20,6 @@ class RecipeDetailState(
             failure = { emptyList<String>() }
         )
 
-    fun onLikeClicked() = viewModel.onLikeClicked()
-
     fun addFavoriteRecipe() = viewModel.addFavoriteRecipe()
 
     fun removeFavoriteRecipe() = viewModel.removeFavoriteRecipe()

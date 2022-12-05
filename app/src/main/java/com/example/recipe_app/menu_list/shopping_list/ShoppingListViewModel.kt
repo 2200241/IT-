@@ -4,7 +4,11 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.recipe_app.data.Ingredient
+import com.example.recipe_app.data.RecipeThumb
 import com.example.recipe_app.recipe_detail.RecipeDetailViewModel
+import com.example.recipe_app.use_cases.TestUseCase
+import com.github.michaelbull.result.mapBoth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,16 +18,18 @@ import javax.inject.Inject
 
 data class ShoppingListUiState(
     val isLoading: Boolean = false,
-    val menuId: String = "",
+    val recipes: List<RecipeThumb> = emptyList(),
+    val ingredients: List<Ingredient> = emptyList()
 )
 
 @HiltViewModel
 class ShoppingListViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle,
+    private val useCase: TestUseCase
 //    private val menuId: String?
 ): ViewModel() {
 
-    private val menuId = savedStateHandle.get<String>("menuId")
+    private val menuId = savedStateHandle.get<String>("menuId") ?: ""
 
     private val _uiState = MutableStateFlow(ShoppingListUiState(
         isLoading = false,
@@ -32,23 +38,28 @@ class ShoppingListViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-/*
-            useCase.fetch(menuId)
-                .onSuccess { shoppingList ->
-                    _uiState.update { it.copy(
-                        shoppingList = shoppingList
-                    ) }
-                }
-*/
-            _uiState.update { it.copy(menuId = "TEST@$menuId") }
+            startLoading()
+            useCase.fetchShoppingList(menuId).mapBoth(
+                success = { ingredients ->
+                    _uiState.update { it.copy(ingredients = ingredients) }
+                          },
+                failure = {}
+            )
+            useCase.fetchMenu(menuId).mapBoth(
+                success = { recipes ->
+                    _uiState.update { it.copy(recipes = recipes) }
+                },
+                failure = {}
+            )
+            endLoading()
         }
     }
 
-    suspend fun startLoading() {
+    private fun startLoading() {
         _uiState.update { it.copy(isLoading = true) }
     }
 
-    suspend fun endLoading() {
+    private fun endLoading() {
         _uiState.update { it.copy(isLoading = false) }
     }
 

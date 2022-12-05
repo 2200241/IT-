@@ -18,6 +18,8 @@ interface TestRepository {
     suspend fun addFavoriteMenu(menu: Menu): Result<String, String>
     suspend fun removeFavoriteMenu(id: String): Result<String, String>
     suspend fun fetchMenus():  Flow<Result<List<Menu>, String>>
+    suspend fun fetchMenu(id: String): Result<List<RecipeThumb>, String>
+    suspend fun fetchShoppingList(id: String): Result<List<Ingredient>, String>
     suspend fun addMenu(menu: Menu): Result<String, String>
     suspend fun removeMenu(id: String): Result<String, String>
     suspend fun getTempMenu(): Flow<Result<List<RecipeThumb>, String>>
@@ -52,7 +54,7 @@ class TestRepositoryImpl @Inject constructor(): TestRepository {
     override suspend fun fetchRecipeDetail(id: String): Result<RecipeDetail, String> {
         return Ok(
             RecipeDetail(
-            id = "id$id",
+            id = id,
             title = "title$id",
             image = "url$id",
             ingredients = listOf(
@@ -103,6 +105,26 @@ class TestRepositoryImpl @Inject constructor(): TestRepository {
             delay(500)
             emit(Ok(testMenus))
         }
+    }
+
+    override suspend fun fetchMenu(id: String): Result<List<RecipeThumb>, String> {
+        return Ok(listOf(
+            RecipeThumb(id = "1234567890", thumb = "url"),
+            RecipeThumb(id = "0000000001", thumb = "url"),
+            RecipeThumb(id = "9876543210", thumb = "url"),
+            RecipeThumb(id = "7777777777", thumb = "url"),
+            RecipeThumb(id = "5555555555", thumb = "url")
+        ))
+    }
+
+    override suspend fun fetchShoppingList(id: String): Result<List<Ingredient>, String> {
+        return Ok(listOf(
+            Ingredient("小麦粉", "大さじ１"),
+            Ingredient("水", "200ml"),
+            Ingredient("卵", "1個"),
+            Ingredient("豚肉", "100g"),
+            Ingredient("サラダ油", "")
+        ))
     }
 
     override suspend fun addMenu(menu: Menu): Result<String, String> {

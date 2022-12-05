@@ -43,17 +43,15 @@ class RecipeDetailViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = Ok(Favorites())
     )
-    private val _favoriteRecipeIds = favoriteRecipeIds.value.mapBoth(
-        success = { favorites -> favorites.recipes.map { recipe -> recipe.id } },
-        failure = { emptyList() }
-    )
 
     init {
         viewModelScope.launch {
+            startLoading()
             useCase.fetchRecipeDetail(recipeId ?: "").mapBoth(
                 success = { recipe -> _uiState.update { it.copy(recipeDetail = recipe) } },
                 failure = {  }
             )
+            endLoading()
         }
     }
 
@@ -65,19 +63,11 @@ class RecipeDetailViewModel @Inject constructor(
         _uiState.update { it.copy(isLoading = false) }
     }
 
-    fun onLikeClicked() {
-        if (_favoriteRecipeIds.contains(recipeId)) {
-            removeFavoriteRecipe()
-        } else {
-            addFavoriteRecipe()
-        }
-    }
-
     fun addFavoriteRecipe() {
         viewModelScope.launch {
             useCase.addFavoriteRecipe(
                 Recipe(
-                    id = _uiState.value.recipeDetail.id,
+                    id = recipeId,
                     categoryId = _uiState.value.recipeDetail.categoryId,
                     title = _uiState.value.recipeDetail.title,
                     thumb = thumb
@@ -88,7 +78,7 @@ class RecipeDetailViewModel @Inject constructor(
 
     fun removeFavoriteRecipe() {
         viewModelScope.launch {
-            useCase.removeFavoriteRecipe(_uiState.value.recipeDetail.id)
+            useCase.removeFavoriteRecipe(recipeId)
         }
     }
 

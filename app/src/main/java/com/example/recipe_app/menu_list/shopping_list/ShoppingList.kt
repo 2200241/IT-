@@ -37,13 +37,13 @@ import com.example.recipe_app.make_menu.select_recipes.SelectedRecipes
 fun ShoppingList(
     state: ShoppingListState = rememberShoppingListState(),
     paddingValues: PaddingValues,
-    onThumbClicked: (String) -> Unit
+    onThumbClicked: (String, String) -> Unit
 ) {
     val uiState = state.uiState
 
     Column(modifier = Modifier.padding(paddingValues)) {
         // TODO
-//        SelectedRecipes(emptyList(), {}, {})
+        SelectedRecipes(false, uiState.recipes, onThumbClicked)
         Divider(color = Color.LightGray)
 
         LazyColumn() {
