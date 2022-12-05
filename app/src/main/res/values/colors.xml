@@ -17,6 +17,6 @@
     <color name="clearButtonColor">#FF797979</color>
     <color name="decisionButtonColor">#FF03DAC5</color>
     <color name="addListButtonColor">#FF03DAC5</color>
-    <color name="searchTextFieldColor">#FFF2F2F2</color>
+    <color name="searchTextFieldColor">#FFE6E6E6</color>
     <color name="favoriteIconColor">#FFFF6666</color>
 </resources>

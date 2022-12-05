@@ -17,7 +17,8 @@ import javax.inject.Inject
 data class SelectFavoriteUiState(
     val isLoading: Boolean = false,
     val favorites: Favorites = Favorites(),
-    val selectedTab: FavoriteTab = FavoriteTab.SelectRecipeTab
+    val selectedMainTab: FavoriteTab = FavoriteTab.SelectRecipeTab,
+    val selectedSubTab: FavoriteCategoryTab = FavoriteCategoryTab.SelectStapleFoodTab
 )
 
 @HiltViewModel
@@ -28,7 +29,8 @@ class SelectFavoriteViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(
         SelectFavoriteUiState(
             isLoading = false,
-            selectedTab = FavoriteTab.SelectRecipeTab
+            selectedMainTab = FavoriteTab.SelectRecipeTab,
+            selectedSubTab = FavoriteCategoryTab.SelectStapleFoodTab
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -60,7 +62,11 @@ class SelectFavoriteViewModel @Inject constructor(
     }
 
     fun onTabClicked(selectedTab: FavoriteTab) {
-        _uiState.update { it.copy(selectedTab = selectedTab) }
+        _uiState.update { it.copy(selectedMainTab = selectedTab) }
+    }
+
+    fun onTabClicked(selectedTab: FavoriteCategoryTab) {
+        _uiState.update { it.copy(selectedSubTab = selectedTab) }
     }
 
     private fun setTestList() {
@@ -97,4 +103,22 @@ sealed class FavoriteTab(
     object SelectRecipeTab: FavoriteTab(R.string.recipe, 0)
 
     object SelectMenuTab: FavoriteTab(R.string.menu, 1)
+}
+
+sealed class FavoriteCategoryTab(
+    val titleId: Int,
+    val index: Int
+) {
+    object SelectStapleFoodTab: FavoriteCategoryTab(R.string.staple_food, 0)
+    object SelectMainDishTab: FavoriteCategoryTab(R.string.main_dish, 1)
+
+    object SelectSideDishTab: FavoriteCategoryTab(R.string.side_dish, 2)
+
+    object SelectSoupTab: FavoriteCategoryTab(R.string.soup, 3)
+
+    object SelectSweetsTab: FavoriteCategoryTab(R.string.sweets, 4)
+
+    object SelectDrinkTab: FavoriteCategoryTab(R.string.drink, 5)
+
+    object SelectOthersTab: FavoriteCategoryTab(R.string.others, 6)
 }

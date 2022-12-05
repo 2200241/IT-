@@ -13,6 +13,8 @@ class SelectFavoriteState(
 
     fun onTabClicked(selectedTab: FavoriteTab) = viewModel.onTabClicked(selectedTab)
 
+    fun onTabClicked(selectedTab: FavoriteCategoryTab) = viewModel.onTabClicked(selectedTab)
+
 }
 
 @Composable

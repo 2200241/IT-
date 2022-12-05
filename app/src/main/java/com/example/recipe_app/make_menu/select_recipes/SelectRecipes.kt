@@ -116,6 +116,7 @@ fun SelectRecipes(
                         item { SearchResultRecipes(uiState.recipes, onItemClicked) }
                     }
                 }
+                item { Spacer(Modifier.height(80.dp)) }
             }
         }
 
@@ -126,7 +127,8 @@ fun SelectRecipes(
         ) {
             ExtendedFloatingActionButton(
                 modifier = Modifier
-                    .padding(10.dp)
+                    .fillMaxWidth()
+                    .padding(horizontal = 30.dp, vertical = 8.dp)
                     .align(Alignment.BottomCenter),
                 backgroundColor = colorResource(id = R.color.decisionButtonColor),
                 contentColor = Color.White,
@@ -271,5 +273,4 @@ fun SearchResultRecipes(
             }
         }
     }
-    Spacer(Modifier.height(100.dp))
 }

@@ -1,5 +1,6 @@
 package com.example.recipe_app.menu_list.shopping_list
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -26,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -42,9 +44,16 @@ fun ShoppingList(
     val uiState = state.uiState
 
     Column(modifier = Modifier.padding(paddingValues)) {
+        Text(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
+            text = "買い物リスト",
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            color = colorResource(id = R.color.fontColor)
+        )
+        Divider(color = Color.LightGray)
         SelectedRecipes(onThumbClicked)
         Divider(color = Color.LightGray)
-
         LazyColumn() {
             item {
                 Text(
@@ -56,6 +65,7 @@ fun ShoppingList(
                 )
             }
             item { ShoppingListMaterials() }
+            item { Spacer(Modifier.height(80.dp)) }
         }
     }
 
@@ -97,11 +107,23 @@ fun ShoppingListMaterials() {
                     checked = checkedState.value,
                     onCheckedChange = { checkedState.value = it }
                 )
-                Text(
-                    text = "材料$i",
-                    fontSize = 20.sp,
-                    color = colorResource(id = R.color.fontColor)
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "材料$i",
+                        fontSize = 20.sp,
+                        color = colorResource(id = R.color.fontColor)
+                    )
+                    Text(
+                        modifier = Modifier.padding(end = 5.dp),
+                        text = "分量$i",
+                        fontSize = 20.sp,
+                        color = colorResource(id = R.color.fontColor)
+                    )
+                }
             }
             Divider(
                 modifier = Modifier.padding(bottom = 8.dp),
@@ -109,5 +131,4 @@ fun ShoppingListMaterials() {
             )
         }
     }
-    Spacer(Modifier.height(100.dp))
 }
