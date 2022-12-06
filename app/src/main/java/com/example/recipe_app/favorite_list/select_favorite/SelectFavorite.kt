@@ -1,10 +1,13 @@
 package com.example.recipe_app.favorite_list.select_favorite
 
 import android.util.Log
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.ScrollableTabRow
@@ -94,22 +97,30 @@ fun SelectFavoriteCategoriesTabBar(
     onClick: (FavoriteCategoryTab) -> Unit
 ) {
     ScrollableTabRow(
-        modifier = modifier,
+        modifier = modifier.padding(horizontal = 5.dp),
         selectedTabIndex = selectedTab.index,
         backgroundColor = Color.White,
+        contentColor = Color.Transparent,
         edgePadding = 0.dp
     ) {
         FavoriteCategoryTabs.forEach { item ->
+            val selected = selectedTab.index == item.index
+            val backgroundColor = if (selected) colorResource(id = R.color.categoryTabColor) else Color.White
+
             Tab(
-                modifier = Modifier.height(50.dp),
+                modifier = Modifier
+                    .padding(horizontal = 5.dp, vertical = 10.dp)
+                    .background(color = backgroundColor, shape = CircleShape)
+                    .border(BorderStroke(1.5.dp, colorResource(id = R.color.categoryTabColor)), CircleShape),
                 selected = item.index == selectedTab.index,
-                selectedContentColor = colorResource(id = R.color.fontColor),
-                unselectedContentColor = Color.Gray,
+                selectedContentColor = Color.White,
+                unselectedContentColor = colorResource(id = R.color.fontColor),
                 onClick = {
                     onClick(item)
                 }
             ) {
                 Text(
+                    modifier = Modifier.padding(10.dp),
                     text = stringResource(id = item.titleId),
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
