@@ -16,14 +16,20 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Divider
+import androidx.compose.material.DropdownMenu
 import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.sharp.Add
 import androidx.compose.material.icons.sharp.Clear
 import androidx.compose.material.icons.sharp.Favorite
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -49,10 +55,11 @@ fun RecipeDetail(
     ) {
         LazyColumn() {
             item { CookingImage(recipe = uiState.recipeDetail) }
-            item { RecipeDetailTitle("材料") }
+            item { RecipeDetailTitle("材料(人分)") }
             item { RecipeDetailMaterials() }
             item { RecipeDetailTitle("作り方") }
             item { CookingProcedure() }
+            item { Spacer(Modifier.height(80.dp)) }
         }
     }
 
@@ -72,6 +79,7 @@ fun CookingImage(recipe: RecipeDetail) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(bottom = 5.dp)
             .height(220.dp)
             .background(color = Color.LightGray)
     ) {
@@ -101,11 +109,22 @@ fun RecipeDetailTitle(title: String) {
 fun RecipeDetailMaterials() {
     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
         for (i in 1..10) {
-            Text(
-                text = "材料名$i",
-                fontSize = 20.sp,
-                color = colorResource(id = R.color.fontColor)
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "材料名$i",
+                    fontSize = 20.sp,
+                    color = colorResource(id = R.color.fontColor)
+                )
+                Text(
+                    text = "分量$i",
+                    fontSize = 20.sp,
+                    color = colorResource(id = R.color.fontColor)
+                )
+            }
             Divider(
                 modifier = Modifier.padding(bottom = 10.dp),
                 color = Color.LightGray
@@ -126,7 +145,6 @@ fun CookingProcedure() {
             )
         }
     }
-    Spacer(Modifier.height(100.dp))
 }
 
 @Composable

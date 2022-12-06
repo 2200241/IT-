@@ -1,7 +1,9 @@
 package com.example.recipe_app.make_menu.select_recipes
 
 import android.util.Log
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -179,6 +181,7 @@ fun SelectRecipes(
                         onRecipeUnLiked = state::removeFavorite
                     )
                 }
+                item { Spacer(Modifier.height(80.dp)) }
             }
         }
 
@@ -189,7 +192,8 @@ fun SelectRecipes(
         ) {
             ExtendedFloatingActionButton(
                 modifier = Modifier
-                    .padding(10.dp)
+                    .fillMaxWidth()
+                    .padding(horizontal = 30.dp, vertical = 8.dp)
                     .align(Alignment.BottomCenter),
                 backgroundColor = colorResource(id = R.color.decisionButtonColor),
                 contentColor = Color.White,
@@ -256,22 +260,30 @@ fun SelectCategoriesTabBar(
     onClick: (CategoryTab) -> Unit
 ) {
     ScrollableTabRow(
-        modifier = modifier,
+        modifier = modifier.padding(horizontal = 5.dp),
         selectedTabIndex = selectedTab.index,
         backgroundColor = Color.White,
-        edgePadding = 0.dp
+        contentColor = Color.Transparent,
+        edgePadding = 0.dp,
     ) {
         CategoryTabs.forEach { item ->
+            val selected = selectedTab.index == item.index
+            val backgroundColor = if (selected) colorResource(id = R.color.categoryTabColor) else Color.White
+
             Tab(
-                modifier = Modifier.height(50.dp),
+                modifier = Modifier
+                    .padding(horizontal = 5.dp, vertical = 10.dp)
+                    .background(color = backgroundColor, shape = CircleShape)
+                    .border(BorderStroke(1.5.dp, colorResource(id = R.color.categoryTabColor)), CircleShape),
                 selected = item.index == selectedTab.index,
-                selectedContentColor = colorResource(id = R.color.fontColor),
-                unselectedContentColor = Color.Gray,
+                selectedContentColor = Color.White,
+                unselectedContentColor = colorResource(id = R.color.fontColor),
                 onClick = {
                     onClick(item)
                 }
             ) {
                 Text(
+                    modifier = Modifier.padding(10.dp),
                     text = stringResource(id = item.titleId),
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
@@ -352,5 +364,4 @@ fun SearchResultRecipes(
             }
         }
     }
-    Spacer(Modifier.height(100.dp))
 }
