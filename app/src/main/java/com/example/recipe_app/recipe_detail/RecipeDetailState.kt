@@ -27,7 +27,6 @@ class RecipeDetailState(
     fun addToTempMenu() = viewModel.addToTempMenu()
 }
 
-//viewModel()を使うと同じインスタンスが返されてしまう？
 @Composable
 fun rememberRecipeDetailState(
     viewModel: RecipeDetailViewModel = hiltViewModel()

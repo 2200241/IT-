@@ -49,15 +49,23 @@ fun SelectFavorite(
         LazyColumn() {
             when (uiState.selectedMainTab) {
                 FavoriteTab.SelectRecipeTab -> {
-                    item { FavoriteRecipeList(state) }
-/*
-                    favorites.recipes.forEach { recipe ->
-                        item {
-                            FavoriteRecipeListItem(recipe, favorites.recipes)
-                            Divider(color = Color.LightGray)
+                    item {
+                        Column() {
+                            SelectFavoriteCategoriesTabBar(
+                                selectedTab = uiState.selectedSubTab,
+                                onClick = state::onTabClicked
+                            )
+
+                            favorites.recipes.filter { it.categoryId == uiState.selectedSubTab.index + 1 }.forEach { recipe ->
+                                FavoriteRecipeListItem(
+                                    recipe = recipe,
+                                    recipes = favorites.recipes
+                                )
+                                Divider(color = Color.LightGray)
+                            }
+//                    item { FavoriteRecipeList(state) }
                         }
                     }
-*/
                 }
                 FavoriteTab.SelectMenuTab -> {
                     favorites.menus.forEach { menu ->
@@ -124,7 +132,10 @@ fun SelectFavoriteCategoriesTabBar(
                 modifier = Modifier
                     .padding(horizontal = 5.dp, vertical = 10.dp)
                     .background(color = backgroundColor, shape = CircleShape)
-                    .border(BorderStroke(1.5.dp, colorResource(id = R.color.categoryTabColor)), CircleShape),
+                    .border(
+                        BorderStroke(1.5.dp, colorResource(id = R.color.categoryTabColor)),
+                        CircleShape
+                    ),
                 selected = item.index == selectedTab.index,
                 selectedContentColor = Color.White,
                 unselectedContentColor = colorResource(id = R.color.fontColor),
@@ -158,6 +169,7 @@ private val FavoriteCategoryTabs = listOf(
     FavoriteCategoryTab.SelectOthersTab
 )
 
+/*
 @Composable
 fun FavoriteRecipeList(state: SelectFavoriteState) {
     val uiState = state.uiState
@@ -213,6 +225,8 @@ fun FavoriteRecipeList(state: SelectFavoriteState) {
         }
     }
 }
+*/
+
 @Composable
 fun FavoriteRecipeListItem(
     recipe: Recipe,
