@@ -1,9 +1,10 @@
 package com.example.recipe_app.repositories
 
-import android.util.Log
 import com.example.recipe_app.data.*
+import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.mapBoth
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -17,12 +18,12 @@ interface TestRepository {
     suspend fun removeFavoriteRecipe(id: String): Result<String, String>
     suspend fun addFavoriteMenu(menu: Menu): Result<String, String>
     suspend fun removeFavoriteMenu(id: String): Result<String, String>
-    suspend fun fetchMenus():  Flow<Result<List<Menu>, String>>
-    suspend fun fetchMenu(id: String): Result<List<RecipeThumb>, String>
-    suspend fun fetchShoppingList(id: String): Result<List<Ingredient>, String>
-    suspend fun addMenu(menu: Menu): Result<String, String>
+    fun fetchMenus():  Flow<Result<List<Menu>, String>>
+    fun fetchMenu(id: String): Flow<Result<MenuDetail, String>>
+    suspend fun checkShoppingListItem(id: String, index: Int): Result<String, String>
+    suspend fun addMenu(): Result<String, String>
     suspend fun removeMenu(id: String): Result<String, String>
-    suspend fun getTempMenu(): Flow<Result<List<RecipeThumb>, String>>
+    fun getTempMenu(): Flow<Result<List<RecipeThumb>, String>>
     suspend fun addToTempMenu(recipe: RecipeThumb): Result<String, String>
     suspend fun removeFromTempMenu(id: String): Result<String, String>
     suspend fun removeAllFromTempMenu(): Result<String, String>
@@ -31,7 +32,7 @@ interface TestRepository {
 //    suspend fun removeAllergen(id: String): Result<String, String>
 }
 
-private var testMenus = emptyList<Menu>()
+private var testMenus = emptyList<MenuDetail>()
 private var testFavorites = Favorites()
 private var testTempMenu = emptyList<RecipeThumb>()
 
@@ -100,47 +101,65 @@ class TestRepositoryImpl @Inject constructor(): TestRepository {
         return Ok("Successed")
     }
 
-    override suspend fun fetchMenus(): Flow<Result<List<Menu>, String>> {
+    override fun fetchMenus(): Flow<Result<List<Menu>, String>> {
         return flow {
             delay(500)
-            emit(Ok(testMenus))
+            emit(Ok(testMenus.map { it.menu }))
         }
     }
 
-    override suspend fun fetchMenu(id: String): Result<List<RecipeThumb>, String> {
-        return Ok(listOf(
-            RecipeThumb(id = "1234567890", thumb = "url"),
-            RecipeThumb(id = "0000000001", thumb = "url"),
-            RecipeThumb(id = "9876543210", thumb = "url"),
-            RecipeThumb(id = "7777777777", thumb = "url"),
-            RecipeThumb(id = "5555555555", thumb = "url")
-        ))
+    override fun fetchMenu(id: String): Flow<Result<MenuDetail, String>> {
+        return flow {
+            delay(500)
+            emit(
+                if (testMenus.find { it.menu.id == id } != null) {
+                    Ok(testMenus.find { it.menu.id == id }!!)
+                } else {
+                    Err("The menu is not found.")
+                }
+            )
+        }
     }
 
-    override suspend fun fetchShoppingList(id: String): Result<List<Ingredient>, String> {
-        return Ok(listOf(
-            Ingredient("小麦粉", "大さじ１"),
-            Ingredient("水", "200ml"),
-            Ingredient("卵", "1個"),
-            Ingredient("豚肉", "100g"),
-            Ingredient("サラダ油", "")
-        ))
+    override suspend fun checkShoppingListItem(id: String, index: Int): Result<String, String> {
+        testMenus.forEach { menuDetail ->
+            if (menuDetail.menu.id == id) {
+                menuDetail.shoppingItems.forEachIndexed { i, shoppingItem ->
+                    if (i == index) !shoppingItem.isChecked
+                }
+            }
+        }
+        return Ok("Successed")
     }
 
-    override suspend fun addMenu(menu: Menu): Result<String, String> {
-        testMenus += menu
+    override suspend fun addMenu(): Result<String, String> {
+        var withIngredients: List<ShoppingItem> = emptyList()
+        testTempMenu.map { fetchRecipeDetail(it.id).mapBoth(
+            success = { recipe ->
+                recipe.ingredients.map { ingredient ->
+                    withIngredients += ShoppingItem(ingredient, false)
+                }
+                      },
+            failure = {}
+        ) }
+        testMenus += MenuDetail(
+            menu = Menu(id = "test${Math.random()}", recipes = testTempMenu),
+            shoppingItems = withIngredients
+        )
         return Ok("Successed")
     }
 
     override suspend fun removeMenu(id: String): Result<String, String> {
-        testMenus = testMenus.filter { it.id != id }
+        testMenus = testMenus.filter { it.menu.id != id }
         return Ok("Successed")
     }
 
-    override suspend fun getTempMenu(): Flow<Result<List<RecipeThumb>, String>> {
+    override fun getTempMenu(): Flow<Result<List<RecipeThumb>, String>> {
         return flow {
-            delay(500)
-            emit(Ok(testTempMenu))
+            while (true) {
+                delay(500)
+                emit(Ok(testTempMenu))
+            }
         }
     }
 

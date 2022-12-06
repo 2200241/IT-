@@ -18,7 +18,13 @@ class SelectRecipesState(
     val favoriteRecipeIds: List<String>
         @Composable get() = viewModel.favoriteRecipeIds.collectAsState().value.mapBoth(
             success = { favorites ->  favorites.recipes.map { it.id } },
-            failure = { emptyList<String>() }
+            failure = { emptyList() }
+        )
+
+    val selectedRecipes: List<RecipeThumb>
+        @Composable get() = viewModel.selectedRecipes.collectAsState().value.mapBoth(
+            success = { it },
+            failure = { emptyList() }
         )
 
     fun onTabClicked(selectedTab: CategoryTab) = viewModel.onTabClicked(selectedTab)

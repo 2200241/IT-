@@ -1,5 +1,8 @@
 package com.example.recipe_app.data
 
+/**
+* For lists
+*/
 data class Recipe(
     val id: String = "",
     val categoryId: Int = 0,
@@ -8,6 +11,9 @@ data class Recipe(
 //    val isFavorite: Boolean = false
 )
 
+/**
+ * For Recipe Details
+ */
 data class RecipeDetail(
     val id: String = "",
     val categoryId: Int = 0,
@@ -17,41 +23,58 @@ data class RecipeDetail(
     val instructions: List<Instruction> = emptyList()
 )
 
+/**
+ * RecipeDetail property
+ */
 data class Ingredient(
     val name: String = "",
     val quantity: String = ""
 )
 
+/**
+ * RecipeDetail property
+ */
 data class Instruction(
     val order: Int = 0,
     val content: String = ""
 )
 
+/**
+ * For Favorite Lists
+**/
 data class Favorites(
     val menus: List<Menu> = emptyList(),
     val recipes: List<Recipe> = emptyList()
 )
 
+/**
+ * For Menu Lists
+ */
 data class Menu(
     val id: String = "",
-    val date: String = "",
     val recipes: List<RecipeThumb> = emptyList()
 )
 
-// For Menu property
+/**
+ * Menu property
+ */
 data class RecipeThumb(
     val id: String = "",
     val thumb: String = ""
 )
 
-// 表示するときにfilterすればいい
-/*
-data class Categories(
-    val stapleFood: List<Recipe> = emptyList(),
-    val mainDish: List<Recipe> = emptyList(),
-    val sideDish: List<Recipe> = emptyList(),
-    val soup: List<Recipe> = emptyList(),
-    val sweets: List<Recipe> = emptyList(),
-    val drink: List<Recipe> = emptyList(),
-    val others: List<Recipe> = emptyList()
-)*/
+/**
+ * For Shopping List
+ */
+data class MenuDetail(
+    val menu: Menu = Menu(),
+    val shoppingItems: List<ShoppingItem> = emptyList()
+)
+
+/**
+ * MenuDetail property
+ */
+data class ShoppingItem(
+    val ingredient: Ingredient = Ingredient(),
+    val isChecked: Boolean = false
+)

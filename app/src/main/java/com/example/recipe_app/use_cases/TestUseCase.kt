@@ -16,12 +16,12 @@ interface TestUseCase {
     suspend fun removeFavoriteRecipe(id: String): Result<String, String>
     suspend fun addFavoriteMenu(menu: Menu): Result<String, String>
     suspend fun removeFavoriteMenu(id: String): Result<String, String>
-    suspend fun fetchMenus(): Flow<Result<List<Menu>, String>>
-    suspend fun fetchMenu(id: String): Result<List<RecipeThumb>, String>
-    suspend fun fetchShoppingList(id: String): Result<List<Ingredient>, String>
-    suspend fun addMenu(menu: Menu): Result<String, String>
+    fun fetchMenus(): Flow<Result<List<Menu>, String>>
+    fun fetchMenu(id: String): Flow<Result<MenuDetail, String>>
+    suspend fun checkShoppingListItem(id: String, index: Int): Result<String, String>
+    suspend fun addMenu(): Result<String, String>
     suspend fun removeMenu(id: String): Result<String, String>
-    suspend fun getTempMenu(): Flow<Result<List<RecipeThumb>, String>>
+    fun getTempMenu(): Flow<Result<List<RecipeThumb>, String>>
     suspend fun addToTempMenu(recipe: RecipeThumb): Result<String, String>
     suspend fun removeFromTempMenu(id: String): Result<String, String>
     suspend fun removeAllFromTempMenu(): Result<String, String>
@@ -59,27 +59,27 @@ class TestUseCaseImpl @Inject constructor(
         return testRepository.removeFavoriteMenu(id)
     }
 
-    override suspend fun fetchMenus(): Flow<Result<List<Menu>, String>> {
+    override fun fetchMenus(): Flow<Result<List<Menu>, String>> {
         return testRepository.fetchMenus()
     }
 
-    override suspend fun fetchMenu(id: String): Result<List<RecipeThumb>, String> {
+    override fun fetchMenu(id: String): Flow<Result<MenuDetail, String>> {
         return testRepository.fetchMenu(id)
     }
 
-    override suspend fun fetchShoppingList(id: String): Result<List<Ingredient>, String> {
-        return testRepository.fetchShoppingList(id)
+    override suspend fun checkShoppingListItem(id: String, index: Int): Result<String, String> {
+        return testRepository.checkShoppingListItem(id, index)
     }
 
-    override suspend fun addMenu(menu: Menu): Result<String, String> {
-        return testRepository.addMenu(menu)
+    override suspend fun addMenu(): Result<String, String> {
+        return testRepository.addMenu()
     }
 
     override suspend fun removeMenu(id: String): Result<String, String> {
         return testRepository.removeMenu(id)
     }
 
-    override suspend fun getTempMenu(): Flow<Result<List<RecipeThumb>, String>> {
+    override fun getTempMenu(): Flow<Result<List<RecipeThumb>, String>> {
         return testRepository.getTempMenu()
     }
 

@@ -1,10 +1,11 @@
 package com.example.recipe_app.menu_list
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.recipe_app.use_cases.TestUseCase
+import com.github.michaelbull.result.Ok
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 data class MenuListUiState(
@@ -13,6 +14,7 @@ data class MenuListUiState(
 
 @HiltViewModel
 class MenuListViewModel @Inject constructor(
+    private val useCase: TestUseCase
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow(MenuListUiState(
@@ -20,11 +22,12 @@ class MenuListViewModel @Inject constructor(
     ))
     val uiState = _uiState.asStateFlow()
 
-    suspend fun startLoading() {
+
+    private fun startLoading() {
         _uiState.update { it.copy(isLoading = true) }
     }
 
-    suspend fun endLoading() {
+    private fun endLoading() {
         _uiState.update { it.copy(isLoading = false) }
     }
 }

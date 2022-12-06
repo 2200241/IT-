@@ -86,7 +86,7 @@ fun SelectRecipes(
             )
 
             Divider(color = Color.LightGray)
-            SelectedRecipes(true, uiState.selectedRecipes, onItemClicked, state::removeRecipe)
+            SelectedRecipes(true, state.selectedRecipes, onItemClicked, state::removeRecipe)
             Divider(color = Color.LightGray)
 
             SelectCategoriesTabBar(

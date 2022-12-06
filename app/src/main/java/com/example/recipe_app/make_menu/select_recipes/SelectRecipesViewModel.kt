@@ -21,7 +21,6 @@ data class SelectRecipesUiState(
     val isLoading: Boolean = false,
     val error: String = "",
     val recipes: List<Recipe> = emptyList(),
-    val selectedRecipes: List<RecipeThumb> = emptyList(),
     val selectedTab: CategoryTab = CategoryTab.SelectStapleFoodTab
 )
 
@@ -38,7 +37,6 @@ class SelectRecipesViewModel @Inject constructor(
         isLoading = false,
         error = "",
         recipes = emptyList(),
-        selectedRecipes = emptyList(),
         selectedTab = CategoryTab.SelectStapleFoodTab
     ))
     val uiState = _uiState.asStateFlow()
@@ -47,6 +45,12 @@ class SelectRecipesViewModel @Inject constructor(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = Ok(Favorites())
+    )
+
+    val selectedRecipes = useCase.getTempMenu().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = Ok(emptyList())
     )
 
     init {
@@ -69,18 +73,20 @@ class SelectRecipesViewModel @Inject constructor(
     }
 
     fun selectRecipe(recipe: RecipeThumb) {
-        _uiState.update { it.copy(selectedRecipes = _uiState.value.selectedRecipes + listOf(recipe)) }
+        viewModelScope.launch {
+            useCase.addToTempMenu(recipe)
+        }
     }
 
     fun removeRecipe(id: String) {
-        _uiState.update { it.copy(
-            selectedRecipes = _uiState.value.selectedRecipes.filter { recipe -> recipe.id != id }
-        ) }
+        viewModelScope.launch {
+            useCase.removeFromTempMenu(id)
+        }
     }
 
     fun addMenu() {
         viewModelScope.launch {
-            useCase.addMenu(Menu(id = "", date = "", recipes = _uiState.value.selectedRecipes))
+            useCase.addMenu()
         }
     }
 

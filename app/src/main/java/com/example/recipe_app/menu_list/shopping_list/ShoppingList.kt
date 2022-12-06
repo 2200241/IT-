@@ -30,6 +30,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.recipe_app.R
+import com.example.recipe_app.data.Ingredient
+import com.example.recipe_app.data.ShoppingItem
 import com.example.recipe_app.make_menu.select_conditions.rippleClickable
 import com.example.recipe_app.make_menu.select_recipes.SelectedRecipes
 
@@ -42,8 +44,7 @@ fun ShoppingList(
     val uiState = state.uiState
 
     Column(modifier = Modifier.padding(paddingValues)) {
-        // TODO
-        SelectedRecipes(false, uiState.recipes, onThumbClicked)
+        SelectedRecipes(false, state.menuDetail.menu.recipes, onThumbClicked)
         Divider(color = Color.LightGray)
 
         LazyColumn() {
@@ -56,7 +57,7 @@ fun ShoppingList(
                     color = colorResource(id = R.color.fontColor)
                 )
             }
-            item { ShoppingListMaterials() }
+            item { ShoppingListMaterials(state.menuDetail.shoppingItems, state::checkShoppingListItem) }
         }
     }
 
@@ -82,24 +83,28 @@ fun ShoppingList(
 }
 
 @Composable
-fun ShoppingListMaterials() {
-    for (i in 1..15) {
-        val checkedState = remember { mutableStateOf(false) }
+fun ShoppingListMaterials(
+    items: List<ShoppingItem>,
+    onChecked: (Int) -> Unit
+) {
+    items.forEachIndexed { index, item ->
+//        val checkedState = remember { mutableStateOf(false) }
+
         Column(modifier = Modifier.padding(horizontal = 15.dp)) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .rippleClickable { checkedState.value = !checkedState.value },
+                    .rippleClickable { onChecked(index) },
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Checkbox(
                     modifier = Modifier.size(40.dp),
                     colors = CheckboxDefaults.colors(colorResource(id = R.color.selectButtonColor)),
-                    checked = checkedState.value,
-                    onCheckedChange = { checkedState.value = it }
+                    checked = item.isChecked,
+                    onCheckedChange = {}
                 )
                 Text(
-                    text = "材料$i",
+                    text = "${item.ingredient.name} ${item.ingredient.quantity}",
                     fontSize = 20.sp,
                     color = colorResource(id = R.color.fontColor)
                 )
