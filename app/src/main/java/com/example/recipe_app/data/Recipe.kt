@@ -19,6 +19,7 @@ data class RecipeDetail(
     val categoryId: Int = 0,
     val title: String = "",
     val image: String = "",
+    val serving: Int = 0,
     val ingredients:List<Ingredient> = emptyList(),
     val instructions: List<Instruction> = emptyList()
 )
@@ -76,5 +77,6 @@ data class MenuDetail(
  */
 data class ShoppingItem(
     val ingredient: Ingredient = Ingredient(),
+    val serving: Int = 0,
     val isChecked: Boolean = false
 )
