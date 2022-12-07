@@ -4,22 +4,16 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.recipe_app.room.Favorite.Favorite
 import com.example.recipe_app.room.allergy.Allergy
 import com.example.recipe_app.room.allergy.AllergyDao
-import com.example.recipe_app.room.favorite.Favorite
 import com.example.recipe_app.room.favorite.FavoriteDao
-//import com.example.recipe_app.room.menu.Menu
-//import com.example.recipe_app.room.menu.MenuDao
-//import com.example.recipe_app.room.menu.Recipe
-//import com.example.recipe_app.room.menu.RecipeDao
 
-@Database(entities = [Favorite::class, Allergy::class,], version = 1, exportSchema = false)
+@Database(entities = [Favorite::class, Allergy::class], version = 1, exportSchema = false)
 abstract class RecipeAppDatabase: RoomDatabase() {
-//    Menu::class, Recipe::class
+
     abstract fun favoriteDao(): FavoriteDao
-    abstract fun allergyDao(): AllergyDao
-//    abstract fun menuDao(): MenuDao
-//    abstract fun recipeDao(): RecipeDao
+    abstract fun AllergyDao(): AllergyDao
 
     companion object {
         @Volatile
