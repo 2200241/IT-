@@ -1,7 +1,6 @@
 package com.example.recipe_app.room.favorite
 
 import androidx.room.*
-import com.example.recipe_app.room.Favorite.Favorite
 
 @Dao
 interface FavoriteDao {

@@ -1,7 +1,7 @@
 package com.example.recipe_app.repositories
 
 import android.app.Application
-import com.example.recipe_app.room.Favorite.Favorite
+import com.example.recipe_app.room.favorite.Favorite
 import com.example.recipe_app.room.database.RecipeAppDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
