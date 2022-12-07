@@ -1,6 +1,5 @@
 package com.example.recipe_app.room.allergy
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 
 @Dao

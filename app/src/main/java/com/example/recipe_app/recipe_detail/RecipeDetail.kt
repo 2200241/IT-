@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Divider
 import androidx.compose.material.ExtendedFloatingActionButton
@@ -30,49 +28,58 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.recipe_app.R
+import com.example.recipe_app.data.RecipeDetail
 
 @Composable
 fun RecipeDetail(
     state: RecipeDetailState = rememberRecipeDetailState(),
     paddingValues: PaddingValues,
+    addButtonIsDisplayed: Boolean = false,
     onBackPressed: () -> Unit = {}
 ) {
+    val uiState = state.uiState
+
     Column(
         modifier = Modifier.padding(paddingValues),
     ) {
         LazyColumn() {
-            item { Header(state) }
-            item { RecipeDetailTitle("材料") }
+            item { CookingImage(recipe = uiState.recipeDetail) }
+            item { RecipeDetailTitle("材料(人分)") }
             item { RecipeDetailMaterials() }
             item { RecipeDetailTitle("作り方") }
             item { CookingProcedure() }
+            item { Spacer(Modifier.height(80.dp)) }
         }
     }
 
-    RecipeDetailBottomButtons(paddingValues)
+    RecipeDetailBottomButtons(
+        paddingValues = paddingValues,
+        recipeId = uiState.recipeDetail.id,
+        favoriteRecipeIds = state.favoriteRecipeIds,
+        addButtonIsDisplayed = addButtonIsDisplayed,
+        onAddButtonClicked = state::addToTempMenu,
+        onLiked = state::addFavoriteRecipe,
+        onUnliked = state::removeFavoriteRecipe
+    )
 }
 
 @Composable
-fun Header(state: RecipeDetailState) {
-    Row(
+fun CookingImage(recipe: RecipeDetail) {
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(15.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
+            .padding(bottom = 5.dp)
+            .height(220.dp)
+            .background(color = Color.LightGray)
     ) {
         Text(
-            text = state.uiState.title,
-            fontSize = 18.sp,
-            color = colorResource(id = R.color.fontColor)
-        )
-        state.test()
-        Box( // ->image
             modifier = Modifier
-                .size(160.dp, 115.dp)
-                .background(color = Color.LightGray)
-        ) {
-            Text(text = "料理画像", color = Color.White)
-        }
+                .padding(10.dp)
+                .align(Alignment.BottomStart),
+            text = recipe.title,
+            color = Color.White,
+            fontSize = 20.sp
+        )
     }
 }
 
@@ -91,11 +98,22 @@ fun RecipeDetailTitle(title: String) {
 fun RecipeDetailMaterials() {
     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
         for (i in 1..10) {
-            Text(
-                text = "材料名$i",
-                fontSize = 20.sp,
-                color = colorResource(id = R.color.fontColor)
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "材料名$i",
+                    fontSize = 20.sp,
+                    color = colorResource(id = R.color.fontColor)
+                )
+                Text(
+                    text = "分量$i",
+                    fontSize = 20.sp,
+                    color = colorResource(id = R.color.fontColor)
+                )
+            }
             Divider(
                 modifier = Modifier.padding(bottom = 10.dp),
                 color = Color.LightGray
@@ -116,11 +134,18 @@ fun CookingProcedure() {
             )
         }
     }
-    Spacer(Modifier.height(100.dp))
 }
 
 @Composable
-fun RecipeDetailBottomButtons(paddingValues: PaddingValues) {
+fun RecipeDetailBottomButtons(
+    paddingValues: PaddingValues,
+    recipeId: String,
+    favoriteRecipeIds: List<String>,
+    addButtonIsDisplayed: Boolean,
+    onAddButtonClicked: () -> Unit,
+    onLiked: () -> Unit,
+    onUnliked: () -> Unit
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -134,25 +159,30 @@ fun RecipeDetailBottomButtons(paddingValues: PaddingValues) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            ExtendedFloatingActionButton(
-                backgroundColor = colorResource(id = R.color.addListButtonColor),
-                contentColor = Color.White ,
-                text = {
-                    Text(
-                        text = "買い物リストへ追加",
-                        fontSize = 18.sp
-                    )
-                },
-                onClick = {}
-            )
+            if (addButtonIsDisplayed) {
+                ExtendedFloatingActionButton(
+                    backgroundColor = colorResource(id = R.color.addListButtonColor),
+                    contentColor = Color.White,
+                    text = {
+                        Text(
+                            text = "買い物リストへ追加",
+                            fontSize = 18.sp
+                        )
+                    },
+                    onClick = onAddButtonClicked
+                )
+            }
             FloatingActionButton(
                 backgroundColor = Color.White,
                 contentColor = Color.LightGray,
-                onClick = { /*TODO*/ }
+                onClick = if (favoriteRecipeIds.contains(recipeId)) onUnliked else onLiked
             ) {
                 Icon(
                     Icons.Sharp.Favorite,
                     contentDescription = null,
+                    tint = if (favoriteRecipeIds.contains(recipeId))
+                        colorResource(id = R.color.favoriteIconColor)
+                    else Color.LightGray
                 )
             }
         }

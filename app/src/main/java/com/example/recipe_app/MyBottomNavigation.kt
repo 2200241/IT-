@@ -3,6 +3,7 @@ package com.example.recipe_app
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
@@ -12,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -37,6 +39,10 @@ fun MyBottomNavigation(
                 icon = { Icon(
                     imageVector = item.icon,
                     contentDescription = stringResource(id = item.titleId)
+                ) },
+                label = { Text(
+                    text = stringResource(id = item.titleId),
+                    fontWeight = FontWeight.Bold
                 ) },
                 selected = currentDestination?.hierarchy?.any {
                     it.route == item.screen.route

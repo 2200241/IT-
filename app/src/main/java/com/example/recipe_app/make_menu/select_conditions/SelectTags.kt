@@ -15,6 +15,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Divider
@@ -59,14 +60,12 @@ fun TagCategory(
     selectedTags: List<Int>,
     onTagClicked: (Int) -> Unit
 ) {
-    Column(modifier = Modifier.padding(bottom = 10.dp)) {
-        SelectTagsTitle(largeCategory.id)
-        SelectTagsButton(
-            items = largeCategory.items,
-            selectedTags = selectedTags,
-            onTagClicked = onTagClicked
-        )
-    }
+    SelectTagsTitle(largeCategory.id)
+    SelectTagsButton(
+        items = largeCategory.items,
+        selectedTags = selectedTags,
+        onTagClicked = onTagClicked
+    )
 }
 
 @Composable
@@ -98,7 +97,7 @@ fun SelectTagsButton(
             val fontWeight = if (selectedTags.contains(item)) FontWeight.Bold else FontWeight.Normal
             OutlinedButton(
                 border = BorderStroke(1.5.dp, colorResource(id = R.color.borderLightColor)),
-                shape = RoundedCornerShape(50),
+                shape = CircleShape,
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = backgroundColor, contentColor = contentColor),
                 onClick = { onTagClicked(item) }

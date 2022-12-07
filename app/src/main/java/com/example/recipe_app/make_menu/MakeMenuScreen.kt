@@ -35,23 +35,24 @@ fun MakeMenuScreen(
         }
         composable(
             route = "selectRecipes/{conditions}",
-            arguments = listOf(navArgument("conditions") { type = NavType.StringType })
+//            arguments = listOf(navArgument("conditions") { type = NavType.StringType })
         ) { backStackEntry ->
             SelectRecipes(
 //                state = rememberSelectRecipesState(conditions = backStackEntry.arguments?.getString("conditions")),
                 paddingValues = paddingValues,
-                onItemClicked = { recipeId ->
-                    state.navigateToRecipeDetail(recipeId, backStackEntry)
+                onItemClicked = { recipeId, thumb ->
+                    state.navigateToRecipeDetail(recipeId, thumb, backStackEntry)
                 },
                 onBackPressed = { state.navigateBack() }
             )
         }
         composable(
-            route = "recipeDetail/{recipeId}",
-            arguments = listOf(navArgument("recipeId") { type = NavType.StringType })
-        ) { backStackEntry ->
+            route = "recipeDetail/{recipeId}/{thumb}",
+//            arguments = listOf(navArgument("recipeId") { type = NavType.StringType })
+        ) {
             RecipeDetail(
 //                state = rememberRecipeDetailState(recipeId = backStackEntry.arguments?.getString("recipeId")),
+                addButtonIsDisplayed = true,
                 paddingValues = paddingValues,
                 onBackPressed = { state.navigateBack() }
             )

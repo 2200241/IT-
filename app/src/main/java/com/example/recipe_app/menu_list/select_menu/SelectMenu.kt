@@ -47,9 +47,9 @@ fun SelectMenu(
         LazyColumn() {
             item {
                 for (i in 1..10) {
-                    Divider(color = Color.Gray)
+                    Divider(color = Color.LightGray)
                     MenuListItem(onItemClicked = onItemClicked)
-                    Divider(color = Color.Gray)
+                    Divider(color = Color.LightGray)
                 }
             }
         }
@@ -67,12 +67,12 @@ fun MenuListItem(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Box(
-            modifier = Modifier.size((screenWidth-60).dp, 100.dp)
+            modifier = Modifier.width((screenWidth-60).dp)
         ) {
             LazyRow(
                 modifier = Modifier.clickable { onItemClicked("testId") },
-                contentPadding = PaddingValues(all = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
+                contentPadding = PaddingValues(12.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 for (i in 1..5) {
                     item {
@@ -91,7 +91,7 @@ fun MenuListItem(
             Icons.Sharp.Favorite,
             contentDescription = null,
             modifier = Modifier
-                .padding(bottom = 16.dp, end = 16.dp)
+                .padding(bottom = 12.dp, end = 12.dp)
                 .size(30.dp)
                 .align(alignment = Alignment.Bottom)
                 .clickable { },

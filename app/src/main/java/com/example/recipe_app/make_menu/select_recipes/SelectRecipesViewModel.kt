@@ -3,20 +3,17 @@ package com.example.recipe_app.make_menu.select_recipes
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.recipe_app.R
+import com.example.recipe_app.data.Favorites
 import com.example.recipe_app.data.Menu
 import com.example.recipe_app.data.Recipe
 import com.example.recipe_app.data.RecipeThumb
-import com.example.recipe_app.make_menu.select_conditions.ConditionTab
 import com.example.recipe_app.use_cases.TestUseCase
-import com.github.michaelbull.result.flatMap
+import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.mapBoth
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,7 +21,6 @@ data class SelectRecipesUiState(
     val isLoading: Boolean = false,
     val error: String = "",
     val recipes: List<Recipe> = emptyList(),
-    val selectedRecipes: List<RecipeThumb> = emptyList(),
     val selectedTab: CategoryTab = CategoryTab.SelectStapleFoodTab
 )
 
@@ -41,10 +37,21 @@ class SelectRecipesViewModel @Inject constructor(
         isLoading = false,
         error = "",
         recipes = emptyList(),
-        selectedRecipes = emptyList(),
         selectedTab = CategoryTab.SelectStapleFoodTab
     ))
     val uiState = _uiState.asStateFlow()
+
+    val favoriteRecipeIds = useCase.fetchFavorites().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = Ok(Favorites())
+    )
+
+    val selectedRecipes = useCase.getTempMenu().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = Ok(emptyList())
+    )
 
     init {
         viewModelScope.launch {
@@ -65,19 +72,33 @@ class SelectRecipesViewModel @Inject constructor(
         _uiState.update { it.copy(isLoading = false) }
     }
 
-    fun selectRecipe(id: String, thumb: String) {
-        _uiState.update { it.copy(selectedRecipes = _uiState.value.selectedRecipes + listOf(RecipeThumb(id, thumb))) }
+    fun selectRecipe(recipe: RecipeThumb) {
+        viewModelScope.launch {
+            useCase.addToTempMenu(recipe)
+        }
     }
 
     fun removeRecipe(id: String) {
-        _uiState.update { it.copy(
-            selectedRecipes = _uiState.value.selectedRecipes.filter { recipe -> recipe.id != id }
-        ) }
+        viewModelScope.launch {
+            useCase.removeFromTempMenu(id)
+        }
     }
 
     fun addMenu() {
         viewModelScope.launch {
-            useCase.addMenu(Menu(id = "", date = "", recipes = _uiState.value.selectedRecipes))
+            useCase.addMenu()
+        }
+    }
+
+    fun addFavorite(recipe: Recipe) {
+        viewModelScope.launch {
+            useCase.addFavoriteRecipe(recipe)
+        }
+    }
+
+    fun removeFavorite(id: String) {
+        viewModelScope.launch {
+            useCase.removeFavoriteRecipe(id)
         }
     }
 

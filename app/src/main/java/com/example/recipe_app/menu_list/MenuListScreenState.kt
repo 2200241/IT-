@@ -15,11 +15,11 @@ import kotlinx.coroutines.launch
 
 internal sealed class Screen(val route: String) {
     object SelectMenu : Screen("selectMenu")
-    object ShoppingList : Screen("shoppingList/{menuId}") {
+    object ShoppingList : Screen("shoppingList/{menuId}/") {
         fun createRoute(menuId: String) = "shoppingList/$menuId"
     }
-    object RecipeDetail : Screen("recipeDetail/{recipeId}") {
-        fun createRoute(recipeId: String) = "recipeDetail/$recipeId"
+    object RecipeDetail : Screen("recipeDetail/{recipeId}/{thumb}") {
+        fun createRoute(recipeId: String, thumb: String) = "recipeDetail/$recipeId/$thumb"
     }
 }
 
@@ -38,7 +38,7 @@ class MenuListScreenState(
         }
     }
 
-    fun navigateToRecipeDetail(recipeId: String, from: NavBackStackEntry) {
+    fun navigateToRecipeDetail(recipeId: String, thumb: String, from: NavBackStackEntry) {
         if (from.lifecycleIsResumed()) {
             if (recipeId.isBlank()) {
                 coroutineScope.launch {
@@ -48,7 +48,7 @@ class MenuListScreenState(
                     )
                 }
             } else {
-                navController.navigate(Screen.RecipeDetail.createRoute(recipeId))
+                navController.navigate(Screen.RecipeDetail.createRoute(recipeId, thumb))
             }
         }
     }

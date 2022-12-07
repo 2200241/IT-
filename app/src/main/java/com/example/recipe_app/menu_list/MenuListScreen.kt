@@ -33,19 +33,19 @@ fun MenuListScreen(
         }
         composable(
             route = "shoppingList/{menuId}",
-            arguments = listOf(navArgument("menuId") { type = NavType.StringType})
+//            arguments = listOf(navArgument("menuId") { type = NavType.StringType })
         ) { backStackEntry ->
             ShoppingList(
 //                state = rememberShoppingListState(menuId = backStackEntry.arguments?.getString("menuId")),
                 paddingValues = paddingValues,
-                onThumbClicked = { id ->
-                    state.navigateToRecipeDetail(id, backStackEntry)
+                onThumbClicked = { id, thumb ->
+                    state.navigateToRecipeDetail(id, thumb, backStackEntry)
                 }
             )
         }
         composable(
             route = "recipeDetail/{recipeId}",
-            arguments = listOf(navArgument("recipeId") { type = NavType.StringType })
+//            arguments = listOf(navArgument("recipeId") { type = NavType.StringType })
         ) { backStackEntry ->
             RecipeDetail(
 //                state = rememberRecipeDetailState(recipeId = backStackEntry.arguments?.getString("recipeId")),

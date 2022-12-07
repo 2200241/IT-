@@ -7,87 +7,80 @@ import com.example.recipe_app.data.Favorites
 import com.example.recipe_app.data.Menu
 import com.example.recipe_app.data.Recipe
 import com.example.recipe_app.data.RecipeThumb
+import com.example.recipe_app.use_cases.TestUseCase
+import com.github.michaelbull.result.Ok
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class SelectFavoriteUiState(
     val isLoading: Boolean = false,
-    val favorites: Favorites = Favorites(),
-    val selectedTab: FavoriteTab = FavoriteTab.SelectRecipeTab
+    val selectedMainTab: FavoriteTab = FavoriteTab.SelectRecipeTab,
+    val selectedSubTab: FavoriteCategoryTab = FavoriteCategoryTab.SelectStapleFoodTab
 )
 
 @HiltViewModel
 class SelectFavoriteViewModel @Inject constructor(
+    private val useCase: TestUseCase
 //    useCase: GetFavoritesUseCase = GetFavoritesUseCase()
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow(
         SelectFavoriteUiState(
             isLoading = false,
-            selectedTab = FavoriteTab.SelectRecipeTab
+            selectedMainTab = FavoriteTab.SelectRecipeTab,
+            selectedSubTab = FavoriteCategoryTab.SelectStapleFoodTab
         )
     )
     val uiState = _uiState.asStateFlow()
 
-    init {
-        viewModelScope.launch {
-/*
-            useCase.fetch()
-                .onSuccess { favorites ->
-                    _uiState.update { it.copy(
-                        favorites = favorites
-                    ) }
-                }
-*/
-            setTestList()
-        }
-    }
+    val favorites = useCase.fetchFavorites().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = Ok(Favorites())
+    )
 
-    suspend fun startLoading() {
+    private fun startLoading() {
         _uiState.update { it.copy(isLoading = true) }
     }
 
-    suspend fun endLoading() {
+    private fun endLoading() {
         _uiState.update { it.copy(isLoading = false) }
     }
 
-    fun deleteFavorite() {
+    fun addFavoriteRecipe(recipe: Recipe) {
+        viewModelScope.launch {
+            useCase.addFavoriteRecipe(recipe)
+        }
+    }
 
+    fun addFavoriteMenu(menu: Menu) {
+        viewModelScope.launch {
+            useCase.addFavoriteMenu(menu)
+        }
+    }
+
+    fun removeFavoriteRecipe(id: String) {
+        viewModelScope.launch {
+            useCase.removeFavoriteRecipe(id)
+        }
+    }
+
+    fun removeFavoriteMenu(id: String) {
+        viewModelScope.launch {
+            useCase.removeFavoriteMenu(id)
+        }
     }
 
     fun onTabClicked(selectedTab: FavoriteTab) {
-        _uiState.update { it.copy(selectedTab = selectedTab) }
+        _uiState.update { it.copy(selectedMainTab = selectedTab) }
     }
 
-    private fun setTestList() {
-        var testArray = emptyArray<Recipe>()
-        for (i in 1..10) {
-            testArray += Recipe(
-                title = "料理$i",
-                thumb = "url",
-                isFavorite = true
-            )
-        }
-
-        var testRecipeThumbArray = emptyArray<RecipeThumb>()
-        for (i in 1..10) {
-            testRecipeThumbArray += RecipeThumb(id = "id@$i", thumb = "url@$i")
-        }
-        var testMenuArray = emptyArray<Menu>()
-        for (i in 1..10) {
-            testMenuArray += Menu(id = "1", date = "2022-1-1", recipes = testRecipeThumbArray.asList())
-        }
-
-        val testFavorites = Favorites(
-            menus = testMenuArray.asList(),
-            recipes = testArray.asList()
-        )
-        _uiState.update { it.copy(favorites = testFavorites) }
+    fun onTabClicked(selectedTab: FavoriteCategoryTab) {
+        _uiState.update { it.copy(selectedSubTab = selectedTab) }
     }
+
 }
 
 sealed class FavoriteTab(
@@ -97,4 +90,22 @@ sealed class FavoriteTab(
     object SelectRecipeTab: FavoriteTab(R.string.recipe, 0)
 
     object SelectMenuTab: FavoriteTab(R.string.menu, 1)
+}
+
+sealed class FavoriteCategoryTab(
+    val titleId: Int,
+    val index: Int
+) {
+    object SelectStapleFoodTab: FavoriteCategoryTab(R.string.staple_food, 0)
+    object SelectMainDishTab: FavoriteCategoryTab(R.string.main_dish, 1)
+
+    object SelectSideDishTab: FavoriteCategoryTab(R.string.side_dish, 2)
+
+    object SelectSoupTab: FavoriteCategoryTab(R.string.soup, 3)
+
+    object SelectSweetsTab: FavoriteCategoryTab(R.string.sweets, 4)
+
+    object SelectDrinkTab: FavoriteCategoryTab(R.string.drink, 5)
+
+    object SelectOthersTab: FavoriteCategoryTab(R.string.others, 6)
 }
