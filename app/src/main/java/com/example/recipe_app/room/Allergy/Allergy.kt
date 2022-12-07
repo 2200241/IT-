@@ -1,4 +1,4 @@
-package com.example.recipe_app.room.Allergy
+package com.example.recipe_app.room.allergy
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
