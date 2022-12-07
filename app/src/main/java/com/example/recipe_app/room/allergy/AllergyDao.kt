@@ -1,13 +1,12 @@
-package com.example.recipe_app.room.Allergy
+package com.example.recipe_app.room.allergy
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.example.recipe_app.room.Allergy.Allergy
 
 @Dao
 interface AllergyDao {
     @Query("SELECT * FROM allergies")
-    fun readAllData(): LiveData<List<Allergy>>
+    suspend fun getAllAllergy(): List<Allergy>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE) 
     suspend fun addAllergy(allergy: Allergy)

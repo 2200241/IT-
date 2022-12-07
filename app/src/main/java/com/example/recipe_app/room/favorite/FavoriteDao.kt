@@ -1,12 +1,11 @@
-package com.example.recipe_app.room.Favorite
+package com.example.recipe_app.room.favorite
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 
 @Dao
 interface FavoriteDao {
-    @Query("SELECT * FROM favorites")
-    fun readAllData(): LiveData<List<Favorite>>
+    @Query("SELECT * FROM Favorites")
+    suspend fun getAllFavorite(): List<Favorite>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE) 
     suspend fun addFavorite(favorite: Favorite)
@@ -19,5 +18,4 @@ interface FavoriteDao {
 
     @Query("delete from favorites")
     suspend fun deleteAllFavorites()
-
 }
