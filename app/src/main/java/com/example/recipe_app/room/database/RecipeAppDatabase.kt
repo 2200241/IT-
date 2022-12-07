@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.recipe_app.room.Allergy.AllergyDao
 import com.example.recipe_app.room.Favorite.Favorite
 import com.example.recipe_app.room.allergy.Allergy
+import com.example.recipe_app.room.allergy.AllergyDao
 import com.example.recipe_app.room.favorite.FavoriteDao
 
 @Database(entities = [Favorite::class, Allergy::class], version = 1, exportSchema = false)
