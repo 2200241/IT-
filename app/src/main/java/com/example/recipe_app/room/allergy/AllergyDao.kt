@@ -5,7 +5,7 @@ import androidx.room.*
 @Dao
 interface AllergyDao {
     @Query("SELECT * FROM allergies")
-    fun getAllAllergy(): List<Allergy>
+    suspend fun getAllAllergy(): List<Allergy>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE) 
     suspend fun addAllergy(allergy: Allergy)
