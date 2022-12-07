@@ -13,7 +13,7 @@ import com.example.recipe_app.room.favorite.FavoriteDao
 abstract class RecipeAppDatabase: RoomDatabase() {
 
     abstract fun favoriteDao(): FavoriteDao
-    abstract fun AllergyDao(): AllergyDao
+    abstract fun allergyDao(): AllergyDao
 
     companion object {
         @Volatile
