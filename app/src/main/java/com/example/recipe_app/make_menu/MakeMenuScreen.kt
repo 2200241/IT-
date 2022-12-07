@@ -2,6 +2,7 @@ package com.example.recipe_app.make_menu
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -38,7 +39,7 @@ fun MakeMenuScreen(
 //            arguments = listOf(navArgument("conditions") { type = NavType.StringType })
         ) { backStackEntry ->
             SelectRecipes(
-//                state = rememberSelectRecipesState(conditions = backStackEntry.arguments?.getString("conditions")),
+                state = rememberSelectRecipesState(scaffoldState = state.scaffoldState),
                 paddingValues = paddingValues,
                 onItemClicked = { recipeId, thumb ->
                     state.navigateToRecipeDetail(recipeId, thumb, backStackEntry)

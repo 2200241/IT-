@@ -1,5 +1,6 @@
 package com.example.recipe_app.make_menu.select_recipes
 
+import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
@@ -11,7 +12,8 @@ import com.github.michaelbull.result.mapBoth
 
 class SelectRecipesState(
     private val viewModel: SelectRecipesViewModel,
-) {
+    val scaffoldState: ScaffoldState,
+    ) {
     val uiState: SelectRecipesUiState
         @Composable get() = viewModel.uiState.collectAsState().value
 
@@ -29,6 +31,8 @@ class SelectRecipesState(
 
     fun onTabClicked(selectedTab: CategoryTab) = viewModel.onTabClicked(selectedTab)
 
+    fun resetMessage() = viewModel.resetMessage()
+
     fun selectRecipe(recipe: RecipeThumb) = viewModel.selectRecipe(recipe)
 
     fun removeRecipe(id: String) = viewModel.removeRecipe(id)
@@ -43,7 +47,8 @@ class SelectRecipesState(
 
 @Composable
 fun rememberSelectRecipesState(
-    viewModel: SelectRecipesViewModel = hiltViewModel()
+    viewModel: SelectRecipesViewModel = hiltViewModel(),
+    scaffoldState: ScaffoldState,
 /*
     conditions: String?,
     viewModel: SelectRecipesViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
@@ -51,5 +56,5 @@ fun rememberSelectRecipesState(
     )
 */
 ): SelectRecipesState = remember {
-    SelectRecipesState(viewModel)
+    SelectRecipesState(viewModel, scaffoldState)
 }

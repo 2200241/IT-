@@ -25,9 +25,9 @@ internal sealed class Screen(val route: String) {
 
 class MakeMenuScreenState(
     private val viewModel: MakeMenuViewModel,
-    private val scaffoldState: ScaffoldState,
+    val scaffoldState: ScaffoldState,
     private val coroutineScope: CoroutineScope,
-    val navController: NavHostController
+    val navController: NavHostController,
 ) {
     val uiState: MakeMenuUiState
         @Composable get() = viewModel.uiState.collectAsState().value
@@ -35,12 +35,7 @@ class MakeMenuScreenState(
     fun navigateToSelectRecipes(conditions: String, from: NavBackStackEntry) {
         if (from.lifecycleIsResumed()) {
             if (conditions.isBlank()) {
-                coroutineScope.launch {
-                    scaffoldState.snackbarHostState.showSnackbar(
-                        message = "条件を選択してください",
-                        actionLabel = "OK"
-                    )
-                }
+                showSnackBar("条件を選択してください")
             } else {
                 navController.navigate(Screen.SelectRecipes.createRoute(conditions))
             }
@@ -50,15 +45,19 @@ class MakeMenuScreenState(
     fun navigateToRecipeDetail(recipeId: String, thumb: String, from: NavBackStackEntry) {
         if (from.lifecycleIsResumed()) {
             if (recipeId.isBlank()) {
-                coroutineScope.launch {
-                    scaffoldState.snackbarHostState.showSnackbar(
-                        message = "No recipe is selected.",
-                        actionLabel = "OK"
-                    )
-                }
+                showSnackBar("No recipe is selected.")
             } else {
                 navController.navigate(Screen.RecipeDetail.createRoute(recipeId, thumb))
             }
+        }
+    }
+
+    fun showSnackBar(message: String) {
+        coroutineScope.launch {
+            scaffoldState.snackbarHostState.showSnackbar(
+                message = message,
+                actionLabel = "OK"
+            )
         }
     }
 

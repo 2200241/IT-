@@ -39,6 +39,7 @@ import androidx.compose.material.icons.sharp.Favorite
 import androidx.compose.material.icons.sharp.FavoriteBorder
 import androidx.compose.material.icons.sharp.Star
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -62,13 +63,23 @@ import com.google.accompanist.flowlayout.MainAxisAlignment
 
 @Composable
 fun SelectRecipes(
-    state: SelectRecipesState = rememberSelectRecipesState(),
+    state: SelectRecipesState,
     paddingValues: PaddingValues,
     onItemClicked: (String, String) -> Unit,
     onBackPressed: () -> Unit
 ) {
     val uiState = state.uiState
     val favoriteRecipeIds = state.favoriteRecipeIds
+    
+    if (uiState.message.isNotBlank()) {
+        LaunchedEffect(state.scaffoldState.snackbarHostState) {
+            state.scaffoldState.snackbarHostState.showSnackbar(
+                message = uiState.message,
+                actionLabel = "OK"
+            )
+            state.resetMessage()
+        }
+    }
 
     if (uiState.isLoading) {
         Box(
@@ -274,7 +285,10 @@ fun SelectCategoriesTabBar(
                 modifier = Modifier
                     .padding(horizontal = 5.dp, vertical = 10.dp)
                     .background(color = backgroundColor, shape = CircleShape)
-                    .border(BorderStroke(1.5.dp, colorResource(id = R.color.categoryTabColor)), CircleShape),
+                    .border(
+                        BorderStroke(1.5.dp, colorResource(id = R.color.categoryTabColor)),
+                        CircleShape
+                    ),
                 selected = item.index == selectedTab.index,
                 selectedContentColor = Color.White,
                 unselectedContentColor = colorResource(id = R.color.fontColor),

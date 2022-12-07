@@ -7,6 +7,7 @@ import com.example.recipe_app.data.Favorites
 import com.example.recipe_app.data.Menu
 import com.example.recipe_app.data.Recipe
 import com.example.recipe_app.data.RecipeThumb
+import com.example.recipe_app.use_cases.GetFavoritesUseCase
 import com.example.recipe_app.use_cases.TestUseCase
 import com.github.michaelbull.result.Ok
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,9 +23,15 @@ data class SelectFavoriteUiState(
 
 @HiltViewModel
 class SelectFavoriteViewModel @Inject constructor(
-    private val useCase: TestUseCase
-//    useCase: GetFavoritesUseCase = GetFavoritesUseCase()
+    private val useCase: TestUseCase,
+    private val GetFavoritesUseCase: GetFavoritesUseCase
 ): ViewModel() {
+
+    init{
+        viewModelScope.launch {
+            GetFavoritesUseCase.setTestFavoriteData()
+        }
+    }
 
     private val _uiState = MutableStateFlow(
         SelectFavoriteUiState(

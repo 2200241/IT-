@@ -9,6 +9,7 @@ import javax.inject.Inject
 
 data class MakeMenuUiState(
     val isLoading: Boolean = false,
+    val error: String = ""
 )
 
 @HiltViewModel
@@ -20,11 +21,11 @@ class MakeMenuViewModel @Inject constructor(
     ))
     val uiState = _uiState.asStateFlow()
 
-    suspend fun startLoading() {
+    private fun startLoading() {
         _uiState.update { it.copy(isLoading = true) }
     }
 
-    suspend fun endLoading() {
+    private fun endLoading() {
         _uiState.update { it.copy(isLoading = false) }
     }
 }

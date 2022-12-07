@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 data class SelectRecipesUiState(
     val isLoading: Boolean = false,
-    val error: String = "",
+    val message: String = "",
     val recipes: List<Recipe> = emptyList(),
     val selectedTab: CategoryTab = CategoryTab.SelectStapleFoodTab
 )
@@ -28,14 +28,13 @@ data class SelectRecipesUiState(
 class SelectRecipesViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val useCase: TestUseCase
-//    private val conditions: String?
 ): ViewModel() {
 
     private val conditions = savedStateHandle.get<String>("conditions")
 
     private val _uiState = MutableStateFlow(SelectRecipesUiState(
         isLoading = false,
-        error = "",
+        message = "",
         recipes = emptyList(),
         selectedTab = CategoryTab.SelectStapleFoodTab
     ))
@@ -58,7 +57,7 @@ class SelectRecipesViewModel @Inject constructor(
             startLoading()
             useCase.fetchRecipes(conditions ?: "").mapBoth(
                 success = { recipes -> _uiState.update { it.copy(recipes = recipes) }},
-                failure = { error -> _uiState.update { it.copy(error = error) } }
+                failure = { err -> _uiState.update { it.copy(message = err) } }
             )
             endLoading()
         }
@@ -70,6 +69,10 @@ class SelectRecipesViewModel @Inject constructor(
 
     private fun endLoading() {
         _uiState.update { it.copy(isLoading = false) }
+    }
+
+    fun resetMessage() {
+        _uiState.update { it.copy(message = "") }
     }
 
     fun selectRecipe(recipe: RecipeThumb) {
@@ -86,7 +89,10 @@ class SelectRecipesViewModel @Inject constructor(
 
     fun addMenu() {
         viewModelScope.launch {
-            useCase.addMenu()
+            useCase.addMenu().mapBoth(
+                success = { useCase.removeAllFromTempMenu() },
+                failure = { err -> _uiState.update { it.copy(message = err) }}
+            )
         }
     }
 

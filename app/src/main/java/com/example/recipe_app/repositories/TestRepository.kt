@@ -58,6 +58,7 @@ class TestRepositoryImpl @Inject constructor(): TestRepository {
             id = id,
             title = "title$id",
             image = "url$id",
+            serving = (1..5).random(),
             ingredients = listOf(
                 Ingredient(name = "卵", quantity = "2個"),
                 Ingredient(name = "小麦粉", quantity = "大さじ2"),
@@ -133,20 +134,26 @@ class TestRepositoryImpl @Inject constructor(): TestRepository {
     }
 
     override suspend fun addMenu(): Result<String, String> {
-        var withIngredients: List<ShoppingItem> = emptyList()
-        testTempMenu.map { fetchRecipeDetail(it.id).mapBoth(
-            success = { recipe ->
-                recipe.ingredients.map { ingredient ->
-                    withIngredients += ShoppingItem(ingredient, false)
-                }
-                      },
-            failure = {}
-        ) }
-        testMenus += MenuDetail(
-            menu = Menu(id = "test${Math.random()}", recipes = testTempMenu),
-            shoppingItems = withIngredients
-        )
-        return Ok("Successed")
+        if (testTempMenu.isEmpty()) {
+            return Err("No recipe is selected")
+        } else {
+            var withIngredients: List<ShoppingItem> = emptyList()
+            testTempMenu.map {
+                fetchRecipeDetail(it.id).mapBoth(
+                    success = { recipe ->
+                        recipe.ingredients.map { ingredient ->
+                            withIngredients += ShoppingItem(ingredient, recipe.serving, false)
+                        }
+                    },
+                    failure = {}
+                )
+            }
+            testMenus += MenuDetail(
+                menu = Menu(id = "test${Math.random()}", recipes = testTempMenu),
+                shoppingItems = withIngredients
+            )
+            return Ok("Successed")
+        }
     }
 
     override suspend fun removeMenu(id: String): Result<String, String> {
