@@ -11,50 +11,50 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 interface TestRepository {
-    suspend fun fetchRecipes(conditions: String): Result<List<Recipe>, String>
-    suspend fun fetchRecipeDetail(id: String): Result<RecipeDetail, String>
+    suspend fun fetchRecipes(conditions: String): Result<List<RecipeWithCategoryId>, String>
+    suspend fun fetchRecipeDetail(id: Int): Result<Recipe, String>
     fun fetchFavorites(): Flow<Result<Favorites, String>>
-    suspend fun addFavoriteRecipe(recipe: Recipe): Result<String, String>
-    suspend fun removeFavoriteRecipe(id: String): Result<String, String>
-    suspend fun addFavoriteMenu(menu: Menu): Result<String, String>
-    suspend fun removeFavoriteMenu(id: String): Result<String, String>
-    fun fetchMenus():  Flow<Result<List<Menu>, String>>
-    fun fetchMenu(id: String): Flow<Result<MenuDetail, String>>
-    suspend fun checkShoppingListItem(id: String, index: Int): Result<String, String>
+    suspend fun addFavoriteRecipe(recipeWithCategoryId: RecipeWithCategoryId): Result<String, String>
+    suspend fun removeFavoriteRecipe(id: Int): Result<String, String>
+    suspend fun addFavoriteMenu(menuWithoutIngredients: MenuWithoutIngredients): Result<String, String>
+    suspend fun removeFavoriteMenu(id: Int): Result<String, String>
+    fun fetchMenus():  Flow<Result<List<MenuWithoutIngredients>, String>>
+    fun fetchMenu(id: Int): Flow<Result<MenuWithRecipeThumbs, String>>
+    suspend fun checkShoppingListItem(id: Int, index: Int): Result<String, String>
     suspend fun addMenu(): Result<String, String>
-    suspend fun removeMenu(id: String): Result<String, String>
+    suspend fun removeMenu(id: Int): Result<String, String>
     fun getTempMenu(): Flow<Result<List<RecipeThumb>, String>>
     suspend fun addToTempMenu(recipe: RecipeThumb): Result<String, String>
-    suspend fun removeFromTempMenu(id: String): Result<String, String>
+    suspend fun removeFromTempMenu(id: Int): Result<String, String>
     suspend fun removeAllFromTempMenu(): Result<String, String>
 //    suspend fun getAllergens(): Flow<Result<String, String>>
 //    suspend fun addAllergen(id: String): Result<String, String>
 //    suspend fun removeAllergen(id: String): Result<String, String>
 }
 
-private var testMenus = emptyList<MenuDetail>()
+private var testMenuWithRecipeThumbs = emptyList<MenuWithRecipeThumbs>()
 private var testFavorites = Favorites()
 private var testTempMenu = emptyList<RecipeThumb>()
 
 class TestRepositoryImpl @Inject constructor(): TestRepository {
 
-    override suspend fun fetchRecipes(conditions: String): Result<List<Recipe>, String> {
-        val list = conditions.split("&")
-        val a = list.map { Recipe(id = it + "a", categoryId = 1, title = "タイトルA@$it", thumb = "url@$it") }
-        val b = list.map { Recipe(id = it + "b", categoryId = 2, title = "タイトルB@$it", thumb = "url@$it") }
-        val c = list.map { Recipe(id = it + "c", categoryId = 3, title = "タイトルC@$it", thumb = "url@$it") }
-        val d = list.map { Recipe(id = it + "d", categoryId = 4, title = "タイトルD@$it", thumb = "url@$it") }
-        val e = list.map { Recipe(id = it + "e", categoryId = 5, title = "タイトルE@$it", thumb = "url@$it") }
-        val f = list.map { Recipe(id = it + "f", categoryId = 6, title = "タイトルF@$it", thumb = "url@$it") }
-        val g = list.map { Recipe(id = it + "g", categoryId = 7, title = "タイトルG@$it", thumb = "url@$it") }
+    override suspend fun fetchRecipes(conditions: String): Result<List<RecipeWithCategoryId>, String> {
+        val list = conditions.split("&").map { it }
+        val a = list.map { RecipeWithCategoryId(id = (1..999999).random(), categoryId = 1, title = "タイトルA@$it", thumb = "url@$it") }
+        val b = list.map { RecipeWithCategoryId(id = (1..999999).random(), categoryId = 2, title = "タイトルB@it", thumb = "url@$it") }
+        val c = list.map { RecipeWithCategoryId(id = (1..999999).random(), categoryId = 3, title = "タイトルC@it", thumb = "url@$it") }
+        val d = list.map { RecipeWithCategoryId(id = (1..999999).random(), categoryId = 4, title = "タイトルD@it", thumb = "url@$it") }
+        val e = list.map { RecipeWithCategoryId(id = (1..999999).random(), categoryId = 5, title = "タイトルE@it", thumb = "url@$it") }
+        val f = list.map { RecipeWithCategoryId(id = (1..999999).random(), categoryId = 6, title = "タイトルF@it", thumb = "url@$it") }
+        val g = list.map { RecipeWithCategoryId(id = (1..999999).random(), categoryId = 7, title = "タイトルG@it", thumb = "url@$it") }
 
         delay(1000)
         return Ok(a + b + c + d + e + f + g)
     }
 
-    override suspend fun fetchRecipeDetail(id: String): Result<RecipeDetail, String> {
+    override suspend fun fetchRecipeDetail(id: Int): Result<Recipe, String> {
         return Ok(
-            RecipeDetail(
+            Recipe(
             id = id,
             title = "title$id",
             image = "url$id",
@@ -82,50 +82,59 @@ class TestRepositoryImpl @Inject constructor(): TestRepository {
         }
     }
 
-    override suspend fun addFavoriteRecipe(recipe: Recipe): Result<String, String> {
-        testFavorites = testFavorites.copy(recipes = testFavorites.recipes + recipe)
+    override suspend fun addFavoriteRecipe(recipeWithCategoryId: RecipeWithCategoryId): Result<String, String> {
+        testFavorites = testFavorites.copy(recipeWithCategoryIds = testFavorites.recipeWithCategoryIds + recipeWithCategoryId)
         return Ok("Successed")
     }
 
-    override suspend fun removeFavoriteRecipe(id: String): Result<String, String> {
-        testFavorites = testFavorites.copy(recipes = testFavorites.recipes.filter { it.id != id })
+    override suspend fun removeFavoriteRecipe(id: Int): Result<String, String> {
+        testFavorites = testFavorites.copy(recipeWithCategoryIds = testFavorites.recipeWithCategoryIds.filter { it.id != id })
         return Ok("Successed")
     }
 
-    override suspend fun addFavoriteMenu(menu: Menu): Result<String, String> {
-        testFavorites = testFavorites.copy(menus = testFavorites.menus + menu)
+    override suspend fun addFavoriteMenu(menuWithoutIngredients: MenuWithoutIngredients): Result<String, String> {
+        testFavorites = testFavorites.copy(menuWithoutIngredients = testFavorites.menuWithoutIngredients + menuWithoutIngredients)
         return Ok("Successed")
     }
 
-    override suspend fun removeFavoriteMenu(id: String): Result<String, String> {
-        testFavorites = testFavorites.copy(menus = testFavorites.menus.filter { it.id != id })
+    override suspend fun removeFavoriteMenu(id: Int): Result<String, String> {
+        testFavorites = testFavorites.copy(menuWithoutIngredients = testFavorites.menuWithoutIngredients.filter { it.id != id })
         return Ok("Successed")
     }
 
-    override fun fetchMenus(): Flow<Result<List<Menu>, String>> {
+    override fun fetchMenus(): Flow<Result<List<MenuWithoutIngredients>, String>> {
         return flow {
-            delay(500)
-            emit(Ok(testMenus.map { it.menu }))
+            while (true) {
+                delay(500)
+                emit(Ok(testMenuWithRecipeThumbs.map {
+                    MenuWithoutIngredients(
+                        id = it.id,
+                        recipes = it.recipes
+                    )
+                }))
+            }
         }
     }
 
-    override fun fetchMenu(id: String): Flow<Result<MenuDetail, String>> {
+    override fun fetchMenu(id: Int): Flow<Result<MenuWithRecipeThumbs, String>> {
         return flow {
-            delay(500)
-            emit(
-                if (testMenus.find { it.menu.id == id } != null) {
-                    Ok(testMenus.find { it.menu.id == id }!!)
-                } else {
-                    Err("The menu is not found.")
-                }
-            )
+            while (true) {
+                delay(500)
+                emit(
+                    if (testMenuWithRecipeThumbs.find { it.id == id } != null) {
+                        Ok(testMenuWithRecipeThumbs.find { it.id == id }!!)
+                    } else {
+                        Err("The menu is not found.")
+                    }
+                )
+            }
         }
     }
 
-    override suspend fun checkShoppingListItem(id: String, index: Int): Result<String, String> {
-        testMenus.forEach { menuDetail ->
-            if (menuDetail.menu.id == id) {
-                menuDetail.shoppingItems.forEachIndexed { i, shoppingItem ->
+    override suspend fun checkShoppingListItem(id: Int, index: Int): Result<String, String> {
+        testMenuWithRecipeThumbs.forEach { menu ->
+            if (menu.id == id) {
+                menu.shoppingItems.forEachIndexed { i, shoppingItem ->
                     if (i == index) !shoppingItem.isChecked
                 }
             }
@@ -148,16 +157,17 @@ class TestRepositoryImpl @Inject constructor(): TestRepository {
                     failure = {}
                 )
             }
-            testMenus += MenuDetail(
-                menu = Menu(id = "test${Math.random()}", recipes = testTempMenu),
+            testMenuWithRecipeThumbs += MenuWithRecipeThumbs(
+                id = (1..99999).random(),
+                recipes = testTempMenu,
                 shoppingItems = withIngredients
             )
             return Ok("Successed")
         }
     }
 
-    override suspend fun removeMenu(id: String): Result<String, String> {
-        testMenus = testMenus.filter { it.menu.id != id }
+    override suspend fun removeMenu(id: Int): Result<String, String> {
+        testMenuWithRecipeThumbs = testMenuWithRecipeThumbs.filter { it.id != id }
         return Ok("Successed")
     }
 
@@ -175,7 +185,7 @@ class TestRepositoryImpl @Inject constructor(): TestRepository {
         return Ok("Successed")
     }
 
-    override suspend fun removeFromTempMenu(id: String): Result<String, String> {
+    override suspend fun removeFromTempMenu(id: Int): Result<String, String> {
         testTempMenu = testTempMenu.filter { it.id != id }
         return Ok("Successed")
     }

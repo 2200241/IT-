@@ -1,6 +1,5 @@
 package com.example.recipe_app.make_menu.select_recipes
 
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -10,42 +9,28 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Divider
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.ScrollableTabRow
 import androidx.compose.material.Tab
-import androidx.compose.material.TabRow
 import androidx.compose.material.Text
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Favorite
-import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.sharp.Clear
 import androidx.compose.material.icons.sharp.Favorite
-import androidx.compose.material.icons.sharp.FavoriteBorder
-import androidx.compose.material.icons.sharp.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.colorResource
@@ -54,9 +39,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.recipe_app.R
-import com.example.recipe_app.make_menu.select_conditions.ConditionTab
-import com.example.recipe_app.make_menu.select_conditions.SelectTags
-import com.example.recipe_app.data.Recipe
+import com.example.recipe_app.data.RecipeWithCategoryId
 import com.example.recipe_app.data.RecipeThumb
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
@@ -65,12 +48,11 @@ import com.google.accompanist.flowlayout.MainAxisAlignment
 fun SelectRecipes(
     state: SelectRecipesState,
     paddingValues: PaddingValues,
-    onItemClicked: (String, String) -> Unit,
+    onItemClicked: (Int, String) -> Unit,
     onBackPressed: () -> Unit
 ) {
     val uiState = state.uiState
-    val favoriteRecipeIds = state.favoriteRecipeIds
-    
+
     if (uiState.message.isNotBlank()) {
         LaunchedEffect(state.scaffoldState.snackbarHostState) {
             state.scaffoldState.snackbarHostState.showSnackbar(
@@ -185,8 +167,8 @@ fun SelectRecipes(
 */
                 item {
                     SearchResultRecipes(
-                        recipes = uiState.recipes.filter { it.categoryId == uiState.selectedTab.index + 1 },
-                        favoriteRecipeIds = favoriteRecipeIds,
+                        recipeWithCategoryIds = uiState.recipeWithCategoryIds.filter { it.categoryId == uiState.selectedTab.index + 1 },
+                        favoriteRecipeIds = state.favoriteRecipeIds,
                         onItemClicked = onItemClicked,
                         onRecipeLiked = state::addFavorite,
                         onRecipeUnLiked = state::removeFavorite
@@ -225,8 +207,8 @@ fun SelectRecipes(
 fun SelectedRecipes(
     deleteButtonIsDisplayed: Boolean = false,
     selectedRecipes: List<RecipeThumb>,
-    onItemClicked: (String, String) -> Unit,
-    onDeleteClicked: (String) -> Unit = {}
+    onItemClicked: (Int, String) -> Unit,
+    onDeleteClicked: (Int) -> Unit = {}
 ) {
     LazyRow(
         contentPadding = PaddingValues(12.dp),
@@ -319,11 +301,11 @@ private val CategoryTabs = listOf(
 
 @Composable
 fun SearchResultRecipes(
-    recipes: List<Recipe>,
-    favoriteRecipeIds: List<String>,
-    onItemClicked: (String, String) -> Unit,
-    onRecipeLiked: (Recipe) -> Unit,
-    onRecipeUnLiked: (String) -> Unit
+    recipeWithCategoryIds: List<RecipeWithCategoryId>,
+    favoriteRecipeIds: List<Int>,
+    onItemClicked: (Int, String) -> Unit,
+    onRecipeLiked: (RecipeWithCategoryId) -> Unit,
+    onRecipeUnLiked: (Int) -> Unit
 ) {
     val screenWidth = LocalConfiguration.current.screenWidthDp
 
@@ -333,7 +315,7 @@ fun SearchResultRecipes(
         mainAxisAlignment = MainAxisAlignment.Start,
         crossAxisSpacing = 5.dp,
     ) {
-        recipes.map { recipe ->
+        recipeWithCategoryIds.map { recipe ->
             Box(
                 modifier = Modifier
                     .size(((screenWidth / 2) - 10).dp, 140.dp)

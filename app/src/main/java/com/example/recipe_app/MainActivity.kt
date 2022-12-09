@@ -16,6 +16,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.recipe_app.favorite_list.FavoriteListScreen
+import com.example.recipe_app.favorite_list.rememberFavoriteListScreenState
 import com.example.recipe_app.make_menu.MakeMenuScreen
 import com.example.recipe_app.make_menu.rememberMakeMenuScreenState
 import com.example.recipe_app.menu_list.MenuListScreen
@@ -63,18 +64,19 @@ fun MainScreen() {
             ) {
                 composable(Screen.MakeMenu.route) {
                     MakeMenuScreen(
-                        paddingValues = paddingValues,
-                        state = rememberMakeMenuScreenState(scaffoldState = scaffoldState)
+                        state = rememberMakeMenuScreenState(scaffoldState = scaffoldState),
+                        paddingValues = paddingValues
                     )
                 }
                 composable(Screen.MenuList.route) {
                     MenuListScreen(
-                        paddingValues = paddingValues,
-                        state = rememberMenuListScreenState(scaffoldState = scaffoldState)
+                        state = rememberMenuListScreenState(scaffoldState = scaffoldState),
+                        paddingValues = paddingValues
                     )
                 }
                 composable(Screen.FavoriteList.route) {
                     FavoriteListScreen(
+                        state = rememberFavoriteListScreenState(scaffoldState = scaffoldState),
                         paddingValues = paddingValues
                     )
                 }

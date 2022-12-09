@@ -6,8 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.recipe_app.R
 import com.example.recipe_app.data.Favorites
-import com.example.recipe_app.data.Menu
-import com.example.recipe_app.data.Recipe
+import com.example.recipe_app.data.RecipeWithCategoryId
 import com.example.recipe_app.data.RecipeThumb
 import com.example.recipe_app.use_cases.TestUseCase
 import com.github.michaelbull.result.Ok
@@ -20,7 +19,7 @@ import javax.inject.Inject
 data class SelectRecipesUiState(
     val isLoading: Boolean = false,
     val message: String = "",
-    val recipes: List<Recipe> = emptyList(),
+    val recipeWithCategoryIds: List<RecipeWithCategoryId> = emptyList(),
     val selectedTab: CategoryTab = CategoryTab.SelectStapleFoodTab
 )
 
@@ -35,12 +34,12 @@ class SelectRecipesViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(SelectRecipesUiState(
         isLoading = false,
         message = "",
-        recipes = emptyList(),
+        recipeWithCategoryIds = emptyList(),
         selectedTab = CategoryTab.SelectStapleFoodTab
     ))
     val uiState = _uiState.asStateFlow()
 
-    val favoriteRecipeIds = useCase.fetchFavorites().stateIn(
+    val favoriteRecipes = useCase.fetchFavorites().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = Ok(Favorites())
@@ -56,7 +55,7 @@ class SelectRecipesViewModel @Inject constructor(
         viewModelScope.launch {
             startLoading()
             useCase.fetchRecipes(conditions ?: "").mapBoth(
-                success = { recipes -> _uiState.update { it.copy(recipes = recipes) }},
+                success = { recipes -> _uiState.update { it.copy(recipeWithCategoryIds = recipes) }},
                 failure = { err -> _uiState.update { it.copy(message = err) } }
             )
             endLoading()
@@ -81,7 +80,7 @@ class SelectRecipesViewModel @Inject constructor(
         }
     }
 
-    fun removeRecipe(id: String) {
+    fun removeRecipe(id: Int) {
         viewModelScope.launch {
             useCase.removeFromTempMenu(id)
         }
@@ -96,13 +95,13 @@ class SelectRecipesViewModel @Inject constructor(
         }
     }
 
-    fun addFavorite(recipe: Recipe) {
+    fun addFavorite(recipe: RecipeWithCategoryId) {
         viewModelScope.launch {
             useCase.addFavoriteRecipe(recipe)
         }
     }
 
-    fun removeFavorite(id: String) {
+    fun removeFavorite(id: Int) {
         viewModelScope.launch {
             useCase.removeFavoriteRecipe(id)
         }

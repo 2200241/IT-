@@ -1,28 +1,53 @@
 package com.example.recipe_app.favorite_list
 
-import android.util.Log
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.LocalOverscrollConfiguration
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Divider
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.sharp.Star
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import com.example.recipe_app.favorite_list.select_favorite.SelectFavorite
+import com.example.recipe_app.menu_list.shopping_list.ShoppingList
+import com.example.recipe_app.recipe_detail.RecipeDetail
 
 @Composable
 fun FavoriteListScreen(
-    paddingValues: PaddingValues
+    state: FavoriteListScreenState,
+    paddingValues: PaddingValues,
 ) {
-    SelectFavorite(paddingValues = paddingValues)
+    NavHost(
+        navController = state.navController,
+        startDestination = Screen.SelectFavorite.route,
+    ) {
+        composable(Screen.SelectFavorite.route) { backStackEntry ->
+            SelectFavorite(
+                paddingValues = paddingValues,
+                onRecipeClicked = { id, thumb ->
+                    state.navigateToRecipeDetail(id, thumb, backStackEntry)
+                },
+                onMenuClicked = { id ->
+                    state.navigateToShoppingList(id, backStackEntry)
+                }
+            )
+        }
+        composable(
+            route = "recipeDetail/{recipeId}/{thumb}",
+//            arguments = listOf(navArgument("conditions") { type = NavType.StringType })
+        ) { backStackEntry ->
+            RecipeDetail(
+                paddingValues = paddingValues,
+                addButtonIsDisplayed = false,
+                onBackPressed = state::navigateBack
+            )
+        }
+        composable(
+            route = "shoppingList/{menuId}",
+//            arguments = listOf(navArgument("recipeId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            ShoppingList(
+                paddingValues = paddingValues,
+                onThumbClicked = { id, thumb ->
+                    state.navigateToRecipeDetail(id, thumb, backStackEntry)
+                }
+            )
+        }
+    }
 }

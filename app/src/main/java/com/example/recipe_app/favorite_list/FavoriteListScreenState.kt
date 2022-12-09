@@ -1,4 +1,4 @@
-package com.example.recipe_app.make_menu
+package com.example.recipe_app.favorite_list
 
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
@@ -14,31 +14,27 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 internal sealed class Screen(val route: String) {
-    object SelectConditions : Screen("selectConditions")
-    object SelectRecipes : Screen("selectRecipes/{conditions}") {
-        fun createRoute(conditions: String) = "selectRecipes/$conditions"
+    object SelectFavorite : Screen("selectFavorite")
+    object ShoppingList : Screen("shoppingList/{menuId}/") {
+        fun createRoute(menuId: Int) = "shoppingList/$menuId"
     }
     object RecipeDetail : Screen("recipeDetail/{recipeId}/{thumb}") {
         fun createRoute(recipeId: Int, thumb: String) = "recipeDetail/$recipeId/$thumb"
     }
 }
 
-class MakeMenuScreenState(
-    private val viewModel: MakeMenuViewModel,
-    val scaffoldState: ScaffoldState,
+class FavoriteListScreenState(
+    private val viewModel: FavoriteListViewModel,
+    private val scaffoldState: ScaffoldState,
     private val coroutineScope: CoroutineScope,
-    val navController: NavHostController,
+    val navController: NavHostController
 ) {
-    val uiState: MakeMenuUiState
+    val uiState: FavoriteListUiState
         @Composable get() = viewModel.uiState.collectAsState().value
 
-    fun navigateToSelectRecipes(conditions: String, from: NavBackStackEntry) {
+    fun navigateToShoppingList(id: Int, from: NavBackStackEntry) {
         if (from.lifecycleIsResumed()) {
-            if (conditions.isBlank()) {
-                showSnackBar("条件を選択してください")
-            } else {
-                navController.navigate(Screen.SelectRecipes.createRoute(conditions))
-            }
+            navController.navigate(Screen.ShoppingList.createRoute(id))
         }
     }
 
@@ -47,17 +43,13 @@ class MakeMenuScreenState(
             if (recipeId >= 0) {
                 navController.navigate(Screen.RecipeDetail.createRoute(recipeId, thumb))
             } else {
-                showSnackBar("No recipe is selected.")
+                coroutineScope.launch {
+                    scaffoldState.snackbarHostState.showSnackbar(
+                        message = "No recipe is selected.",
+                        actionLabel = "OK"
+                    )
+                }
             }
-        }
-    }
-
-    fun showSnackBar(message: String) {
-        coroutineScope.launch {
-            scaffoldState.snackbarHostState.showSnackbar(
-                message = message,
-                actionLabel = "OK"
-            )
         }
     }
 
@@ -67,13 +59,13 @@ class MakeMenuScreenState(
 }
 
 @Composable
-fun rememberMakeMenuScreenState(
-    viewModel: MakeMenuViewModel = hiltViewModel(),
+fun rememberFavoriteListScreenState(
+    viewModel: FavoriteListViewModel = hiltViewModel(),
     scaffoldState: ScaffoldState,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     navController: NavHostController = rememberNavController()
-): MakeMenuScreenState = remember {
-    MakeMenuScreenState(viewModel, scaffoldState, coroutineScope, navController)
+): FavoriteListScreenState = remember {
+    FavoriteListScreenState(viewModel, scaffoldState, coroutineScope, navController)
 }
 
 /**

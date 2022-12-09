@@ -1,11 +1,9 @@
 package com.example.recipe_app.recipe_detail
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.recipe_app.data.Recipe
 import com.github.michaelbull.result.mapBoth
 
 class RecipeDetailState(
@@ -16,8 +14,8 @@ class RecipeDetailState(
 
     val favoriteRecipeIds
         @Composable get() = viewModel.favoriteRecipeIds.collectAsState().value.mapBoth(
-            success = { favorites ->  favorites.recipes.map { it.id } },
-            failure = { emptyList<String>() }
+            success = { favorites ->  favorites.recipeWithCategoryIds.map { it.id } },
+            failure = { emptyList() }
         )
 
     fun addFavoriteRecipe() = viewModel.addFavoriteRecipe()
