@@ -5,7 +5,7 @@ import androidx.room.*
 @Dao
 interface FavoriteDao {
     @Query("SELECT * FROM Favorites")
-    fun getAllFavorites(): List<Favorite>
+    suspend fun getAllFavorites(): List<Favorite>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE) 
     suspend fun addFavorite(favorite: Favorite)
