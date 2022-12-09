@@ -1,6 +1,7 @@
 package com.example.recipe_app
 
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,7 +9,9 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.core.view.WindowCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -29,7 +32,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             RecipeappTheme {
                 // A surface container using the 'background' color from the theme
-                StatusBarColor()
+                val systemUiController = rememberSystemUiController()
+                SideEffect {
+                    systemUiController.setStatusBarColor(color = Color.White)
+                }
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
@@ -38,15 +44,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
-}
-
-@Composable
-fun StatusBarColor() {
-    val systemUiController = rememberSystemUiController()
-    val statusBarColor = colorResource(id = R.color.statusBarColor)
-    SideEffect {
-        systemUiController.setStatusBarColor(statusBarColor)
     }
 }
 
@@ -81,7 +78,11 @@ fun MainScreen() {
                         paddingValues = paddingValues
                     )
                 }
-                composable(Screen.Settings.route) { SettingsScreen() }
+                composable(Screen.Settings.route) {
+                    SettingsScreen(
+                        paddingValues = paddingValues
+                    )
+                }
             }
         }
     }

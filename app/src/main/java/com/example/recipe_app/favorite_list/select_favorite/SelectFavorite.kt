@@ -93,7 +93,7 @@ fun SelectFavoritesTabBar(
     ) {
         FavoriteTabs.forEach { item ->
             Tab(
-                modifier = Modifier.height(50.dp),
+                modifier = Modifier.height(45.dp),
                 selected = item.index == selectedTab.index,
                 selectedContentColor = colorResource(id = R.color.fontColor),
                 unselectedContentColor = Color.Gray,
