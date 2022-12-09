@@ -65,6 +65,7 @@ fun RecipeDetail(
 
 @Composable
 fun CookingImage(recipe: RecipeDetail) {
+//    fun CookingImage(recipe: RecipeWithoutThumb)
     Box(
         modifier = Modifier
             .fillMaxWidth()

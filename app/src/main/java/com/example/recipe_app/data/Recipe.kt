@@ -1,5 +1,6 @@
 package com.example.recipe_app.data
 
+//
 /**
 * For lists
 */
@@ -65,8 +66,8 @@ data class RecipeThumb(
 )
 
 /**
- * For Shopping List
- */
+// * For Shopping List
+// */
 data class MenuDetail(
     val menu: Menu = Menu(),
     val shoppingItems: List<ShoppingItem> = emptyList()

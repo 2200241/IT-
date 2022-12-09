@@ -80,6 +80,9 @@ dependencies {
     kapt "androidx.room:room-compiler:$Room_version"
     implementation "androidx.room:room-ktx:$Room_version"
     androidTestImplementation "androidx.room:room-testing:$Room_version"
+
+    //Gson
+    implementation 'com.google.code.gson:gson:2.8.6'
 }
 
 kapt {

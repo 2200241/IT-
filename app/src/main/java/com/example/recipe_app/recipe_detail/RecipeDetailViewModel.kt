@@ -4,11 +4,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.recipe_app.data.Favorites
-import com.example.recipe_app.data.Recipe
-import com.example.recipe_app.data.RecipeDetail
-import com.example.recipe_app.data.RecipeThumb
+import androidx.room.ColumnInfo
+import com.example.recipe_app.data.*
 import com.example.recipe_app.use_cases.GetRecipeDetailUseCase
+import com.example.recipe_app.use_cases.GetRecipesUseCase
 import com.example.recipe_app.use_cases.TestUseCase
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.mapBoth
@@ -25,7 +24,8 @@ data class RecipeDetailUiState(
 @HiltViewModel
 class RecipeDetailViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val useCase: TestUseCase
+    private val useCase: TestUseCase,
+    private val GetRecipesUseCase :GetRecipesUseCase
 //    private val recipeId: String?,
 //    private val useCase: GetRecipeDetailUseCase = GetRecipeDetailUseCase()
 ): ViewModel() {
@@ -51,6 +51,7 @@ class RecipeDetailViewModel @Inject constructor(
                 success = { recipe -> _uiState.update { it.copy(recipeDetail = recipe) } },
                 failure = {  }
             )
+
             endLoading()
         }
     }
