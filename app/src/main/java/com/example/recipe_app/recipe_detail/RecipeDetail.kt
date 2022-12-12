@@ -125,6 +125,7 @@ fun RecipeDetailMaterials() {
 @Composable
 fun CookingProcedure() {
     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+        // TODO
         for (i in 1..5) {
             Text(
                 modifier = Modifier.padding(bottom = 10.dp),

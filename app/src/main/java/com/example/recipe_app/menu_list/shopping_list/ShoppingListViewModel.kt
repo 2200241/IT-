@@ -3,7 +3,9 @@ package com.example.recipe_app.menu_list.shopping_list
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.recipe_app.data.Favorites
 import com.example.recipe_app.data.MenuWithRecipeThumbs
+import com.example.recipe_app.data.MenuWithoutIngredients
 import com.example.recipe_app.use_cases.TestUseCase
 import com.github.michaelbull.result.Ok
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -36,6 +38,12 @@ class ShoppingListViewModel @Inject constructor(
         initialValue = Ok(MenuWithRecipeThumbs())
     )
 
+    val favorites = useCase.fetchFavorites().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = Ok(Favorites())
+    )
+
     private fun startLoading() {
         _uiState.update { it.copy(isLoading = true) }
     }
@@ -47,6 +55,21 @@ class ShoppingListViewModel @Inject constructor(
     fun checkShoppingListItem(index: Int) {
         viewModelScope.launch {
             useCase.checkShoppingListItem(menuId, index)
+        }
+    }
+
+    fun addFavorite(menu: MenuWithRecipeThumbs) {
+        viewModelScope.launch {
+            useCase.addFavoriteMenu(MenuWithoutIngredients(
+                id = menu.id,
+                recipes = menu.recipes
+            ))
+        }
+    }
+
+    fun removeFavorite(id: Int) {
+        viewModelScope.launch {
+            useCase.removeFavoriteMenu(id)
         }
     }
 

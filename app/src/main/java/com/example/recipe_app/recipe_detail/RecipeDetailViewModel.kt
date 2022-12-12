@@ -63,7 +63,6 @@ class RecipeDetailViewModel @Inject constructor(
     }
 
     fun addFavoriteRecipe() {
-        Log.d("debug", "$recipeId")
         viewModelScope.launch {
             useCase.addFavoriteRecipe(
                 RecipeWithCategoryId(
@@ -82,6 +81,7 @@ class RecipeDetailViewModel @Inject constructor(
         }
     }
 
+    // TODO: 二重登録防止
     fun addToTempMenu() {
         viewModelScope.launch {
             useCase.addToTempMenu(RecipeThumb(id = recipeId, thumb = thumb))

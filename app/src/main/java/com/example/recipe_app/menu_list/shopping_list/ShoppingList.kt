@@ -40,6 +40,8 @@ fun ShoppingList(
     onThumbClicked: (Int, String) -> Unit
 ) {
     val uiState = state.uiState
+    val menu = state.menuWithRecipeThumbs
+    val favoriteMenuIds = state.favoriteMenuIds
 
     Column(modifier = Modifier.padding(paddingValues)) {
         Text(
@@ -50,7 +52,7 @@ fun ShoppingList(
             color = colorResource(id = R.color.fontColor)
         )
         Divider(color = Color.LightGray)
-        SelectedRecipes(false, state.menuWithRecipeThumbs.recipes, onThumbClicked)
+        SelectedRecipes(false, menu.recipes, onThumbClicked)
         Divider(color = Color.LightGray)
 
         LazyColumn() {
@@ -63,7 +65,7 @@ fun ShoppingList(
                     color = colorResource(id = R.color.fontColor)
                 )
             }
-            item { ShoppingListMaterials(state.menuWithRecipeThumbs.shoppingItems, state::checkShoppingListItem) }
+            item { ShoppingListMaterials(menu.shoppingItems, state::checkShoppingListItem) }
             item { Spacer(Modifier.height(80.dp)) }
         }
     }
@@ -79,11 +81,18 @@ fun ShoppingList(
                 .padding(horizontal = 12.dp, vertical = 8.dp),
             backgroundColor = Color.White,
             contentColor = Color.LightGray,
-            onClick = { /*TODO*/ }
+            onClick = {
+                if (favoriteMenuIds.contains(menu.id))
+                    state.removeFavorite(menu.id)
+                else state.addFavorite(menu)
+            }
         ) {
             Icon(
                 Icons.Sharp.Favorite,
                 contentDescription = null,
+                tint = if (favoriteMenuIds.contains(menu.id))
+                    colorResource(id = R.color.favoriteIconColor)
+                else Color.Gray
             )
         }
     }
