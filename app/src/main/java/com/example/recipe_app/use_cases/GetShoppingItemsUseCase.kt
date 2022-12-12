@@ -18,11 +18,8 @@ class GetShoppingItemsUseCase @Inject constructor(private val shoppingItemReposi
 
         shoppingItemList = shoppingItemRepository.getAllShoppingItems()
 
-        if (shoppingItemList == null) {
-            throw InvalidGetShoppingItemsException("recipeList is null")
-        }
-        if (shoppingItemList.first().id.toString().isBlank()) {
-            throw InvalidGetShoppingItemsException("お気に入りがありません")
+        if (shoppingItemList.isEmpty()) {
+            throw InvalidGetShoppingItemsException("recipeList is empty")
         }
 
         return shoppingItemList

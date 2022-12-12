@@ -1,22 +1,20 @@
 package com.example.recipe_app.data
-
-//
+// 上書き防止
 /**
 * For lists
 */
-data class Recipe(
-    val id: String = "",
+data class RecipeWithCategoryId(
+    val id: Int = 0,
     val categoryId: Int = 0,
     val title: String = "",
     val thumb: String = "",
-//    val isFavorite: Boolean = false
 )
 
 /**
  * For Recipe Details
  */
-data class RecipeDetail(
-    val id: String = "",
+data class Recipe(
+    val id: Int = 0,
     val categoryId: Int = 0,
     val title: String = "",
     val image: String = "",
@@ -45,15 +43,15 @@ data class Instruction(
  * For Favorite Lists
 **/
 data class Favorites(
-    val menus: List<Menu> = emptyList(),
-    val recipes: List<Recipe> = emptyList()
+    val menuWithoutIngredients: List<MenuWithoutIngredients> = emptyList(),
+    val recipeWithCategoryIds: List<RecipeWithCategoryId> = emptyList()
 )
 
 /**
  * For Menu Lists
  */
-data class Menu(
-    val id: String = "",
+data class MenuWithoutIngredients(
+    val id: Int = 0,
     val recipes: List<RecipeThumb> = emptyList()
 )
 
@@ -61,15 +59,16 @@ data class Menu(
  * Menu property
  */
 data class RecipeThumb(
-    val id: String = "",
+    val id: Int = 0,
     val thumb: String = ""
 )
 
 /**
-// * For Shopping List
-// */
-data class MenuDetail(
-    val menu: Menu = Menu(),
+ * For Shopping List
+ */
+data class MenuWithRecipeThumbs(
+    val id: Int = 0,
+    val recipes: List<RecipeThumb> = emptyList(),
     val shoppingItems: List<ShoppingItem> = emptyList()
 )
 

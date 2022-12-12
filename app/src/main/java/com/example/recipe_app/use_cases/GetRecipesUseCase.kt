@@ -16,8 +16,8 @@ class GetRecipesUseCase @Inject constructor(private val recipeRepository: Recipe
 
         recipeList = recipeRepository.getAllRecipes()
 
-        if (recipeList == null) {
-            throw InvalidGetRecipesException("recipeList is null")
+        if (recipeList.isEmpty()) {
+            throw InvalidGetRecipesException("recipeList is empty")
         }
         if (recipeList.first().id.toString().isBlank()) {
             throw InvalidGetRecipesException("お気に入りがありません")

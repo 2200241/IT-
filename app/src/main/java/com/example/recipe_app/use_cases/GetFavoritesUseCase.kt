@@ -14,8 +14,8 @@ class GetFavoritesUseCase @Inject constructor(private val favoriteRepository: Fa
 
         favoriteList = favoriteRepository.getAllFavorites()
 
-        if (favoriteList == null) {
-            throw InvalidGetFavoritesException("favoriteList is null")
+        if (favoriteList.isEmpty()) {
+            throw InvalidGetFavoritesException("favoriteList is empty")
         }
         if (favoriteList.first().name.isBlank()) {
             throw InvalidGetFavoritesException("お気に入りがありません")
