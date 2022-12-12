@@ -12,7 +12,7 @@ class FavoriteRepository @Inject constructor(application: Application) {
     private val favoriteDao = RecipeAppDatabase.getDatabase(application).favoriteDao()
 
     //全件取得
-    suspend fun getAllFavorite(): List<Favorite> = favoriteDao.getAllFavorite()
+    suspend fun getAllFavorites(): List<Favorite> = favoriteDao.getAllFavorites()
 
     //追加
     suspend fun addFavorite(favorite: Favorite) {
