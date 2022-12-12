@@ -32,7 +32,7 @@ import com.example.recipe_app.R
 import com.example.recipe_app.data.ShoppingItem
 import com.example.recipe_app.make_menu.select_conditions.rippleClickable
 import com.example.recipe_app.make_menu.select_recipes.SelectedRecipes
-
+// 上書き防止
 @Composable
 fun ShoppingList(
     state: ShoppingListState = rememberShoppingListState(),

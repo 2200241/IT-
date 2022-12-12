@@ -12,7 +12,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-
+// 上書き防止
 internal sealed class Screen(val route: String) {
     object SelectFavorite : Screen("selectFavorite")
     object ShoppingList : Screen("shoppingList/{menuId}/") {

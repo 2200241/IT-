@@ -5,7 +5,7 @@ import com.example.recipe_app.repositories.TestRepository
 import com.github.michaelbull.result.Result
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
-
+// 上書き防止
 interface TestUseCase {
     suspend fun fetchRecipes(conditions: String): Result<List<RecipeWithCategoryId>, String>
     suspend fun fetchRecipeDetail(id: Int): Result<Recipe, String>

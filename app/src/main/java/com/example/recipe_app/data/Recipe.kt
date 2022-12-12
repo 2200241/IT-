@@ -1,5 +1,5 @@
 package com.example.recipe_app.data
-
+// 上書き防止
 /**
 * For lists
 */

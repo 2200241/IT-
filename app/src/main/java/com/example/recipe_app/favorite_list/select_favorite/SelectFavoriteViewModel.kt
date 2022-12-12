@@ -13,7 +13,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
+// 上書き防止
 data class SelectFavoriteUiState(
     val isLoading: Boolean = false,
     val selectedMainTab: FavoriteTab = FavoriteTab.SelectRecipeTab,

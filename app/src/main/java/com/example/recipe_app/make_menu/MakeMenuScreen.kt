@@ -13,7 +13,7 @@ import com.example.recipe_app.make_menu.select_recipes.SelectRecipes
 import com.example.recipe_app.make_menu.select_recipes.rememberSelectRecipesState
 import com.example.recipe_app.recipe_detail.RecipeDetail
 import com.example.recipe_app.recipe_detail.rememberRecipeDetailState
-
+// 上書き防止
 @Composable
 fun MakeMenuScreen(
     state: MakeMenuScreenState,

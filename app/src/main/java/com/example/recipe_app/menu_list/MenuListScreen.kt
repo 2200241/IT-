@@ -13,7 +13,7 @@ import com.example.recipe_app.menu_list.shopping_list.ShoppingList
 import com.example.recipe_app.menu_list.shopping_list.rememberShoppingListState
 import com.example.recipe_app.recipe_detail.RecipeDetail
 import com.example.recipe_app.recipe_detail.rememberRecipeDetailState
-
+// 上書き防止
 @Composable
 fun MenuListScreen(
     state: MenuListScreenState,

@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
-
+// 上書き防止
 data class SelectConditionsUiState(
     val isLoading: Boolean = false,
     val largeCategories: List<LargeCategory>,

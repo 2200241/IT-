@@ -54,7 +54,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.recipe_app.R
-
+// 上書き防止
 @Composable
 fun SelectIngredients(
     modifier: Modifier = Modifier,

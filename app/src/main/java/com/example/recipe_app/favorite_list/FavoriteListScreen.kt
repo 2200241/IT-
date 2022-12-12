@@ -7,7 +7,7 @@ import androidx.navigation.compose.composable
 import com.example.recipe_app.favorite_list.select_favorite.SelectFavorite
 import com.example.recipe_app.menu_list.shopping_list.ShoppingList
 import com.example.recipe_app.recipe_detail.RecipeDetail
-
+// 上書き防止
 @Composable
 fun FavoriteListScreen(
     state: FavoriteListScreenState,

@@ -9,7 +9,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
-
+// 上書き防止
 interface TestRepository {
     suspend fun fetchRecipes(conditions: String): Result<List<RecipeWithCategoryId>, String>
     suspend fun fetchRecipeDetail(id: Int): Result<Recipe, String>
