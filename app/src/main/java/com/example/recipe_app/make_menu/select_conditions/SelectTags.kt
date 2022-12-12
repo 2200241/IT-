@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.sp
 import com.example.recipe_app.R
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
-// 上書き防止
+
 @Composable
 fun SelectTags(
     modifier: Modifier = Modifier,

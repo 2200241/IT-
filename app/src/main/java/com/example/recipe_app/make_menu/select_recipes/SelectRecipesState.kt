@@ -8,7 +8,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.recipe_app.data.RecipeWithCategoryId
 import com.example.recipe_app.data.RecipeThumb
 import com.github.michaelbull.result.mapBoth
-// 上書き防止
+
 class SelectRecipesState(
     private val viewModel: SelectRecipesViewModel,
     val scaffoldState: ScaffoldState,

@@ -15,7 +15,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-// 上書き防止
+
 data class SelectRecipesUiState(
     val isLoading: Boolean = false,
     val message: String = "",

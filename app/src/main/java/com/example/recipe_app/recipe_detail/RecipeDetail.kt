@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.recipe_app.R
 import com.example.recipe_app.data.Recipe
-// 上書き防止
+
 @Composable
 fun RecipeDetail(
     state: RecipeDetailState = rememberRecipeDetailState(),

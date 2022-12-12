@@ -6,7 +6,7 @@ import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.recipe_app.data.MenuWithoutIngredients
 import com.github.michaelbull.result.mapBoth
-// 上書き防止
+
 class SelectMenuState(
     private val viewModel: SelectMenuViewModel
 ) {

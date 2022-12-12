@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.sp
 import com.example.recipe_app.R
 import com.example.recipe_app.data.RecipeWithCategoryId
 import com.example.recipe_app.menu_list.select_menu.MenuListItem
-// 上書き防止
+
 @Composable
 fun SelectFavorite(
     state: SelectFavoriteState = rememberSelectFavoriteState(),

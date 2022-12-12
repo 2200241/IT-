@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import com.example.recipe_app.R
 import androidx.compose.ui.unit.sp
 import com.example.recipe_app.ui.theme.Shapes
-// 上書き防止
+
 @Composable
 fun SelectConditions(
     state: SelectConditionsState = rememberSelectConditionsState(),

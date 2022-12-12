@@ -9,7 +9,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
-// 上書き防止
+
 interface TestRepository {
     suspend fun fetchRecipes(conditions: String): Result<List<RecipeWithCategoryId>, String>
     suspend fun fetchRecipeDetail(id: Int): Result<Recipe, String>
@@ -55,21 +55,22 @@ class TestRepositoryImpl @Inject constructor(): TestRepository {
     override suspend fun fetchRecipeDetail(id: Int): Result<Recipe, String> {
         return Ok(
             Recipe(
-            id = id,
-            title = "title$id",
-            image = "url$id",
-            serving = (1..5).random(),
-            ingredients = listOf(
-                Ingredient(name = "卵", quantity = "2個"),
-                Ingredient(name = "小麦粉", quantity = "大さじ2"),
-                Ingredient(name = "水", quantity = "200ml")
-            ),
-            instructions = listOf(
-                Instruction(order = 1, content = "手順１"),
-                Instruction(order = 2, content = "手順２"),
-                Instruction(order = 3, content = "手順３")
+                id = id,
+                categoryId = 1,
+                title = "title$id",
+                image = "url$id",
+                serving = (1..5).random(),
+                ingredients = listOf(
+                    Ingredient(name = "卵", quantity = "2個"),
+                    Ingredient(name = "小麦粉", quantity = "大さじ2"),
+                    Ingredient(name = "水", quantity = "200ml")
+                ),
+                instructions = listOf(
+                    Instruction(order = 1, content = "手順１"),
+                    Instruction(order = 2, content = "手順２"),
+                    Instruction(order = 3, content = "手順３")
+                )
             )
-        )
         )
     }
 

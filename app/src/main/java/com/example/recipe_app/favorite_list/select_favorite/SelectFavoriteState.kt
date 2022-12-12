@@ -8,7 +8,7 @@ import com.example.recipe_app.data.Favorites
 import com.example.recipe_app.data.MenuWithoutIngredients
 import com.example.recipe_app.data.RecipeWithCategoryId
 import com.github.michaelbull.result.mapBoth
-// 上書き防止
+
 class SelectFavoriteState(
     private val viewModel: SelectFavoriteViewModel
 ) {
