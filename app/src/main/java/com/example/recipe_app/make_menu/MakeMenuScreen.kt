@@ -16,9 +16,9 @@ import com.example.recipe_app.recipe_detail.rememberRecipeDetailState
 
 @Composable
 fun MakeMenuScreen(
+    state: MakeMenuScreenState,
     modifier: Modifier = Modifier,
     paddingValues: PaddingValues,
-    state: MakeMenuScreenState
 ) {
     val uiState = state.uiState
 

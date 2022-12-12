@@ -21,18 +21,14 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.sharp.Favorite
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.recipe_app.R
-import com.example.recipe_app.data.Ingredient
 import com.example.recipe_app.data.ShoppingItem
 import com.example.recipe_app.make_menu.select_conditions.rippleClickable
 import com.example.recipe_app.make_menu.select_recipes.SelectedRecipes
@@ -41,7 +37,7 @@ import com.example.recipe_app.make_menu.select_recipes.SelectedRecipes
 fun ShoppingList(
     state: ShoppingListState = rememberShoppingListState(),
     paddingValues: PaddingValues,
-    onThumbClicked: (String, String) -> Unit
+    onThumbClicked: (Int, String) -> Unit
 ) {
     val uiState = state.uiState
 
@@ -54,7 +50,7 @@ fun ShoppingList(
             color = colorResource(id = R.color.fontColor)
         )
         Divider(color = Color.LightGray)
-        SelectedRecipes(false, state.menuDetail.menu.recipes, onThumbClicked)
+        SelectedRecipes(false, state.menuWithRecipeThumbs.recipes, onThumbClicked)
         Divider(color = Color.LightGray)
 
         LazyColumn() {
@@ -67,7 +63,7 @@ fun ShoppingList(
                     color = colorResource(id = R.color.fontColor)
                 )
             }
-            item { ShoppingListMaterials(state.menuDetail.shoppingItems, state::checkShoppingListItem) }
+            item { ShoppingListMaterials(state.menuWithRecipeThumbs.shoppingItems, state::checkShoppingListItem) }
             item { Spacer(Modifier.height(80.dp)) }
         }
     }

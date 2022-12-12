@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Card
@@ -103,10 +104,7 @@ fun SearchTextField(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(
-                        colorResource(id = R.color.searchTextFieldColor),
-                        RoundedCornerShape(50)
-                    )
+                    .background(colorResource(id = R.color.searchTextFieldColor), CircleShape)
                     .padding(12.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -142,7 +140,6 @@ fun CategoryTitle(title: String) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            //.padding(vertical = 5.dp)
             .animateContentSize(
                 animationSpec = tween(
                     durationMillis = 300,
