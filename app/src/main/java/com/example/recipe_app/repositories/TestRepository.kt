@@ -32,7 +32,7 @@ interface TestRepository {
 //    suspend fun removeAllergen(id: String): Result<String, String>
 }
 
-private var testMenuWithRecipeThumbs = emptyList<MenuWithRecipeThumbs>()
+private var testMenu = emptyList<MenuWithRecipeThumbs>()
 private var testFavorites = Favorites()
 private var testTempMenu = emptyList<RecipeThumb>()
 
@@ -107,7 +107,7 @@ class TestRepositoryImpl @Inject constructor(): TestRepository {
         return flow {
             while (true) {
                 delay(500)
-                emit(Ok(testMenuWithRecipeThumbs.map {
+                emit(Ok(testMenu.map {
                     MenuWithoutIngredients(
                         id = it.id,
                         recipes = it.recipes
@@ -122,8 +122,8 @@ class TestRepositoryImpl @Inject constructor(): TestRepository {
             while (true) {
                 delay(500)
                 emit(
-                    if (testMenuWithRecipeThumbs.find { it.id == id } != null) {
-                        Ok(testMenuWithRecipeThumbs.find { it.id == id }!!)
+                    if (testMenu.find { it.id == id } != null) {
+                        Ok(testMenu.find { it.id == id }!!)
                     } else {
                         Err("The menu is not found.")
                     }
@@ -133,11 +133,19 @@ class TestRepositoryImpl @Inject constructor(): TestRepository {
     }
 
     override suspend fun checkShoppingListItem(id: Int, index: Int): Result<String, String> {
-        testMenuWithRecipeThumbs.forEach { menu ->
+        testMenu = testMenu.map { menu ->
             if (menu.id == id) {
-                menu.shoppingItems.forEachIndexed { i, shoppingItem ->
-                    if (i == index) !shoppingItem.isChecked
-                }
+                menu.copy(
+                    shoppingItems = menu.shoppingItems.mapIndexed { i, shoppingItem ->
+                        if (i == index) {
+                            shoppingItem.copy(isChecked = !shoppingItem.isChecked)
+                        } else {
+                            shoppingItem
+                        }
+                    }
+                )
+            } else {
+                menu
             }
         }
         return Ok("Successed")
@@ -158,7 +166,7 @@ class TestRepositoryImpl @Inject constructor(): TestRepository {
                     failure = {}
                 )
             }
-            testMenuWithRecipeThumbs += MenuWithRecipeThumbs(
+            testMenu += MenuWithRecipeThumbs(
                 id = (1..99999).random(),
                 recipes = testTempMenu,
                 shoppingItems = withIngredients
@@ -168,7 +176,7 @@ class TestRepositoryImpl @Inject constructor(): TestRepository {
     }
 
     override suspend fun removeMenu(id: Int): Result<String, String> {
-        testMenuWithRecipeThumbs = testMenuWithRecipeThumbs.filter { it.id != id }
+        testMenu = testMenu.filter { it.id != id }
         return Ok("Successed")
     }
 

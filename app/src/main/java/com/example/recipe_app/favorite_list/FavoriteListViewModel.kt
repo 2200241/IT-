@@ -1,25 +1,25 @@
-package com.example.recipe_app.menu_list
+package com.example.recipe_app.favorite_list
 
 import androidx.lifecycle.ViewModel
-import com.example.recipe_app.use_cases.TestUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
-data class MenuListUiState(
+data class FavoriteListUiState(
     val isLoading: Boolean = false,
+    val error: String = ""
 )
 
 @HiltViewModel
-class MenuListViewModel @Inject constructor(
-    private val useCase: TestUseCase
+class FavoriteListViewModel @Inject constructor(
 ): ViewModel() {
 
-    private val _uiState = MutableStateFlow(MenuListUiState(
+    private val _uiState = MutableStateFlow(FavoriteListUiState(
         isLoading = false,
     ))
     val uiState = _uiState.asStateFlow()
-
 
     private fun startLoading() {
         _uiState.update { it.copy(isLoading = true) }
