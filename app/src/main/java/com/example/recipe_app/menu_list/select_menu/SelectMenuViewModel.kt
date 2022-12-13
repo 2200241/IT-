@@ -2,7 +2,8 @@ package com.example.recipe_app.menu_list.select_menu
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.recipe_app.data.Menu
+import com.example.recipe_app.data.Favorites
+import com.example.recipe_app.data.MenuWithoutIngredients
 import com.example.recipe_app.use_cases.TestUseCase
 import com.github.michaelbull.result.Ok
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,6 +32,12 @@ class SelectMenuViewModel @Inject constructor(
         initialValue = Ok(emptyList())
     )
 
+    val favorites = useCase.fetchFavorites().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = Ok(Favorites())
+    )
+
     private fun startLoading() {
         _uiState.update { it.copy(isLoading = true) }
     }
@@ -39,19 +46,19 @@ class SelectMenuViewModel @Inject constructor(
         _uiState.update { it.copy(isLoading = false) }
     }
 
-    fun removeMenu(id: String) {
+    fun removeMenu(id: Int) {
         viewModelScope.launch {
             useCase.removeMenu(id)
         }
     }
 
-    fun addFavoriteMenu(menu: Menu) {
+    fun addFavoriteMenu(menuWithoutIngredients: MenuWithoutIngredients) {
         viewModelScope.launch {
-            useCase.addFavoriteMenu(menu)
+            useCase.addFavoriteMenu(menuWithoutIngredients)
         }
     }
 
-    fun removeFavoriteMenu(id: String) {
+    fun removeFavoriteMenu(id: Int) {
         viewModelScope.launch {
             useCase.removeFavoriteMenu(id)
         }

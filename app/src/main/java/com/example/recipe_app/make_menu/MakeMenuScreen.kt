@@ -2,23 +2,19 @@ package com.example.recipe_app.make_menu
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
 import com.example.recipe_app.make_menu.select_conditions.SelectConditions
 import com.example.recipe_app.make_menu.select_recipes.SelectRecipes
 import com.example.recipe_app.make_menu.select_recipes.rememberSelectRecipesState
 import com.example.recipe_app.recipe_detail.RecipeDetail
-import com.example.recipe_app.recipe_detail.rememberRecipeDetailState
 
 @Composable
 fun MakeMenuScreen(
+    state: MakeMenuScreenState,
     modifier: Modifier = Modifier,
     paddingValues: PaddingValues,
-    state: MakeMenuScreenState
 ) {
     val uiState = state.uiState
 

@@ -21,18 +21,14 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.sharp.Favorite
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.recipe_app.R
-import com.example.recipe_app.data.Ingredient
 import com.example.recipe_app.data.ShoppingItem
 import com.example.recipe_app.make_menu.select_conditions.rippleClickable
 import com.example.recipe_app.make_menu.select_recipes.SelectedRecipes
@@ -41,9 +37,11 @@ import com.example.recipe_app.make_menu.select_recipes.SelectedRecipes
 fun ShoppingList(
     state: ShoppingListState = rememberShoppingListState(),
     paddingValues: PaddingValues,
-    onThumbClicked: (String, String) -> Unit
+    onThumbClicked: (Int, String) -> Unit
 ) {
     val uiState = state.uiState
+    val menu = state.menuWithRecipeThumbs
+    val favoriteMenuIds = state.favoriteMenuIds
 
     Column(modifier = Modifier.padding(paddingValues)) {
         Text(
@@ -54,7 +52,7 @@ fun ShoppingList(
             color = colorResource(id = R.color.fontColor)
         )
         Divider(color = Color.LightGray)
-        SelectedRecipes(false, state.menuDetail.menu.recipes, onThumbClicked)
+        SelectedRecipes(false, menu.recipes, onThumbClicked)
         Divider(color = Color.LightGray)
 
         LazyColumn() {
@@ -67,7 +65,7 @@ fun ShoppingList(
                     color = colorResource(id = R.color.fontColor)
                 )
             }
-            item { ShoppingListMaterials(state.menuDetail.shoppingItems, state::checkShoppingListItem) }
+            item { ShoppingListMaterials(menu.shoppingItems, state::checkShoppingListItem) }
             item { Spacer(Modifier.height(80.dp)) }
         }
     }
@@ -83,11 +81,18 @@ fun ShoppingList(
                 .padding(horizontal = 12.dp, vertical = 8.dp),
             backgroundColor = Color.White,
             contentColor = Color.LightGray,
-            onClick = { /*TODO*/ }
+            onClick = {
+                if (favoriteMenuIds.contains(menu.id))
+                    state.removeFavorite(menu.id)
+                else state.addFavorite(menu)
+            }
         ) {
             Icon(
                 Icons.Sharp.Favorite,
                 contentDescription = null,
+                tint = if (favoriteMenuIds.contains(menu.id))
+                    colorResource(id = R.color.favoriteIconColor)
+                else Color.Gray
             )
         }
     }
