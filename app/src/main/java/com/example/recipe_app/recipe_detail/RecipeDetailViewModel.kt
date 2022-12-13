@@ -1,13 +1,13 @@
 package com.example.recipe_app.recipe_detail
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.room.ColumnInfo
-import com.example.recipe_app.data.*
-import com.example.recipe_app.use_cases.GetRecipeDetailUseCase
-import com.example.recipe_app.use_cases.GetRecipesUseCase
+import com.example.recipe_app.data.Favorites
+import com.example.recipe_app.data.RecipeWithCategoryId
+import com.example.recipe_app.data.Recipe
+import com.example.recipe_app.data.RecipeThumb
 import com.example.recipe_app.use_cases.TestUseCase
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.mapBoth
@@ -18,19 +18,18 @@ import javax.inject.Inject
 
 data class RecipeDetailUiState(
     val isLoading: Boolean = false,
-    val recipeDetail: RecipeDetail = RecipeDetail()
+    val recipe: Recipe = Recipe()
 )
 
 @HiltViewModel
 class RecipeDetailViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val useCase: TestUseCase,
-    private val GetRecipesUseCase :GetRecipesUseCase
+    private val useCase: TestUseCase
 //    private val recipeId: String?,
 //    private val useCase: GetRecipeDetailUseCase = GetRecipeDetailUseCase()
 ): ViewModel() {
 
-    private val recipeId = savedStateHandle.get<String>("recipeId") ?: ""
+    private val recipeId = savedStateHandle.get<String>("recipeId")?.toInt() ?: -1
     private val thumb = savedStateHandle.get<String>("thumb") ?: ""
 
     private val _uiState = MutableStateFlow(RecipeDetailUiState(
@@ -47,11 +46,10 @@ class RecipeDetailViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             startLoading()
-            useCase.fetchRecipeDetail(recipeId ?: "").mapBoth(
-                success = { recipe -> _uiState.update { it.copy(recipeDetail = recipe) } },
+            useCase.fetchRecipeDetail(recipeId).mapBoth(
+                success = { recipe -> _uiState.update { it.copy(recipe = recipe) } },
                 failure = {  }
             )
-
             endLoading()
         }
     }
@@ -67,10 +65,10 @@ class RecipeDetailViewModel @Inject constructor(
     fun addFavoriteRecipe() {
         viewModelScope.launch {
             useCase.addFavoriteRecipe(
-                Recipe(
+                RecipeWithCategoryId(
                     id = recipeId,
-                    categoryId = _uiState.value.recipeDetail.categoryId,
-                    title = _uiState.value.recipeDetail.title,
+                    categoryId = _uiState.value.recipe.categoryId,
+                    title = _uiState.value.recipe.title,
                     thumb = thumb
                 )
             )

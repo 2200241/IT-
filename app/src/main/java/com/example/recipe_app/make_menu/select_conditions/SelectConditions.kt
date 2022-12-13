@@ -78,11 +78,11 @@ private fun SelectConditionsTabBar(
     TabRow(
         modifier = modifier,
         selectedTabIndex = selectedTab.index,
-        backgroundColor = Color.White
+        backgroundColor = Color.White,
     ) {
         ConditionTabs.forEach { item ->
             Tab(
-                modifier = Modifier.height(50.dp),
+                modifier = Modifier.height(45.dp),
                 selected = item.index == selectedTab.index,
                 selectedContentColor = colorResource(id = R.color.fontColor),
                 unselectedContentColor = Color.Gray,

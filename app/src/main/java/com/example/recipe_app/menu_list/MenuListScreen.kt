@@ -44,7 +44,7 @@ fun MenuListScreen(
             )
         }
         composable(
-            route = "recipeDetail/{recipeId}",
+            route = "recipeDetail/{recipeId}/{thumb}",
 //            arguments = listOf(navArgument("recipeId") { type = NavType.StringType })
         ) { backStackEntry ->
             RecipeDetail(
