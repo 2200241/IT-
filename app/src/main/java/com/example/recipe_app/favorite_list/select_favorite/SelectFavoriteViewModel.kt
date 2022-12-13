@@ -1,6 +1,5 @@
 package com.example.recipe_app.favorite_list.select_favorite
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.recipe_app.R
@@ -30,7 +29,7 @@ class SelectFavoriteViewModel @Inject constructor(
 
     init{
         viewModelScope.launch {
-            Log.d("test", GetFavoritesUseCase.setTestFavoriteData().toString())
+            GetFavoritesUseCase.setTestFavoriteData()
         }
     }
 
