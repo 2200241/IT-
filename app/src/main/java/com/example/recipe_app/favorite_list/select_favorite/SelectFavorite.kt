@@ -1,5 +1,6 @@
 package com.example.recipe_app.favorite_list.select_favorite
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -25,15 +26,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.recipe_app.R
-import com.example.recipe_app.data.RecipeWithCategoryId
+import com.example.recipe_app.data.Favorites
+import com.example.recipe_app.data.Menu
+import com.example.recipe_app.data.Recipe
+import com.example.recipe_app.make_menu.select_recipes.SearchResultRecipes
 import com.example.recipe_app.menu_list.select_menu.MenuListItem
 
 @Composable
 fun SelectFavorite(
     state: SelectFavoriteState = rememberSelectFavoriteState(),
-    paddingValues: PaddingValues,
-    onRecipeClicked: (Int, String) -> Unit,
-    onMenuClicked: (Int) -> Unit
+    paddingValues: PaddingValues
 ) {
     val uiState = state.uiState
     val favorites = state.favorites
@@ -54,15 +56,10 @@ fun SelectFavorite(
                                 onClick = state::onTabClicked
                             )
 
-                            favorites.recipeWithCategoryIds.filter {
-                                it.categoryId == uiState.selectedSubTab.index + 1
-                            }.forEach { recipe ->
+                            favorites.recipes.filter { it.categoryId == uiState.selectedSubTab.index + 1 }.forEach { recipe ->
                                 FavoriteRecipeListItem(
                                     recipe = recipe,
-                                    favoriteRecipes = favorites.recipeWithCategoryIds,
-                                    onRecipeClicked = onRecipeClicked,
-                                    onLiked = state::addFavoriteRecipe,
-                                    onUnliked = state::removeFavoriteRecipe
+                                    recipes = favorites.recipes
                                 )
                                 Divider(color = Color.LightGray)
                             }
@@ -71,15 +68,9 @@ fun SelectFavorite(
                     }
                 }
                 FavoriteTab.SelectMenuTab -> {
-                    favorites.menuWithoutIngredients.forEach { menu ->
+                    favorites.menus.forEach { menu ->
                         item {
-                            MenuListItem(
-                                menu = menu,
-                                favoriteMenus = favorites.menuWithoutIngredients,
-                                onMenuClicked = onMenuClicked,
-                                onLikeClicked = state::addFavoriteMenu,
-                                onUnlikeClicked = state::removeFavoriteMenu
-                            )
+                            FavoriteMenuListItem(menu, favorites.menus)
                             Divider(color = Color.LightGray)
                         }
                     }
@@ -102,7 +93,7 @@ fun SelectFavoritesTabBar(
     ) {
         FavoriteTabs.forEach { item ->
             Tab(
-                modifier = Modifier.height(45.dp),
+                modifier = Modifier.height(50.dp),
                 selected = item.index == selectedTab.index,
                 selectedContentColor = colorResource(id = R.color.fontColor),
                 unselectedContentColor = Color.Gray,
@@ -238,17 +229,14 @@ fun FavoriteRecipeList(state: SelectFavoriteState) {
 
 @Composable
 fun FavoriteRecipeListItem(
-    recipe: RecipeWithCategoryId,
-    favoriteRecipes: List<RecipeWithCategoryId>,
-    onRecipeClicked: (Int, String) -> Unit,
-    onLiked: (RecipeWithCategoryId) -> Unit,
-    onUnliked: (Int) -> Unit
+    recipe: Recipe,
+    recipes: List<Recipe>
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(12.dp)
-            .clickable { onRecipeClicked(recipe.id, recipe.thumb) },
+            .clickable { Log.d("favoriteListItem", "onClick") },
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Row() {
@@ -272,22 +260,18 @@ fun FavoriteRecipeListItem(
             modifier = Modifier
                 .size(30.dp)
                 .align(alignment = Alignment.Bottom)
-                .clickable {
-                           if (favoriteRecipes.contains(recipe)) onUnliked(recipe.id)
-                           else onLiked(recipe)
-                },
-            tint = if (favoriteRecipes.contains(recipe))
+                .clickable { },
+            tint = if (recipes.contains(recipe))
                 colorResource(id = R.color.favoriteIconColor)
                 else Color.Gray
         )
     }
 }
 
-/*
 @Composable
 fun FavoriteMenuListItem(
-    menu: MenuWithoutIngredients,
-    favoriteMenus: List<MenuWithoutIngredients>
+    menu: Menu,
+    menus: List<Menu>
 ) {
-    MenuListItem()
-}*/
+    MenuListItem(onItemClicked = {})
+}

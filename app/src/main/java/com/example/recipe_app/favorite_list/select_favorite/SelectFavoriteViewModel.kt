@@ -1,11 +1,13 @@
 package com.example.recipe_app.favorite_list.select_favorite
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.recipe_app.R
 import com.example.recipe_app.data.Favorites
-import com.example.recipe_app.data.MenuWithoutIngredients
-import com.example.recipe_app.data.RecipeWithCategoryId
+import com.example.recipe_app.data.Menu
+import com.example.recipe_app.data.Recipe
+import com.example.recipe_app.data.RecipeThumb
 import com.example.recipe_app.use_cases.GetFavoritesUseCase
 import com.example.recipe_app.use_cases.TestUseCase
 import com.github.michaelbull.result.Ok
@@ -28,7 +30,7 @@ class SelectFavoriteViewModel @Inject constructor(
 
     init{
         viewModelScope.launch {
-            GetFavoritesUseCase.setTestFavoriteData()
+            Log.d("test", GetFavoritesUseCase.setTestFavoriteData().toString())
         }
     }
 
@@ -55,25 +57,25 @@ class SelectFavoriteViewModel @Inject constructor(
         _uiState.update { it.copy(isLoading = false) }
     }
 
-    fun addFavoriteRecipe(recipeWithCategoryId: RecipeWithCategoryId) {
+    fun addFavoriteRecipe(recipe: Recipe) {
         viewModelScope.launch {
-            useCase.addFavoriteRecipe(recipeWithCategoryId)
+            useCase.addFavoriteRecipe(recipe)
         }
     }
 
-    fun addFavoriteMenu(menuWithoutIngredients: MenuWithoutIngredients) {
+    fun addFavoriteMenu(menu: Menu) {
         viewModelScope.launch {
-            useCase.addFavoriteMenu(menuWithoutIngredients)
+            useCase.addFavoriteMenu(menu)
         }
     }
 
-    fun removeFavoriteRecipe(id: Int) {
+    fun removeFavoriteRecipe(id: String) {
         viewModelScope.launch {
             useCase.removeFavoriteRecipe(id)
         }
     }
 
-    fun removeFavoriteMenu(id: Int) {
+    fun removeFavoriteMenu(id: String) {
         viewModelScope.launch {
             useCase.removeFavoriteMenu(id)
         }

@@ -16,10 +16,10 @@ import kotlinx.coroutines.launch
 internal sealed class Screen(val route: String) {
     object SelectMenu : Screen("selectMenu")
     object ShoppingList : Screen("shoppingList/{menuId}/") {
-        fun createRoute(menuId: Int) = "shoppingList/$menuId"
+        fun createRoute(menuId: String) = "shoppingList/$menuId"
     }
     object RecipeDetail : Screen("recipeDetail/{recipeId}/{thumb}") {
-        fun createRoute(recipeId: Int, thumb: String) = "recipeDetail/$recipeId/$thumb"
+        fun createRoute(recipeId: String, thumb: String) = "recipeDetail/$recipeId/$thumb"
     }
 }
 
@@ -32,23 +32,23 @@ class MenuListScreenState(
     val uiState: MenuListUiState
         @Composable get() = viewModel.uiState.collectAsState().value
 
-    fun navigateToShoppingList(id: Int, from: NavBackStackEntry) {
+    fun navigateToShoppingList(id: String, from: NavBackStackEntry) {
         if (from.lifecycleIsResumed()) {
             navController.navigate(Screen.ShoppingList.createRoute(id))
         }
     }
 
-    fun navigateToRecipeDetail(recipeId: Int, thumb: String, from: NavBackStackEntry) {
+    fun navigateToRecipeDetail(recipeId: String, thumb: String, from: NavBackStackEntry) {
         if (from.lifecycleIsResumed()) {
-            if (recipeId >= 0) {
-                navController.navigate(Screen.RecipeDetail.createRoute(recipeId, thumb))
-            } else {
+            if (recipeId.isBlank()) {
                 coroutineScope.launch {
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = "No recipe is selected.",
                         actionLabel = "OK"
                     )
                 }
+            } else {
+                navController.navigate(Screen.RecipeDetail.createRoute(recipeId, thumb))
             }
         }
     }

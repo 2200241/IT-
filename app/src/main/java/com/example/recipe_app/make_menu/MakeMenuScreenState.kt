@@ -19,7 +19,7 @@ internal sealed class Screen(val route: String) {
         fun createRoute(conditions: String) = "selectRecipes/$conditions"
     }
     object RecipeDetail : Screen("recipeDetail/{recipeId}/{thumb}") {
-        fun createRoute(recipeId: Int, thumb: String) = "recipeDetail/$recipeId/$thumb"
+        fun createRoute(recipeId: String, thumb: String) = "recipeDetail/$recipeId/$thumb"
     }
 }
 
@@ -42,12 +42,12 @@ class MakeMenuScreenState(
         }
     }
 
-    fun navigateToRecipeDetail(recipeId: Int, thumb: String, from: NavBackStackEntry) {
+    fun navigateToRecipeDetail(recipeId: String, thumb: String, from: NavBackStackEntry) {
         if (from.lifecycleIsResumed()) {
-            if (recipeId >= 0) {
-                navController.navigate(Screen.RecipeDetail.createRoute(recipeId, thumb))
-            } else {
+            if (recipeId.isBlank()) {
                 showSnackBar("No recipe is selected.")
+            } else {
+                navController.navigate(Screen.RecipeDetail.createRoute(recipeId, thumb))
             }
         }
     }

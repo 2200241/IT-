@@ -10,6 +10,10 @@ class AddFavoriteUseCase @Inject constructor(
 
     @Throws(InvalidFavoriteException::class)
     suspend fun addFavorite(favorite: Favorite) {
+        //データ削除 これは最後に消す
+//        repository.deleteAllFavorites()
+
+        //エラー処理
         if(favorite.recipe_id.toString().isBlank()) {
             throw InvalidFavoriteException("The recipe_id of the note can't be empty.")
         }

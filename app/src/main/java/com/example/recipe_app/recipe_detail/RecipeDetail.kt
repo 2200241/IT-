@@ -28,7 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.recipe_app.R
-import com.example.recipe_app.data.Recipe
+import com.example.recipe_app.data.RecipeDetail
 
 @Composable
 fun RecipeDetail(
@@ -43,7 +43,7 @@ fun RecipeDetail(
         modifier = Modifier.padding(paddingValues),
     ) {
         LazyColumn() {
-            item { CookingImage(recipe = uiState.recipe) }
+            item { CookingImage(recipe = uiState.recipeDetail) }
             item { RecipeDetailTitle("材料(人分)") }
             item { RecipeDetailMaterials() }
             item { RecipeDetailTitle("作り方") }
@@ -54,7 +54,7 @@ fun RecipeDetail(
 
     RecipeDetailBottomButtons(
         paddingValues = paddingValues,
-        recipeId = uiState.recipe.id,
+        recipeId = uiState.recipeDetail.id,
         favoriteRecipeIds = state.favoriteRecipeIds,
         addButtonIsDisplayed = addButtonIsDisplayed,
         onAddButtonClicked = state::addToTempMenu,
@@ -64,7 +64,8 @@ fun RecipeDetail(
 }
 
 @Composable
-fun CookingImage(recipe: Recipe) {
+fun CookingImage(recipe: RecipeDetail) {
+//    fun CookingImage(recipe: RecipeWithoutThumb)
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -140,8 +141,8 @@ fun CookingProcedure() {
 @Composable
 fun RecipeDetailBottomButtons(
     paddingValues: PaddingValues,
-    recipeId: Int,
-    favoriteRecipeIds: List<Int>,
+    recipeId: String,
+    favoriteRecipeIds: List<String>,
     addButtonIsDisplayed: Boolean,
     onAddButtonClicked: () -> Unit,
     onLiked: () -> Unit,

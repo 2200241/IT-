@@ -13,7 +13,7 @@ class AllergyRepository @Inject constructor(application: Application){
     private val allergyDao = RecipeAppDatabase.getDatabase(application).allergyDao()
 
     //全件取得
-    suspend fun getAllAllergy(): List<Allergy> = allergyDao.getAllAllergy()
+    suspend fun getAllAllergies(): List<Allergy> = allergyDao.getAllAllergies()
 
     //追加
     suspend fun addAllergy(allergy: Allergy) {
