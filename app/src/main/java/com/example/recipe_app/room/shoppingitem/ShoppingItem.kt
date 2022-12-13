@@ -15,13 +15,15 @@ data class ShoppingItem(
     @ColumnInfo(name = "isChecked")val isChecked: Boolean
 )
 
-//roomに入らない型を変換
 class ShoppingItemTypeConverter {
 
     @TypeConverter
     fun fromIngredient(ingredient: Ingredient) = Gson().toJson(ingredient)
 
+
     @TypeConverter
     fun toIngredient(ingredient: String) = Gson().fromJson(ingredient, Ingredient::class.java)
+
+
 
 }
