@@ -28,6 +28,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.recipe_app.R
+import com.example.recipe_app.data.Ingredient
+import com.example.recipe_app.data.Instruction
 import com.example.recipe_app.data.Recipe
 
 @Composable
@@ -38,23 +40,24 @@ fun RecipeDetail(
     onBackPressed: () -> Unit = {}
 ) {
     val uiState = state.uiState
+    val recipe = uiState.recipe
 
     Column(
         modifier = Modifier.padding(paddingValues),
     ) {
         LazyColumn() {
-            item { CookingImage(recipe = uiState.recipe) }
-            item { RecipeDetailTitle("材料(人分)") }
-            item { RecipeDetailMaterials() }
+            item { CookingImage(recipe = recipe) }
+            item { RecipeDetailTitle("材料(${recipe.serving}人分)") }
+            item { RecipeDetailMaterials(recipe.ingredients) }
             item { RecipeDetailTitle("作り方") }
-            item { CookingProcedure() }
+            item { CookingProcedure(recipe.instructions) }
             item { Spacer(Modifier.height(80.dp)) }
         }
     }
 
     RecipeDetailBottomButtons(
         paddingValues = paddingValues,
-        recipeId = uiState.recipe.id,
+        recipeId = recipe.id,
         favoriteRecipeIds = state.favoriteRecipeIds,
         addButtonIsDisplayed = addButtonIsDisplayed,
         onAddButtonClicked = state::addToTempMenu,
@@ -95,21 +98,23 @@ fun RecipeDetailTitle(title: String) {
 }
 
 @Composable
-fun RecipeDetailMaterials() {
+fun RecipeDetailMaterials(
+    ingredients: List<Ingredient>
+) {
     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-        for (i in 1..10) {
+        ingredients.forEach { ingredients ->
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "材料名$i",
+                    text = ingredients.name,
                     fontSize = 20.sp,
                     color = colorResource(id = R.color.fontColor)
                 )
                 Text(
-                    text = "分量$i",
+                    text = ingredients.quantity,
                     fontSize = 20.sp,
                     color = colorResource(id = R.color.fontColor)
                 )
@@ -123,13 +128,14 @@ fun RecipeDetailMaterials() {
 }
 
 @Composable
-fun CookingProcedure() {
+fun CookingProcedure(
+    instructions: List<Instruction>
+) {
     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-        // TODO
-        for (i in 1..5) {
+        instructions.forEach { instruction ->
             Text(
                 modifier = Modifier.padding(bottom = 10.dp),
-                text = "$i.",
+                text = instruction.content,
                 fontSize = 20.sp,
                 color = colorResource(id = R.color.fontColor)
             )
