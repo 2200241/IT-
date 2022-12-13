@@ -1,9 +1,7 @@
 package com.example.recipe_app.menu_list
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.recipe_app.use_cases.TestUseCase
-import com.github.michaelbull.result.Ok
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject

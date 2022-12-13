@@ -1,6 +1,5 @@
 package com.example.recipe_app.recipe_detail
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

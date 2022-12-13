@@ -5,7 +5,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.recipe_app.data.MenuWithRecipeThumbs
-import com.example.recipe_app.data.MenuWithoutIngredients
 import com.github.michaelbull.result.mapBoth
 
 class ShoppingListState(
