@@ -5,29 +5,30 @@ import com.example.recipe_app.data.Ingredient
 import com.example.recipe_app.data.Instruction
 import com.example.recipe_app.repositories.RecipeRepository
 import com.example.recipe_app.room.recipe.Recipe
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetRecipesUseCase @Inject constructor(private val recipeRepository: RecipeRepository){
 
-    private var recipeList: List<Recipe> = emptyList()
-
     @Throws(InvalidGetRecipesException::class)
-    suspend fun getRecipe(): List<Recipe> {
+    suspend fun getRecipe(): Flow<List<Recipe>> {
 
-        recipeList = recipeRepository.getAllRecipes()
+        var recipeList: Flow<List<Recipe>> = recipeRepository.getAllRecipes()
 
-        if (recipeList.isEmpty()) {
-            throw InvalidGetRecipesException("recipeList is empty")
-        }
-        if (recipeList.first().id.toString().isBlank()) {
-            throw InvalidGetRecipesException("お気に入りがありません")
+        recipeList.collect(){
+            if (it.isEmpty()) {
+                throw InvalidGetRecipesException("recipeList is empty")
+            }
+            if (it.first().id.toString().isBlank()) {
+                throw InvalidGetRecipesException("お気に入りがありません")
+            }
         }
 
         return recipeList
     }
 
     // サンプルデータ
-    suspend fun setTestRecipeData(): List<Recipe> {
+    suspend fun setTestRecipeData(): Flow<List<Recipe>> {
         recipeRepository.deleteAllRecipes()
         val ingredient = ArrayList<Ingredient>()
         ingredient.add(Ingredient("name", "quantity"))

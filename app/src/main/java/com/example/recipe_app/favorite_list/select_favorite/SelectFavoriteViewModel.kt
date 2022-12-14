@@ -7,6 +7,7 @@ import com.example.recipe_app.R
 import com.example.recipe_app.data.Favorites
 import com.example.recipe_app.data.MenuWithoutIngredients
 import com.example.recipe_app.data.RecipeWithCategoryId
+import com.example.recipe_app.use_cases.FavoriteUseCases
 import com.example.recipe_app.use_cases.GetFavoritesUseCase
 import com.example.recipe_app.use_cases.TestUseCase
 import com.github.michaelbull.result.Ok
@@ -24,12 +25,12 @@ data class SelectFavoriteUiState(
 @HiltViewModel
 class SelectFavoriteViewModel @Inject constructor(
     private val useCase: TestUseCase,
-    private val GetFavoritesUseCase: GetFavoritesUseCase
+    private val FavoritesUseCases: FavoriteUseCases
 ): ViewModel() {
 
     init{
         viewModelScope.launch {
-            GetFavoritesUseCase.setTestFavoriteData().collect{
+            FavoritesUseCases.getFavorite.setTestFavoriteData().collect{
                 Log.d("test", it.toString())
             }
         }

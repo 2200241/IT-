@@ -1,12 +1,13 @@
 package com.example.recipe_app.room.recipe
 
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface RecipeDao {
 
     @Query("SELECT * FROM Recipes")
-    suspend fun getAllRecipes(): List<Recipe>
+    fun getAllRecipes(): Flow<List<Recipe>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE) 
     suspend fun addRecipe(recipe: Recipe)

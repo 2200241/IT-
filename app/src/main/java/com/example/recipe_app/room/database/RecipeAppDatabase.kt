@@ -21,7 +21,7 @@ import com.example.recipe_app.room.shoppingitem.ShoppingItem
 import com.example.recipe_app.room.shoppingitem.ShoppingItemDao
 import com.example.recipe_app.room.shoppingitem.ShoppingItemTypeConverter
 
-@Database(entities = [Favorite::class, Allergy::class, Recipe::class, Menu::class, ShoppingItem::class, Cache::class], version = 1, exportSchema = false)
+@Database(entities = [Favorite::class, Allergy::class, Recipe::class, Menu::class, ShoppingItem::class, Cache::class], version = 2, exportSchema = false)
 @TypeConverters(RecipesTypeConverter::class, MenusTypeConverter::class, ShoppingItemTypeConverter::class)
 
 abstract class RecipeAppDatabase: RoomDatabase() {

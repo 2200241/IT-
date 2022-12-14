@@ -1,12 +1,8 @@
 package com.example.recipe_app.use_cases
 
-import android.util.Log
-import androidx.lifecycle.LiveData
 import com.example.recipe_app.repositories.FavoriteRepository
 import com.example.recipe_app.room.favorite.Favorite
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.toList
 import javax.inject.Inject
 
 class GetFavoritesUseCase @Inject constructor(private val favoriteRepository: FavoriteRepository){
@@ -17,8 +13,9 @@ class GetFavoritesUseCase @Inject constructor(private val favoriteRepository: Fa
         var favoriteList: Flow<List<Favorite>> = favoriteRepository.getAllFavorites()
 
         favoriteList.collect {
-            if (it.isEmpty())
+            if (it.isEmpty()) {
                 throw InvalidGetFavoritesException("お気に入りがありません")
+            }
         }
 
         return favoriteList

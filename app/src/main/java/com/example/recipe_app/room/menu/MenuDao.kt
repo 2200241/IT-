@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 interface MenuDao {
     @Transaction
     @Query("SELECT * FROM Menus")
-    suspend fun getAllMenus(): Flow<List<Menu>>
+    fun getAllMenus(): Flow<List<Menu>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addMenu(menu: Menu)

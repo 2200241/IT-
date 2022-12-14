@@ -13,7 +13,7 @@ class MenuRepository @Inject constructor(application: Application) {
     private val menuDao = RecipeAppDatabase.getDatabase(application).menuDao()
 
     //全件取得
-    suspend fun getAllMenus() = menuDao.getAllMenus()
+    fun getAllMenus() = menuDao.getAllMenus()
 
     //追加
     suspend fun addMenu(menu: Menu) {
