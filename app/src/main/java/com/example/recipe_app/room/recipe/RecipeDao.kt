@@ -4,7 +4,7 @@ import androidx.room.*
 
 @Dao
 interface RecipeDao {
-    @Transaction
+
     @Query("SELECT * FROM Recipes")
     suspend fun getAllRecipes(): List<Recipe>
 

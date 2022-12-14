@@ -1,10 +1,10 @@
 package com.example.recipe_app.repositories
 
 import android.app.Application
-import androidx.lifecycle.LiveData
 import com.example.recipe_app.room.allergy.Allergy
 import com.example.recipe_app.room.database.RecipeAppDatabase
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -13,7 +13,7 @@ class AllergyRepository @Inject constructor(application: Application){
     private val allergyDao = RecipeAppDatabase.getDatabase(application).allergyDao()
 
     //全件取得
-    suspend fun getAllAllergies(): List<Allergy> = allergyDao.getAllAllergies()
+    fun getAllAllergies() = allergyDao.getAllAllergies()
 
     //追加
     suspend fun addAllergy(allergy: Allergy) {

@@ -1,12 +1,13 @@
 package com.example.recipe_app.room.menu
 
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MenuDao {
     @Transaction
     @Query("SELECT * FROM Menus")
-    suspend fun getAllMenus(): List<Menu>
+    suspend fun getAllMenus(): Flow<List<Menu>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addMenu(menu: Menu)

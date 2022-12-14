@@ -12,7 +12,7 @@ class ShoppingItemRepository @Inject constructor(application: Application){
     private val shoppingItemDao = RecipeAppDatabase.getDatabase(application).shoppingItemDao()
 
     //全件取得
-    suspend fun getAllShoppingItems(): List<ShoppingItem> = shoppingItemDao.getAllShoppingItems()
+    suspend fun getAllShoppingItems() = shoppingItemDao.getAllShoppingItems()
 
     //追加
     suspend fun addShoppingItem(shoppingItem: ShoppingItem) {
