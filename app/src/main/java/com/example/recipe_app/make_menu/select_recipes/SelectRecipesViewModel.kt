@@ -89,7 +89,10 @@ class SelectRecipesViewModel @Inject constructor(
     fun addMenu() {
         viewModelScope.launch {
             useCase.addMenu().mapBoth(
-                success = { useCase.removeAllFromTempMenu() },
+                success = { message ->
+                    useCase.removeAllFromTempMenu()
+                    _uiState.update { it.copy(message = message) }
+                          },
                 failure = { err -> _uiState.update { it.copy(message = err) }}
             )
         }

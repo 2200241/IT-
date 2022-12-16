@@ -1,5 +1,6 @@
 package com.example.recipe_app.recipe_detail
 
+import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
@@ -8,6 +9,7 @@ import com.github.michaelbull.result.mapBoth
 
 class RecipeDetailState(
     private val viewModel: RecipeDetailViewModel,
+    val scaffoldState: ScaffoldState?
 ) {
     val uiState: RecipeDetailUiState
         @Composable get() = viewModel.uiState.collectAsState().value
@@ -23,11 +25,14 @@ class RecipeDetailState(
     fun removeFavoriteRecipe() = viewModel.removeFavoriteRecipe()
 
     fun addToTempMenu() = viewModel.addToTempMenu()
+
+    fun resetMessage() = viewModel.resetMessage()
 }
 
 @Composable
 fun rememberRecipeDetailState(
-    viewModel: RecipeDetailViewModel = hiltViewModel()
+    viewModel: RecipeDetailViewModel = hiltViewModel(),
+    scaffoldState: ScaffoldState? = null
 /*
     recipeId: String?,
     viewModel: RecipeDetailViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
@@ -35,5 +40,5 @@ fun rememberRecipeDetailState(
     )
 */
 ): RecipeDetailState = remember {
-    RecipeDetailState(viewModel)
+    RecipeDetailState(viewModel, scaffoldState)
 }

@@ -9,6 +9,7 @@ import com.example.recipe_app.make_menu.select_conditions.SelectConditions
 import com.example.recipe_app.make_menu.select_recipes.SelectRecipes
 import com.example.recipe_app.make_menu.select_recipes.rememberSelectRecipesState
 import com.example.recipe_app.recipe_detail.RecipeDetail
+import com.example.recipe_app.recipe_detail.rememberRecipeDetailState
 
 @Composable
 fun MakeMenuScreen(
@@ -48,7 +49,7 @@ fun MakeMenuScreen(
 //            arguments = listOf(navArgument("recipeId") { type = NavType.StringType })
         ) {
             RecipeDetail(
-//                state = rememberRecipeDetailState(recipeId = backStackEntry.arguments?.getString("recipeId")),
+                state = rememberRecipeDetailState(scaffoldState = state.scaffoldState),
                 addButtonIsDisplayed = true,
                 paddingValues = paddingValues,
                 onBackPressed = { state.navigateBack() }

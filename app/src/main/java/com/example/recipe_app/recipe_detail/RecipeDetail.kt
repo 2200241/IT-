@@ -20,6 +20,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.sharp.Favorite
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -41,6 +42,16 @@ fun RecipeDetail(
 ) {
     val uiState = state.uiState
     val recipe = uiState.recipe
+
+    if (uiState.message.isNotBlank()) {
+        LaunchedEffect(state.scaffoldState?.snackbarHostState) {
+            state.scaffoldState?.snackbarHostState?.showSnackbar(
+                message = uiState.message,
+                actionLabel = "OK"
+            )
+            state.resetMessage()
+        }
+    }
 
     Column(
         modifier = Modifier.padding(paddingValues),

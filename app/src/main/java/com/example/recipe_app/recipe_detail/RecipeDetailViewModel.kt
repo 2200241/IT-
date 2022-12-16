@@ -17,7 +17,8 @@ import javax.inject.Inject
 
 data class RecipeDetailUiState(
     val isLoading: Boolean = false,
-    val recipe: Recipe = Recipe()
+    val recipe: Recipe = Recipe(),
+    val message: String = ""
 )
 
 @HiltViewModel
@@ -83,8 +84,19 @@ class RecipeDetailViewModel @Inject constructor(
     // TODO: 二重登録防止
     fun addToTempMenu() {
         viewModelScope.launch {
-            useCase.addToTempMenu(RecipeThumb(id = recipeId, thumb = thumb))
+            useCase.addToTempMenu(RecipeThumb(id = recipeId, thumb = thumb)).mapBoth(
+                success = { setMessage(it) },
+                failure = { setMessage(it) }
+            )
         }
+    }
+
+    fun setMessage(message: String) {
+        _uiState.update { it.copy(message = message) }
+    }
+
+    fun resetMessage() {
+        _uiState.update { it.copy(message = "") }
     }
 
 /*

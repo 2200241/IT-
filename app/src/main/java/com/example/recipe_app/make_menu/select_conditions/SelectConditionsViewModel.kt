@@ -83,6 +83,10 @@ class SelectConditionsViewModel @Inject constructor(
         }
     }
 
+    fun onClearClicked() {
+        _uiState.update { it.copy(selectedTags = emptyList()) }
+    }
+
     fun setKeywords(text: String) {
         _uiState.update { it.copy(keywords = text) }
     }

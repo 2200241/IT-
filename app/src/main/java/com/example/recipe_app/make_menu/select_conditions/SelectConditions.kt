@@ -56,7 +56,8 @@ fun SelectConditions(
         }
 
         SelectConditionsBottomButtons(
-            onSearchClicked = { onSearchClicked(state.getConditions()) }
+            onSearchClicked = { onSearchClicked(state.getConditions()) },
+            onClearClicked = state::onClearClicked
         )
     }
 }
@@ -103,7 +104,10 @@ fun BottomButtonLayout(content: @Composable RowScope.()->Unit) {
 }
 
 @Composable
-fun SelectConditionsBottomButtons(onSearchClicked: () -> Unit) {
+fun SelectConditionsBottomButtons(
+    onSearchClicked: () -> Unit,
+    onClearClicked: () -> Unit
+) {
     BottomButtonLayout {
         Row(
             modifier = Modifier
@@ -121,7 +125,7 @@ fun SelectConditionsBottomButtons(onSearchClicked: () -> Unit) {
                         fontWeight = FontWeight.Bold
                     )
                 },
-                onClick = { Log.d("Button", "onClick") }
+                onClick = onClearClicked
             )
             Spacer(modifier = Modifier.width(15.dp))
             ExtendedFloatingActionButton(

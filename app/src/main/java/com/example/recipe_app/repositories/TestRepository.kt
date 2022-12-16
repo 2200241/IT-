@@ -41,12 +41,12 @@ class TestRepositoryImpl @Inject constructor(): TestRepository {
     override suspend fun fetchRecipes(conditions: String): Result<List<RecipeWithCategoryId>, String> {
         val list = conditions.split("&").map { it }
         val a = list.map { RecipeWithCategoryId(id = (1..999999).random(), categoryId = 1, title = "タイトルA@$it", thumb = "url@$it") }
-        val b = list.map { RecipeWithCategoryId(id = (1..999999).random(), categoryId = 2, title = "タイトルB@it", thumb = "url@$it") }
-        val c = list.map { RecipeWithCategoryId(id = (1..999999).random(), categoryId = 3, title = "タイトルC@it", thumb = "url@$it") }
-        val d = list.map { RecipeWithCategoryId(id = (1..999999).random(), categoryId = 4, title = "タイトルD@it", thumb = "url@$it") }
-        val e = list.map { RecipeWithCategoryId(id = (1..999999).random(), categoryId = 5, title = "タイトルE@it", thumb = "url@$it") }
-        val f = list.map { RecipeWithCategoryId(id = (1..999999).random(), categoryId = 6, title = "タイトルF@it", thumb = "url@$it") }
-        val g = list.map { RecipeWithCategoryId(id = (1..999999).random(), categoryId = 7, title = "タイトルG@it", thumb = "url@$it") }
+        val b = list.map { RecipeWithCategoryId(id = (1..999999).random(), categoryId = 2, title = "タイトルB@$it", thumb = "url@$it") }
+        val c = list.map { RecipeWithCategoryId(id = (1..999999).random(), categoryId = 3, title = "タイトルC@$it", thumb = "url@$it") }
+        val d = list.map { RecipeWithCategoryId(id = (1..999999).random(), categoryId = 4, title = "タイトルD@$it", thumb = "url@$it") }
+        val e = list.map { RecipeWithCategoryId(id = (1..999999).random(), categoryId = 5, title = "タイトルE@$it", thumb = "url@$it") }
+        val f = list.map { RecipeWithCategoryId(id = (1..999999).random(), categoryId = 6, title = "タイトルF@$it", thumb = "url@$it") }
+        val g = list.map { RecipeWithCategoryId(id = (1..999999).random(), categoryId = 7, title = "タイトルG@$it", thumb = "url@$it") }
 
         delay(1000)
         return Ok(a + b + c + d + e + f + g)
@@ -171,7 +171,7 @@ class TestRepositoryImpl @Inject constructor(): TestRepository {
                 recipes = testTempMenu,
                 shoppingItems = withIngredients
             )
-            return Ok("Successed")
+            return Ok("The menu successfully added.")
         }
     }
 
@@ -191,7 +191,7 @@ class TestRepositoryImpl @Inject constructor(): TestRepository {
 
     override suspend fun addToTempMenu(recipe: RecipeThumb): Result<String, String> {
         testTempMenu += recipe
-        return Ok("Successed")
+        return Ok("The recipe successfully added.")
     }
 
     override suspend fun removeFromTempMenu(id: Int): Result<String, String> {

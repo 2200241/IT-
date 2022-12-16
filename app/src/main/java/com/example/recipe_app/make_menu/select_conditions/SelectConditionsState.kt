@@ -16,6 +16,8 @@ class SelectConditionsState(
 
     fun onTagClicked(id: Int) = viewModel.onTagClicked(id)
 
+    fun onClearClicked() = viewModel.onClearClicked()
+
     fun setKeywords(text:String) = viewModel.setKeywords(text)
 
     fun getConditions() = viewModel.getConditions()
