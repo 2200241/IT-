@@ -1,11 +1,12 @@
 package com.example.recipe_app.room.allergy
 
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AllergyDao {
     @Query("SELECT * FROM allergies")
-    suspend fun getAllAllergies(): List<Allergy>
+    fun getAllAllergies(): Flow<List<Allergy>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE) 
     suspend fun addAllergy(allergy: Allergy)

@@ -4,6 +4,7 @@ import android.app.Application
 import com.example.recipe_app.room.favorite.Favorite
 import com.example.recipe_app.room.database.RecipeAppDatabase
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -12,7 +13,7 @@ class FavoriteRepository @Inject constructor(application: Application) {
     private val favoriteDao = RecipeAppDatabase.getDatabase(application).favoriteDao()
 
     //全件取得
-    suspend fun getAllFavorites(): List<Favorite> = favoriteDao.getAllFavorites()
+    fun getAllFavorites() = favoriteDao.getAllFavorites()
 
     //追加
     suspend fun addFavorite(favorite: Favorite) {

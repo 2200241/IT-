@@ -1,31 +1,28 @@
 package com.example.recipe_app.use_cases
 
-import android.util.Log
 import com.example.recipe_app.repositories.FavoriteRepository
 import com.example.recipe_app.room.favorite.Favorite
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetFavoritesUseCase @Inject constructor(private val favoriteRepository: FavoriteRepository){
 
-    private var favoriteList: List<Favorite> = emptyList()
-
     @Throws(InvalidGetFavoritesException::class)
-    suspend fun getFavorites(): List<Favorite> {
+    suspend fun getFavorites(): Flow<List<Favorite>> {
 
-        favoriteList = favoriteRepository.getAllFavorites()
+        var favoriteList: Flow<List<Favorite>> = favoriteRepository.getAllFavorites()
 
-        if (favoriteList.isEmpty()) {
-            throw InvalidGetFavoritesException("favoriteList is empty")
-        }
-        if (favoriteList.first().name.isBlank()) {
-            throw InvalidGetFavoritesException("お気に入りがありません")
+        favoriteList.collect {
+            if (it.isEmpty()) {
+                throw InvalidGetFavoritesException("お気に入りがありません")
+            }
         }
 
         return favoriteList
     }
 
     // サンプルデータ
-    suspend fun setTestFavoriteData(): List<Favorite> {
+    suspend fun setTestFavoriteData(): Flow<List<Favorite>> {
         favoriteRepository.deleteAllFavorites()
         favoriteRepository.addFavorite(Favorite(0,1,"test","test"))
         favoriteRepository.addFavorite(Favorite(0,2,"test","test"))
