@@ -89,8 +89,8 @@ fun SelectRecipes(
             LazyColumn {
                 item {
                     Text(
-                        modifier = Modifier.padding(start = 12.dp, top = 10.dp),
-                        text = stringResource(id = R.string.menuList_title),
+                        modifier = Modifier.padding(start = 15.dp, top = 10.dp),
+                        text = "献立",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
                         color = colorResource(id = R.color.fontColor)
@@ -290,7 +290,6 @@ fun SearchResultRecipes(
                             .align(alignment = Alignment.End)
                             .padding(top = 8.dp, end = 8.dp),
                         backgroundColor = Color.White,
-                        contentColor = Color.LightGray,
                         onClick = {
                             if (favoriteRecipeIds.contains(recipe.id)) {
                                 onRecipeUnLiked(recipe.id)

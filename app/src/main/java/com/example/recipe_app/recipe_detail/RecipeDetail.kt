@@ -187,7 +187,6 @@ fun RecipeDetailBottomButtons(
             }
             FloatingActionButton(
                 backgroundColor = Color.White,
-                contentColor = Color.LightGray,
                 onClick = if (favoriteRecipeIds.contains(recipeId)) onUnliked else onLiked
             ) {
                 Icon(
