@@ -128,14 +128,9 @@ sealed class CategoryTab(
 ) {
     object SelectStapleFoodTab: CategoryTab(R.string.staple_food, 0)
     object SelectMainDishTab: CategoryTab(R.string.main_dish, 1)
-
     object SelectSideDishTab: CategoryTab(R.string.side_dish, 2)
-
     object SelectSoupTab: CategoryTab(R.string.soup, 3)
-
     object SelectSweetsTab: CategoryTab(R.string.sweets, 4)
-
     object SelectDrinkTab: CategoryTab(R.string.drink, 5)
-
     object SelectOthersTab: CategoryTab(R.string.others, 6)
 }

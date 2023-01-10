@@ -1,11 +1,13 @@
 package com.example.recipe_app.menu_list.shopping_list
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.absoluteOffset
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -29,8 +31,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.recipe_app.R
+import com.example.recipe_app.data.MenuWithRecipeThumbs
 import com.example.recipe_app.data.ShoppingItem
-import com.example.recipe_app.make_menu.select_conditions.rippleClickable
 import com.example.recipe_app.make_menu.select_recipes.SelectedRecipes
 
 @Composable
@@ -45,20 +47,21 @@ fun ShoppingList(
 
     Column(modifier = Modifier.padding(paddingValues)) {
         Text(
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
+            modifier = Modifier
+                .padding(vertical = 10.dp)
+                .align(Alignment.CenterHorizontally),
             text = "買い物リスト",
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
             color = colorResource(id = R.color.fontColor)
         )
         Divider(color = Color.LightGray)
-        SelectedRecipes(false, menu.recipes, onThumbClicked)
-        Divider(color = Color.LightGray)
-
-        LazyColumn() {
+        LazyColumn {
+            item { SelectedRecipes(false, menu.recipes, onThumbClicked) }
+            item { Divider(color = Color.LightGray) }
             item {
                 Text(
-                    modifier = Modifier.padding(start = 15.dp, top = 15.dp, bottom = 10.dp),
+                    modifier = Modifier.padding(start = 15.dp, top = 15.dp),
                     text = "材料",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
@@ -70,32 +73,13 @@ fun ShoppingList(
         }
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(paddingValues)
-    ) {
-        FloatingActionButton(
-            modifier = Modifier
-                .align(alignment = Alignment.BottomEnd)
-                .padding(horizontal = 12.dp, vertical = 8.dp),
-            backgroundColor = Color.White,
-            contentColor = Color.LightGray,
-            onClick = {
-                if (favoriteMenuIds.contains(menu.id))
-                    state.removeFavorite(menu.id)
-                else state.addFavorite(menu)
-            }
-        ) {
-            Icon(
-                Icons.Sharp.Favorite,
-                contentDescription = null,
-                tint = if (favoriteMenuIds.contains(menu.id))
-                    colorResource(id = R.color.favoriteIconColor)
-                else Color.Gray
-            )
-        }
-    }
+    ShoppingListBottomButton(
+        paddingValues = paddingValues,
+        menu = menu,
+        favoriteMenuIds = favoriteMenuIds,
+        onMenuLiked = state::addFavorite,
+        onMenuUnLiked = state::removeFavorite
+    )
 }
 
 @Composable
@@ -105,16 +89,18 @@ fun ShoppingListMaterials(
 ) {
     items.forEachIndexed { index, item ->
 //        val checkedState = remember { mutableStateOf(false) }
-
-        Column(modifier = Modifier.padding(horizontal = 15.dp)) {
+        Column {
             Row(
                 modifier = Modifier
+                    .padding(horizontal = 16.dp, vertical = 5.dp)
                     .fillMaxWidth()
-                    .rippleClickable { onChecked(index) },
+                    .clickable { onChecked(index) },
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Checkbox(
-                    modifier = Modifier.size(40.dp),
+                    modifier = Modifier
+                        .absoluteOffset((-8).dp, 0.dp)
+                        .size(40.dp),
                     colors = CheckboxDefaults.colors(colorResource(id = R.color.selectButtonColor)),
                     checked = item.isChecked,
                     onCheckedChange = {}
@@ -125,21 +111,53 @@ fun ShoppingListMaterials(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
+                        modifier = Modifier.absoluteOffset((-8).dp, 0.dp),
                         text = item.ingredient.name,
-                        fontSize = 20.sp,
+                        fontSize = 16.sp,
                         color = colorResource(id = R.color.fontColor)
                     )
                     Text(
-                        modifier = Modifier.padding(end = 5.dp),
                         text = item.ingredient.quantity,
-                        fontSize = 20.sp,
+                        fontSize = 16.sp,
                         color = colorResource(id = R.color.fontColor)
                     )
                 }
             }
-            Divider(
-                modifier = Modifier.padding(bottom = 8.dp),
-                color = Color.LightGray
+            Divider(color = Color.LightGray)
+        }
+    }
+}
+
+@Composable
+fun ShoppingListBottomButton(
+    paddingValues: PaddingValues,
+    menu: MenuWithRecipeThumbs,
+    favoriteMenuIds: List<Int>,
+    onMenuLiked: (MenuWithRecipeThumbs) -> Unit,
+    onMenuUnLiked: (Int) -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(paddingValues),
+        contentAlignment = Alignment.BottomEnd
+    ) {
+        FloatingActionButton(
+            modifier = Modifier.padding(end = 12.dp, bottom = 8.dp),
+            backgroundColor = Color.White,
+            contentColor = Color.LightGray,
+            onClick = {
+                if (favoriteMenuIds.contains(menu.id))
+                    onMenuUnLiked(menu.id)
+                else onMenuLiked(menu)
+            }
+        ) {
+            Icon(
+                imageVector = Icons.Sharp.Favorite,
+                contentDescription = "favorite",
+                tint = if (favoriteMenuIds.contains(menu.id))
+                    colorResource(id = R.color.favoriteIconColor)
+                else Color.LightGray
             )
         }
     }

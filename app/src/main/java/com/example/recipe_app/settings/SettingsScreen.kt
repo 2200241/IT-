@@ -1,5 +1,6 @@
 package com.example.recipe_app.settings
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -22,24 +23,29 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.recipe_app.R
-import com.example.recipe_app.make_menu.select_conditions.rippleClickable
 
 @Composable
 fun SettingsScreen(
     paddingValues: PaddingValues,
 ) {
-    Column(
-        modifier = Modifier.padding(paddingValues),
-    ) {
-        Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp)) {
-            Text(
-                text = "アレルギー登録",
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                color = colorResource(id = R.color.fontColor)
-            )
-            Divider(color = Color.LightGray)
-        }
+    Column(modifier = Modifier.padding(paddingValues)) {
+        Text(
+            modifier = Modifier
+                .padding(vertical = 10.dp)
+                .align(Alignment.CenterHorizontally),
+            text = "設定",
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            color = colorResource(id = R.color.fontColor)
+        )
+        Divider(color = Color.LightGray)
+        Text(
+            modifier = Modifier.padding(start = 15.dp, top = 15.dp),
+            text = "アレルギー設定",
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            color = colorResource(id = R.color.fontColor)
+        )
         Allergies()
     }
 }
@@ -54,7 +60,7 @@ fun Allergies() {
             item {
                 val checkedState = remember { mutableStateOf(false) }
                 Row(
-                    modifier = Modifier.rippleClickable { checkedState.value = !checkedState.value },
+                    modifier = Modifier.clickable { checkedState.value = !checkedState.value },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Checkbox(
@@ -66,7 +72,6 @@ fun Allergies() {
                     Text(
                         text = "アレルギー",
                         fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
                         color = colorResource(id = R.color.fontColor),
                     )
                 }

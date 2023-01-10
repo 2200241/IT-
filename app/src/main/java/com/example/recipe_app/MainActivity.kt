@@ -1,17 +1,18 @@
 package com.example.recipe_app
 
 import android.os.Bundle
-import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
+import androidx.compose.material.ripple.LocalRippleTheme
+import androidx.compose.material.ripple.RippleAlpha
+import androidx.compose.material.ripple.RippleTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
-import androidx.core.view.WindowCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -41,7 +42,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    MainScreen()
+                    CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
+                        MainScreen()
+                    }
                 }
             }
         }
@@ -95,4 +98,12 @@ internal sealed class Screen(val route: String) {
     object MenuList : Screen("menuList")
     object FavoriteList : Screen("favoriteList")
     object Settings : Screen("settings")
+}
+
+private object NoRippleTheme : RippleTheme {
+    @Composable
+    override fun defaultColor() = Color.Unspecified
+    @Composable
+    override fun rippleAlpha(): RippleAlpha =
+        RippleAlpha(0.0f, 0.0f, 0.0f, 0.0f)
 }

@@ -98,45 +98,38 @@ private val ConditionTabs = listOf(
 )
 
 @Composable
-fun BottomButtonLayout(content: @Composable RowScope.()->Unit) {
-    Row { content() }
-}
-
-@Composable
 fun SelectConditionsBottomButtons(onSearchClicked: () -> Unit) {
-    BottomButtonLayout {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 12.dp, vertical = 8.dp)
-        ) {
-            ExtendedFloatingActionButton(
-                modifier = Modifier.weight(1f),
-                backgroundColor = colorResource(id = R.color.clearButtonColor),
-                contentColor = Color.White,
-                text = {
-                    Text(
-                        text = "クリア",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                },
-                onClick = { Log.d("Button", "onClick") }
-            )
-            Spacer(modifier = Modifier.width(15.dp))
-            ExtendedFloatingActionButton(
-                modifier = Modifier.weight(1f),
-                backgroundColor = colorResource(id = R.color.searchButtonColor),
-                contentColor = Color.White,
-                text = {
-                    Text(
-                        text = "検索",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                },
-                onClick = onSearchClicked
-            )
-        }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 12.dp, vertical = 8.dp)
+    ) {
+        ExtendedFloatingActionButton(
+            modifier = Modifier.weight(1f),
+            backgroundColor = colorResource(id = R.color.clearButtonColor),
+            contentColor = Color.White,
+            text = {
+                Text(
+                    text = "クリア",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            },
+            onClick = { /*TODO*/ }
+        )
+        Spacer(modifier = Modifier.width(15.dp))
+        ExtendedFloatingActionButton(
+            modifier = Modifier.weight(1f),
+            backgroundColor = colorResource(id = R.color.searchButtonColor),
+            contentColor = Color.White,
+            text = {
+                Text(
+                    text = "検索",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            },
+            onClick = onSearchClicked
+        )
     }
 }

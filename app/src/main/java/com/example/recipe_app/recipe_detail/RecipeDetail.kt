@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Divider
 import androidx.compose.material.ExtendedFloatingActionButton
@@ -42,10 +43,8 @@ fun RecipeDetail(
     val uiState = state.uiState
     val recipe = uiState.recipe
 
-    Column(
-        modifier = Modifier.padding(paddingValues),
-    ) {
-        LazyColumn() {
+    Column(modifier = Modifier.padding(paddingValues)) {
+        LazyColumn {
             item { CookingImage(recipe = recipe) }
             item { RecipeDetailTitle("材料(${recipe.serving}人分)") }
             item { RecipeDetailMaterials(recipe.ingredients) }
@@ -71,13 +70,12 @@ fun CookingImage(recipe: Recipe) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = 5.dp)
             .height(220.dp)
             .background(color = Color.LightGray)
     ) {
         Text(
             modifier = Modifier
-                .padding(10.dp)
+                .padding(12.dp)
                 .align(Alignment.BottomStart),
             text = recipe.title,
             color = Color.White,
@@ -89,7 +87,7 @@ fun CookingImage(recipe: Recipe) {
 @Composable
 fun RecipeDetailTitle(title: String) {
     Text(
-        modifier = Modifier.padding(horizontal = 15.dp, vertical = 10.dp),
+        modifier = Modifier.padding(start = 15.dp, top = 15.dp, bottom = 3.dp),
         text = title,
         fontSize = 18.sp,
         fontWeight = FontWeight.Bold,
@@ -101,28 +99,27 @@ fun RecipeDetailTitle(title: String) {
 fun RecipeDetailMaterials(
     ingredients: List<Ingredient>
 ) {
-    Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+    Column {
         ingredients.forEach { ingredients ->
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 5.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = ingredients.name,
-                    fontSize = 20.sp,
+                    fontSize = 16.sp,
                     color = colorResource(id = R.color.fontColor)
                 )
                 Text(
                     text = ingredients.quantity,
-                    fontSize = 20.sp,
+                    fontSize = 16.sp,
                     color = colorResource(id = R.color.fontColor)
                 )
             }
-            Divider(
-                modifier = Modifier.padding(bottom = 10.dp),
-                color = Color.LightGray
-            )
+            Divider(color = Color.LightGray)
         }
     }
 }
@@ -131,12 +128,16 @@ fun RecipeDetailMaterials(
 fun CookingProcedure(
     instructions: List<Instruction>
 ) {
-    Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 5.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
         instructions.forEach { instruction ->
             Text(
-                modifier = Modifier.padding(bottom = 10.dp),
                 text = instruction.content,
-                fontSize = 20.sp,
+                fontSize = 16.sp,
                 color = colorResource(id = R.color.fontColor)
             )
         }
@@ -156,28 +157,33 @@ fun RecipeDetailBottomButtons(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(paddingValues)
+            .padding(paddingValues),
+        contentAlignment = Alignment.BottomCenter
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 12.dp, vertical = 8.dp)
-                .align(Alignment.BottomCenter),
+                .padding(horizontal = 12.dp, vertical = 8.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             if (addButtonIsDisplayed) {
                 ExtendedFloatingActionButton(
+                    modifier = Modifier.weight(1f),
                     backgroundColor = colorResource(id = R.color.addListButtonColor),
                     contentColor = Color.White,
                     text = {
                         Text(
-                            text = "買い物リストへ追加",
-                            fontSize = 18.sp
+                            text = "献立に追加",
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold
                         )
                     },
                     onClick = onAddButtonClicked
                 )
+                Spacer(Modifier.width(12.dp))
+            } else {
+                Spacer(Modifier.weight(1f))
             }
             FloatingActionButton(
                 backgroundColor = Color.White,
@@ -185,8 +191,8 @@ fun RecipeDetailBottomButtons(
                 onClick = if (favoriteRecipeIds.contains(recipeId)) onUnliked else onLiked
             ) {
                 Icon(
-                    Icons.Sharp.Favorite,
-                    contentDescription = null,
+                    imageVector = Icons.Sharp.Favorite,
+                    contentDescription = "favorite",
                     tint = if (favoriteRecipeIds.contains(recipeId))
                         colorResource(id = R.color.favoriteIconColor)
                     else Color.LightGray

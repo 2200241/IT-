@@ -44,19 +44,19 @@ fun SelectFavorite(
             onClick = state::onTabClicked
         )
 
-        LazyColumn() {
-            when (uiState.selectedMainTab) {
-                FavoriteTab.SelectRecipeTab -> {
-                    item {
-                        Column() {
-                            SelectFavoriteCategoriesTabBar(
-                                selectedTab = uiState.selectedSubTab,
-                                onClick = state::onTabClicked
-                            )
+        when (uiState.selectedMainTab) {
+            FavoriteTab.SelectRecipeTab -> {
+                Column {
+                    SelectFavoriteCategoriesTabBar(
+                        selectedTab = uiState.selectedSubTab,
+                        onClick = state::onTabClicked
+                    )
 
-                            favorites.recipeWithCategoryIds.filter {
-                                it.categoryId == uiState.selectedSubTab.index + 1
-                            }.forEach { recipe ->
+                    LazyColumn {
+                        favorites.recipeWithCategoryIds.filter {
+                            it.categoryId == uiState.selectedSubTab.index + 1
+                        }.forEach { recipe ->
+                            item {
                                 FavoriteRecipeListItem(
                                     recipe = recipe,
                                     favoriteRecipes = favorites.recipeWithCategoryIds,
@@ -64,13 +64,15 @@ fun SelectFavorite(
                                     onLiked = state::addFavoriteRecipe,
                                     onUnliked = state::removeFavoriteRecipe
                                 )
-                                Divider(color = Color.LightGray)
                             }
-//                    item { FavoriteRecipeList(state) }
+                            item { Divider(color = Color.LightGray) }
                         }
                     }
                 }
-                FavoriteTab.SelectMenuTab -> {
+            }
+            FavoriteTab.SelectMenuTab -> {
+                LazyColumn {
+//                    item { FavoriteRecipeList(state) }
                     favorites.menuWithoutIngredients.forEach { menu ->
                         item {
                             MenuListItem(
@@ -80,8 +82,8 @@ fun SelectFavorite(
                                 onLikeClicked = state::addFavoriteMenu,
                                 onUnlikeClicked = state::removeFavoriteMenu
                             )
-                            Divider(color = Color.LightGray)
                         }
+                        item { Divider(color = Color.LightGray) }
                     }
                 }
             }
@@ -135,27 +137,29 @@ fun SelectFavoriteCategoriesTabBar(
     ) {
         FavoriteCategoryTabs.forEach { item ->
             val selected = selectedTab.index == item.index
-            val backgroundColor = if (selected) colorResource(id = R.color.categoryTabColor) else Color.White
+            val backgroundColor =
+                if (selected) colorResource(id = R.color.categoryTabColor)
+                else Color.White
+            val borderColor =
+                if (selected) colorResource(id = R.color.categoryTabColor)
+                else colorResource(id = R.color.borderLightColor)
 
             Tab(
-                modifier = Modifier
+                modifier = modifier
                     .padding(horizontal = 5.dp, vertical = 10.dp)
                     .background(color = backgroundColor, shape = CircleShape)
-                    .border(
-                        BorderStroke(1.5.dp, colorResource(id = R.color.categoryTabColor)),
-                        CircleShape
-                    ),
-                selected = item.index == selectedTab.index,
+                    .border(border = BorderStroke(1.5.dp, borderColor), shape = CircleShape),
+                selected = selected,
                 selectedContentColor = Color.White,
-                unselectedContentColor = colorResource(id = R.color.fontColor),
+                unselectedContentColor = colorResource(id = R.color.categoryTabColor),
                 onClick = {
                     onClick(item)
                 }
             ) {
                 Text(
-                    modifier = Modifier.padding(10.dp),
+                    modifier = modifier.padding(vertical = 8.dp),
                     text = stringResource(id = item.titleId),
-                    fontSize = 18.sp,
+                    fontSize = 16.sp,
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -178,64 +182,6 @@ private val FavoriteCategoryTabs = listOf(
     FavoriteCategoryTab.SelectOthersTab
 )
 
-/*
-@Composable
-fun FavoriteRecipeList(state: SelectFavoriteState) {
-    val uiState = state.uiState
-
-    Column() {
-        SelectFavoriteCategoriesTabBar(
-            selectedTab = uiState.selectedSubTab,
-            onClick = state::onTabClicked
-        )
-        when (uiState.selectedSubTab) {
-            FavoriteCategoryTab.SelectStapleFoodTab -> {
-                for (i in 1..10) {
-                    FavoriteRecipeListItem("料理名$i")
-                    Divider(color = Color.LightGray)
-                }
-            }
-            FavoriteCategoryTab.SelectMainDishTab -> {
-                for (i in 1..10) {
-                    FavoriteRecipeListItem("料理名$i")
-                    Divider(color = Color.LightGray)
-                }
-            }
-            FavoriteCategoryTab.SelectSideDishTab -> {
-                for (i in 1..10) {
-                    FavoriteRecipeListItem("料理名$i")
-                    Divider(color = Color.LightGray)
-                }
-            }
-            FavoriteCategoryTab.SelectSoupTab -> {
-                for (i in 1..10) {
-                    FavoriteRecipeListItem("料理名$i")
-                    Divider(color = Color.LightGray)
-                }
-            }
-            FavoriteCategoryTab.SelectSweetsTab -> {
-                for (i in 1..10) {
-                    FavoriteRecipeListItem("料理名$i")
-                    Divider(color = Color.LightGray)
-                }
-            }
-            FavoriteCategoryTab.SelectDrinkTab -> {
-                for (i in 1..10) {
-                    FavoriteRecipeListItem("料理名$i")
-                    Divider(color = Color.LightGray)
-                }
-            }
-            FavoriteCategoryTab.SelectOthersTab -> {
-                for (i in 1..10) {
-                    FavoriteRecipeListItem("料理名$i")
-                    Divider(color = Color.LightGray)
-                }
-            }
-        }
-    }
-}
-*/
-
 @Composable
 fun FavoriteRecipeListItem(
     recipe: RecipeWithCategoryId,
@@ -251,7 +197,7 @@ fun FavoriteRecipeListItem(
             .clickable { onRecipeClicked(recipe.id, recipe.thumb) },
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Row() {
+        Row {
             Box( // ->image
                 modifier = Modifier
                     .size(115.dp, 75.dp)
@@ -260,7 +206,7 @@ fun FavoriteRecipeListItem(
                 Text(text = recipe.thumb, color = Color.White)
             }
             Text(
-                modifier = Modifier.padding(start = 8.dp),
+                modifier = Modifier.padding(start = 10.dp),
                 text = recipe.title,
                 fontSize = 18.sp,
                 color = colorResource(id = R.color.fontColor)
@@ -268,7 +214,7 @@ fun FavoriteRecipeListItem(
         }
         Icon(
             Icons.Sharp.Favorite,
-            contentDescription = null,
+            contentDescription = "favorite",
             modifier = Modifier
                 .size(30.dp)
                 .align(alignment = Alignment.Bottom)
@@ -278,16 +224,7 @@ fun FavoriteRecipeListItem(
                 },
             tint = if (favoriteRecipes.contains(recipe))
                 colorResource(id = R.color.favoriteIconColor)
-            else Color.Gray
+            else Color.LightGray
         )
     }
 }
-
-/*
-@Composable
-fun FavoriteMenuListItem(
-    menu: MenuWithoutIngredients,
-    favoriteMenus: List<MenuWithoutIngredients>
-) {
-    MenuListItem()
-}*/

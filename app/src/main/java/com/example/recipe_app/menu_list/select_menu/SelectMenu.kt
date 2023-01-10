@@ -31,17 +31,18 @@ fun SelectMenu(
 
     Column(modifier = Modifier.padding(paddingValues)) {
         Text(
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
+            modifier = Modifier
+                .padding(vertical = 10.dp)
+                .align(Alignment.CenterHorizontally),
             text = stringResource(id = R.string.menuList_title),
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
             color = colorResource(id = R.color.fontColor)
         )
-
-        LazyColumn() {
+        Divider(color = Color.LightGray)
+        LazyColumn {
             item {
                 state.menus.forEach { menu ->
-                    Divider(color = Color.LightGray)
                     MenuListItem(
                         menu = menu,
                         favoriteMenus = state.favoriteMenus,
@@ -74,7 +75,9 @@ fun MenuListItem(
             modifier = Modifier.width((screenWidth-60).dp)
         ) {
             LazyRow(
-                modifier = Modifier.clickable {onMenuClicked(menu.id) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onMenuClicked(menu.id) },
                 contentPadding = PaddingValues(12.dp),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
@@ -92,8 +95,8 @@ fun MenuListItem(
             }
         }
         Icon(
-            Icons.Sharp.Favorite,
-            contentDescription = null,
+            imageVector = Icons.Sharp.Favorite,
+            contentDescription = "favorite",
             modifier = Modifier
                 .padding(bottom = 12.dp, end = 12.dp)
                 .size(30.dp)
@@ -104,7 +107,7 @@ fun MenuListItem(
                 },
             tint = if (favoriteMenus.contains(menu))
                 colorResource(id = R.color.favoriteIconColor)
-            else Color.Gray
+            else Color.LightGray
         )
     }
 }

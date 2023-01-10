@@ -56,7 +56,7 @@ fun TagCategory(
 @Composable
 fun SelectTagsTitle(id: Int) {
     Text(
-        modifier = Modifier.padding(start = 20.dp, top = 20.dp, bottom = 10.dp),
+        modifier = Modifier.padding(start = 20.dp, top = 15.dp, bottom = 3.dp),
         text = stringResource(id),
         fontSize = 18.sp,
         fontWeight = FontWeight.Bold,
@@ -79,18 +79,19 @@ fun SelectTagsButton(
         items.forEach { item ->
             val backgroundColor = if (selectedTags.contains(item)) colorResource(id = R.color.selectButtonColor) else Color.White
             val contentColor = if (selectedTags.contains(item)) Color.White else colorResource(id = R.color.fontColor)
+            val borderColor = if (selectedTags.contains(item)) colorResource(id = R.color.selectButtonColor) else colorResource(id = R.color.borderLightColor)
             val fontWeight = if (selectedTags.contains(item)) FontWeight.Bold else FontWeight.Normal
+
             OutlinedButton(
-                border = BorderStroke(1.5.dp, colorResource(id = R.color.borderLightColor)),
+                border = BorderStroke(1.5.dp, borderColor),
                 shape = CircleShape,
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = backgroundColor, contentColor = contentColor),
                 onClick = { onTagClicked(item) }
             ) {
                 Text(
-                    modifier = Modifier.padding(3.dp),
                     text = stringResource(item),
-                    fontSize = 18.sp,
+                    fontSize = 16.sp,
                     fontWeight = fontWeight
                 )
             }

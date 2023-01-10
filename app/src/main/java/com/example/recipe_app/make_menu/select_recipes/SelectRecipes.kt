@@ -1,6 +1,7 @@
 package com.example.recipe_app.make_menu.select_recipes
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.absoluteOffset
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -36,6 +38,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.recipe_app.R
@@ -44,6 +47,7 @@ import com.example.recipe_app.data.RecipeThumb
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SelectRecipes(
     state: SelectRecipesState,
@@ -73,98 +77,39 @@ fun SelectRecipes(
     } else {
         Column(modifier = Modifier.padding(paddingValues)) {
             Text(
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
+                modifier = Modifier
+                    .padding(vertical = 10.dp)
+                    .align(Alignment.CenterHorizontally),
                 text = stringResource(id = R.string.result),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 color = colorResource(id = R.color.fontColor)
             )
-
             Divider(color = Color.LightGray)
-            SelectedRecipes(true, state.selectedRecipes, onItemClicked, state::removeRecipe)
-            Divider(color = Color.LightGray)
-
-            SelectCategoriesTabBar(
-                selectedTab = uiState.selectedTab,
-                onClick = state::onTabClicked
-            )
-
-            // TODO
-            LazyColumn() {
-/*
-                when (uiState.selectedTab) {
-                    CategoryTab.SelectStapleFoodTab -> {
-                        item {
-                            SearchResultRecipes(
-                                recipes = uiState.recipes.filter { it.categoryId == uiState.selectedTab.index + 1 },
-                                favoriteRecipeIds = favoriteRecipeIds,
-                                onItemClicked = onItemClicked,
-                                onLikeClicked = state::addFavorite
-                            )
-                        }
-                    }
-                    CategoryTab.SelectMainDishTab -> {
-                        item {
-                            SearchResultRecipes(
-                                recipes = uiState.recipes.filter { it.categoryId == uiState.selectedTab.index + 1 },
-                                favoriteRecipeIds = favoriteRecipeIds,
-                                onItemClicked = onItemClicked,
-                                onLikeClicked = state::addFavorite
-                            )
-                        }
-                    }
-                    CategoryTab.SelectSideDishTab -> {
-                        item {
-                            SearchResultRecipes(
-                                recipes = uiState.recipes.filter { it.categoryId == uiState.selectedTab.index + 1 },
-                                favoriteRecipeIds = favoriteRecipeIds,
-                                onItemClicked = onItemClicked,
-                                onLikeClicked = state::addFavorite
-                            )
-                        }
-                    }
-                    CategoryTab.SelectSoupTab -> {
-                        item {
-                            SearchResultRecipes(
-                                recipes = uiState.recipes.filter { it.categoryId == uiState.selectedTab.index + 1 },
-                                favoriteRecipeIds = favoriteRecipeIds,
-                                onItemClicked = onItemClicked,
-                                onLikeClicked = state::addFavorite
-                            )
-                        }
-                    }
-                    CategoryTab.SelectSweetsTab -> {
-                        item {
-                            SearchResultRecipes(
-                                recipes = uiState.recipes.filter { it.categoryId == uiState.selectedTab.index + 1 },
-                                favoriteRecipeIds = favoriteRecipeIds,
-                                onItemClicked = onItemClicked,
-                                onLikeClicked = state::addFavorite
-                            )
-                        }
-                    }
-                    CategoryTab.SelectDrinkTab -> {
-                        item {
-                            SearchResultRecipes(
-                                recipes = uiState.recipes.filter { it.categoryId == uiState.selectedTab.index + 1 },
-                                favoriteRecipeIds = favoriteRecipeIds,
-                                onItemClicked = onItemClicked,
-                                onLikeClicked = state::addFavorite
-                            )
-                        }
-                    }
-                    CategoryTab.SelectOthersTab -> {
-                        item {
-                            SearchResultRecipes(
-                                recipes = uiState.recipes.filter { it.categoryId == uiState.selectedTab.index + 1 },
-                                favoriteRecipeIds = favoriteRecipeIds,
-                                onItemClicked = onItemClicked,
-                                onLikeClicked = state::addFavorite
-                            )
-                        }
+            LazyColumn {
+                item {
+                    Text(
+                        modifier = Modifier.padding(start = 12.dp, top = 10.dp),
+                        text = stringResource(id = R.string.menuList_title),
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = colorResource(id = R.color.fontColor)
+                    )
+                }
+                item {
+                    if (state.selectedRecipes.isNotEmpty()) {
+                        SelectedRecipes(true, state.selectedRecipes, onItemClicked, state::removeRecipe)
+                    } else {
+                        SelectedRecipesIsEmpty()
                     }
                 }
-*/
+                item { Divider(color = Color.LightGray) }
+                stickyHeader {
+                    SelectCategoriesTabBar(
+                        selectedTab = uiState.selectedTab,
+                        onClick = state::onTabClicked
+                    )
+                }
                 item {
                     SearchResultRecipes(
                         recipeWithCategoryIds = uiState.recipeWithCategoryIds.filter { it.categoryId == uiState.selectedTab.index + 1 },
@@ -178,28 +123,10 @@ fun SelectRecipes(
             }
         }
 
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-        ) {
-            ExtendedFloatingActionButton(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 30.dp, vertical = 8.dp)
-                    .align(Alignment.BottomCenter),
-                backgroundColor = colorResource(id = R.color.decisionButtonColor),
-                contentColor = Color.White,
-                text = {
-                    Text(
-                        text = "この献立で決定",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                },
-                onClick = { state.addMenu() }
-            )
-        }
+        SelectRecipesBottomButton(
+            paddingValues = paddingValues,
+            onAddMenuClicked = { state.addMenu() }
+        )
     }
 }
 
@@ -227,21 +154,50 @@ fun SelectedRecipes(
                     if (deleteButtonIsDisplayed) {
                         FloatingActionButton(
                             modifier = Modifier
-                                .size(20.dp)
+                                .size(25.dp)
+                                .absoluteOffset(5.dp, (-5).dp)
                                 .align(alignment = Alignment.TopEnd),
                             backgroundColor = Color.DarkGray,
                             contentColor = Color.White,
                             onClick = { onDeleteClicked(recipe.id) }
                         ) {
                             Icon(
-                                Icons.Sharp.Clear,
-                                contentDescription = null,
-                                modifier = Modifier.size(18.dp)
+                                imageVector = Icons.Sharp.Clear,
+                                contentDescription = "Clear",
+                                modifier = Modifier.size(15.dp)
                             )
                         }
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun SelectedRecipesIsEmpty() {
+    Box(modifier = Modifier.padding(12.dp)) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(75.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = "レシピが追加されていません",
+                textAlign = TextAlign.Center,
+                color = Color.DarkGray,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+            )
+            Text(
+                text = "献立に追加されたレシピの一覧がここに表示されます",
+                textAlign = TextAlign.Center,
+                color = Color.Gray,
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Bold,
+            )
         }
     }
 }
@@ -261,27 +217,29 @@ fun SelectCategoriesTabBar(
     ) {
         CategoryTabs.forEach { item ->
             val selected = selectedTab.index == item.index
-            val backgroundColor = if (selected) colorResource(id = R.color.categoryTabColor) else Color.White
+            val backgroundColor =
+                if (selected) colorResource(id = R.color.categoryTabColor)
+                else Color.Transparent
+            val borderColor =
+                if (selected) colorResource(id = R.color.categoryTabColor)
+                else colorResource(id = R.color.borderLightColor)
 
             Tab(
-                modifier = Modifier
+                modifier = modifier
                     .padding(horizontal = 5.dp, vertical = 10.dp)
                     .background(color = backgroundColor, shape = CircleShape)
-                    .border(
-                        BorderStroke(1.5.dp, colorResource(id = R.color.categoryTabColor)),
-                        CircleShape
-                    ),
-                selected = item.index == selectedTab.index,
+                    .border(border = BorderStroke(1.5.dp, borderColor), shape = CircleShape),
+                selected = selected,
                 selectedContentColor = Color.White,
-                unselectedContentColor = colorResource(id = R.color.fontColor),
+                unselectedContentColor = colorResource(id = R.color.categoryTabColor),
                 onClick = {
                     onClick(item)
                 }
             ) {
                 Text(
-                    modifier = Modifier.padding(10.dp),
+                    modifier = modifier.padding(vertical = 8.dp),
                     text = stringResource(id = item.titleId),
-                    fontSize = 18.sp,
+                    fontSize = 16.sp,
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -330,7 +288,7 @@ fun SearchResultRecipes(
                         modifier = Modifier
                             .size(50.dp)
                             .align(alignment = Alignment.End)
-                            .padding(8.dp),
+                            .padding(top = 8.dp, end = 8.dp),
                         backgroundColor = Color.White,
                         contentColor = Color.LightGray,
                         onClick = {
@@ -342,15 +300,14 @@ fun SearchResultRecipes(
                         }
                     ) {
                         Icon(
-                            Icons.Sharp.Favorite,
-                            contentDescription = null,
+                            imageVector = Icons.Sharp.Favorite,
+                            contentDescription = "Favorite",
                             modifier = Modifier.size(20.dp),
                             tint = if (favoriteRecipeIds.contains(recipe.id))
                                 colorResource(id = R.color.favoriteIconColor)
                             else Color.LightGray
                         )
                     }
-
                     Text(
                         modifier = Modifier.padding(8.dp),
                         text = recipe.title,
@@ -359,5 +316,34 @@ fun SearchResultRecipes(
                 }
             }
         }
+    }
+}
+
+@Composable
+fun SelectRecipesBottomButton(
+    paddingValues: PaddingValues,
+    onAddMenuClicked: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(paddingValues),
+        contentAlignment = Alignment.BottomCenter
+    ) {
+        ExtendedFloatingActionButton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 30.dp, vertical = 8.dp),
+            backgroundColor = colorResource(id = R.color.decisionButtonColor),
+            contentColor = Color.White,
+            text = {
+                Text(
+                    text = "献立決定",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            },
+            onClick = onAddMenuClicked
+        )
     }
 }

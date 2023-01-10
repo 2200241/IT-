@@ -108,14 +108,9 @@ sealed class FavoriteCategoryTab(
 ) {
     object SelectStapleFoodTab: FavoriteCategoryTab(R.string.staple_food, 0)
     object SelectMainDishTab: FavoriteCategoryTab(R.string.main_dish, 1)
-
     object SelectSideDishTab: FavoriteCategoryTab(R.string.side_dish, 2)
-
     object SelectSoupTab: FavoriteCategoryTab(R.string.soup, 3)
-
     object SelectSweetsTab: FavoriteCategoryTab(R.string.sweets, 4)
-
     object SelectDrinkTab: FavoriteCategoryTab(R.string.drink, 5)
-
     object SelectOthersTab: FavoriteCategoryTab(R.string.others, 6)
 }
