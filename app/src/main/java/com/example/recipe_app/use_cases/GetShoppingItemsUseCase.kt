@@ -1,21 +1,20 @@
 package com.example.recipe_app.use_cases
 
-import android.util.Log
+//import com.example.recipe_app.data.ShoppingItem
 import com.example.recipe_app.data.Ingredient
-import com.example.recipe_app.data.Instruction
-import com.example.recipe_app.repositories.RecipeRepository
+import com.example.recipe_app.data.RecipeThumb
+import com.example.recipe_app.data.ShoppingItem as shoppingItem
 import com.example.recipe_app.repositories.ShoppingItemRepository
-import com.example.recipe_app.room.recipe.Recipe
-import com.example.recipe_app.room.shoppingitem.ShoppingItem
+import com.example.recipe_app.room.shoppingitem.MenuWithRecipeThumb
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetShoppingItemsUseCase @Inject constructor(private val shoppingItemRepository: ShoppingItemRepository){
 
     @Throws(InvalidGetRecipesException::class)
-    suspend fun getShoppingItem(): Flow<List<ShoppingItem>> {
+    suspend fun getShoppingItem(): Flow<List<MenuWithRecipeThumb>> {
 
-        var shoppingItemList: Flow<List<ShoppingItem>> = shoppingItemRepository.getAllShoppingItems()
+        var shoppingItemList: Flow<List<MenuWithRecipeThumb>> = shoppingItemRepository.getAllShoppingItems()
 
         shoppingItemList.collect {
             if (it.isEmpty()) {
@@ -26,17 +25,14 @@ class GetShoppingItemsUseCase @Inject constructor(private val shoppingItemReposi
     }
 
     // サンプルデータ
-    suspend fun setTestShoppingItemData(): Flow<List<ShoppingItem>> {
+    suspend fun setTestShoppingItemData(): Flow<List<MenuWithRecipeThumb>> {
         shoppingItemRepository.deleteAllShoppingItems()
-        val ingredient = ArrayList<Ingredient>()
-        ingredient.add(Ingredient("name", "quantity"))
-        val shoppingItem = ShoppingItem(
-            0,
-            ingredient[0],
-            1,
-            false
-        )
-        shoppingItemRepository.addShoppingItem(shoppingItem)
+        val recipeThumb = ArrayList<RecipeThumb>()
+        val shoppingItem = ArrayList<shoppingItem>()
+        val ingredient = Ingredient("test","test")
+        recipeThumb.add(RecipeThumb(0, ""))
+        shoppingItem.add(shoppingItem(ingredient, 0, false))
+        shoppingItemRepository.addShoppingItem(MenuWithRecipeThumb(0, recipeThumb, shoppingItem))
 
         return shoppingItemRepository.getAllShoppingItems()
     }

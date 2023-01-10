@@ -8,13 +8,13 @@ import com.google.gson.Gson
 @Entity(tableName = "Recipes")
 data class Recipe(
     @PrimaryKey val id: Int,
-    @ColumnInfo(name = "categoryId")val categoryId: Int,
-    @ColumnInfo(name = "title")val title: String,
-    @ColumnInfo(name = "image")val image: String,
-    @ColumnInfo(name = "thumb")val thumb: String,
-    @ColumnInfo(name = "serving")val serving: Int,
-    @ColumnInfo(name = "ingredients")val ingredients: List<Ingredient>,
-    @ColumnInfo(name = "instructions")val instructions: List<Instruction>
+    @ColumnInfo(name = "categoryId")val categoryId: Int = 0,
+    @ColumnInfo(name = "title")val title: String = "",
+    @ColumnInfo(name = "image")val image: String = "",
+    @ColumnInfo(name = "thumb")val thumb: String = "",
+    @ColumnInfo(name = "serving")val serving: Int = 0,
+    @ColumnInfo(name = "ingredients")val ingredients: List<Ingredient> = emptyList(),
+    @ColumnInfo(name = "instructions")val instructions: List<Instruction> = emptyList()
 )
 
 //roomに入らない型を変換

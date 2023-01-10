@@ -4,19 +4,19 @@ import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface ShoppingItemDao {
+interface MenuWithRecipeThumbDao{
     @Transaction
     @Query("SELECT * FROM ShoppingItems")
-    fun getAllShoppingItems(): Flow<List<ShoppingItem>>
+    fun getAllShoppingItems(): Flow<List<MenuWithRecipeThumb>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE) 
-    suspend fun addShoppingItem(shoppingItem: ShoppingItem)
+    suspend fun addShoppingItem(menuWithRecipeThumb: MenuWithRecipeThumb)
 
-    @Query("delete from recipes where id = :id")
+    @Query("delete from ShoppingItems where id = :id")
     suspend fun deleteShoppingItem(id: Int)
 
     @Update
-    suspend fun updateShoppingItem(shoppingItem: ShoppingItem)
+    suspend fun updateShoppingItem(menuWithRecipeThumb: MenuWithRecipeThumb)
 
     @Query("delete from ShoppingItems")
     suspend fun deleteAllShoppingItems()

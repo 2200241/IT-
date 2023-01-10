@@ -7,9 +7,9 @@ import com.example.recipe_app.R
 import com.example.recipe_app.data.Favorites
 import com.example.recipe_app.data.MenuWithoutIngredients
 import com.example.recipe_app.data.RecipeWithCategoryId
-import com.example.recipe_app.use_cases.FavoriteUseCases
-import com.example.recipe_app.use_cases.GetFavoritesUseCase
+import com.example.recipe_app.use_cases.GetShoppingItemsUseCase
 import com.example.recipe_app.use_cases.TestUseCase
+import com.example.recipe_app.use_cases.favorite_recipe.FavoriteRecipeUseCases
 import com.github.michaelbull.result.Ok
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -25,12 +25,13 @@ data class SelectFavoriteUiState(
 @HiltViewModel
 class SelectFavoriteViewModel @Inject constructor(
     private val useCase: TestUseCase,
-    private val FavoritesUseCases: FavoriteUseCases
+    private val favoriteRecipesUseCases: FavoriteRecipeUseCases,
+    private val getShoppingItemsUseCase: GetShoppingItemsUseCase
 ): ViewModel() {
 
     init{
         viewModelScope.launch {
-            FavoritesUseCases.getFavorite.setTestFavoriteData().collect{
+            getShoppingItemsUseCase.setTestShoppingItemData().collect{
                 Log.d("test", it.toString())
             }
         }
