@@ -110,7 +110,7 @@ fun SelectConditionsBottomButtons(onSearchClicked: () -> Unit) {
             contentColor = Color.White,
             text = {
                 Text(
-                    text = "クリア",
+                    text = stringResource(id = R.string.clear),
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -124,7 +124,7 @@ fun SelectConditionsBottomButtons(onSearchClicked: () -> Unit) {
             contentColor = Color.White,
             text = {
                 Text(
-                    text = "検索",
+                    text = stringResource(id = R.string.search),
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold
                 )
