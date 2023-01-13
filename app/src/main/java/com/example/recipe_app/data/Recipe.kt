@@ -13,7 +13,7 @@ data class RecipeWithCategoryId(
 )
 
 /**
- * For Recipe Details roomに追加 オフラインキャッシュ用
+ * For Recipe Details roomに追加
  */
 data class Recipe(
     val id: Int = 0,

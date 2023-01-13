@@ -7,6 +7,7 @@ import com.example.recipe_app.R
 import com.example.recipe_app.data.Favorites
 import com.example.recipe_app.data.MenuWithoutIngredients
 import com.example.recipe_app.data.RecipeWithCategoryId
+import com.example.recipe_app.repositories.ApiRepository
 import com.example.recipe_app.use_cases.GetShoppingItemsUseCase
 import com.example.recipe_app.use_cases.TestUseCase
 import com.example.recipe_app.use_cases.favorite_recipe.FavoriteRecipeUseCases
@@ -26,14 +27,16 @@ data class SelectFavoriteUiState(
 class SelectFavoriteViewModel @Inject constructor(
     private val useCase: TestUseCase,
     private val favoriteRecipesUseCases: FavoriteRecipeUseCases,
-    private val getShoppingItemsUseCase: GetShoppingItemsUseCase
+    private val getShoppingItemsUseCase: GetShoppingItemsUseCase,
+    private val apiRepository: ApiRepository
 ): ViewModel() {
 
     init{
         viewModelScope.launch {
-            getShoppingItemsUseCase.setTestShoppingItemData().collect{
-                Log.d("test", it.toString())
-            }
+//            getShoppingItemsUseCase.setTestShoppingItemData().collect{
+//                Log.d("test", it.toString())
+//            }
+            apiRepository.recipeAllData()
         }
     }
 
