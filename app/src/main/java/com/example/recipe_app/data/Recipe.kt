@@ -50,14 +50,6 @@ data class Favorites(
 )
 
 /**
- * For Favorite Lists room返却用
- **/
-//data class Favorites(
-//    val menuWithoutIngredients: List<FavoriteMenu> = emptyList(),
-//    val recipeWithCategoryIds: List<FavoriteRecipe> = emptyList()
-//)
-
-/**
  * For Menu Lists　roomに追加
  */
 data class MenuWithoutIngredients(

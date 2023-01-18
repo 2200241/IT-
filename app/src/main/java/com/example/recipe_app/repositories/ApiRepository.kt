@@ -5,7 +5,10 @@ import android.util.Log
 import com.example.recipe_app.data.Ingredient
 import com.example.recipe_app.data.Instruction
 import com.example.recipe_app.data.Recipe
+import com.example.recipe_app.data.RecipeWithCategoryId
+import com.example.recipe_app.room.favorite_menu.FavoriteMenu
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import javax.inject.Inject
@@ -13,16 +16,21 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.URL
 
-class ApiRepository @Inject constructor(application: Application) {
-
+class ApiRepository @Inject constructor() {
 
     val recipe = ArrayList<Recipe>()
-    //サンプルURL
-    private val url = "https://umayadia-apisample.azurewebsites.net/api/persons"
+    //URL（サンプル）
+    private var url = "https://umayadia-apisample.azurewebsites.net/api/persons"
     //Json格納
     var httpResult = ""
 
-    suspend fun recipeAllData() {
+    //レシピIDから検索
+    suspend fun searchRecipeId(recipeId: String){
+        url += "/$recipeId"
+        recipeData(url)
+    }
+
+    private suspend fun recipeData(url: String) {
         withContext(Dispatchers.IO) {
             val urlObj = URL(url)
 
@@ -37,6 +45,7 @@ class ApiRepository @Inject constructor(application: Application) {
 
             val obj =jsonObj.getJSONArray("data")
 
+            //レシピデータをListに格納
             for(i in 0 until obj.length()) {
 //
 //                val id = obj.getJSONObject(i).getString("id").toInt()
@@ -56,6 +65,8 @@ class ApiRepository @Inject constructor(application: Application) {
                 // 表示
                 Log.d("json", name.toString())
             }
+
+            return@withContext recipe
         }
     }
 }

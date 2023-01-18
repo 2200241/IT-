@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface FavoriteMenuDao {
-    @Transaction
+
     @Query("SELECT * FROM FavoriteMenus")
     fun getAllFavoriteMenus(): Flow<List<FavoriteMenu>>
 

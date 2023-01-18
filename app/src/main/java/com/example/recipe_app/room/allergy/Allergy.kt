@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "Allergies")
 data class Allergy(
-    @PrimaryKey val Allergy_id: Int = 0,
-    @ColumnInfo(name = "Allergy_name") val Allergy_name: String = "",
-    @ColumnInfo(name = "Allergy_check") val Allergy_check: Boolean = false
+    @PrimaryKey val id: Int = 0,
+    @ColumnInfo(name = "name") val name: String = "",
+    @ColumnInfo(name = "check") val check: Boolean = false
 )

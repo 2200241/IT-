@@ -7,16 +7,16 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.recipe_app.room.allergy.Allergy
 import com.example.recipe_app.room.allergy.AllergyDao
-import com.example.recipe_app.room.cache.Cache
-import com.example.recipe_app.room.cache.CacheDao
 import com.example.recipe_app.room.favorite_menu.*
 import com.example.recipe_app.room.favorite_recipe.FavoriteRecipe
 import com.example.recipe_app.room.favorite_recipe.FavoriteRecipeDao
+import com.example.recipe_app.room.menu.Menu
+import com.example.recipe_app.room.menu.MenuDao
 import com.example.recipe_app.room.recipe.*
-import com.example.recipe_app.room.shoppingitem.*
+import com.example.recipe_app.room.shoppinglist.*
 
-@Database(entities = [FavoriteRecipe::class, Allergy::class, Recipe::class, FavoriteMenu::class, MenuWithRecipeThumb::class, Cache::class], version = 2, exportSchema = false)
-@TypeConverters(RecipesTypeConverter::class, FavoriteMenusTypeConverter::class, MenuWithRecipeThumbTypeConverter::class)
+@Database(entities = [FavoriteRecipe::class, Allergy::class, Recipe::class, Menu::class, FavoriteMenu::class, ShoppingList::class, ShoppingItem::class], version = 1, exportSchema = false)
+@TypeConverters(RecipesTypeConverter::class, FavoriteMenusTypeConverter::class)
 
 abstract class RecipeAppDatabase: RoomDatabase() {
 
@@ -24,8 +24,10 @@ abstract class RecipeAppDatabase: RoomDatabase() {
     abstract fun allergyDao(): AllergyDao
     abstract fun recipeDao(): RecipeDao
     abstract fun favoriteMenuDao(): FavoriteMenuDao
-    abstract fun menuWithRecipeThumbDao(): MenuWithRecipeThumbDao
-    abstract fun cacheDao(): CacheDao
+    abstract fun shoppingListDao(): ShoppingListDao
+    abstract fun shoppingItemDao(): ShoppingItemDao
+    abstract fun menuDao(): MenuDao
+
 
     companion object {
         @Volatile

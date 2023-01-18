@@ -1,4 +1,4 @@
-package com.example.recipe_app.use_cases.menu
+package com.example.recipe_app.use_cases.favorite_menu
 
 import com.example.recipe_app.repositories.FavoriteMenuRepository
 import com.example.recipe_app.room.favorite_menu.FavoriteMenu

@@ -21,14 +21,14 @@ data class Recipe(
 class RecipesTypeConverter {
 
     @TypeConverter
-    fun fromIngredients(value: List<Ingredient>?) = Gson().toJson(value)
+    fun fromIngredientsList(value: List<Ingredient>?) = Gson().toJson(value)
 
     @TypeConverter
-    fun toIngredients(value: String) = Gson().fromJson(value, Array<Ingredient>::class.java).toList()
+    fun toIngredientsList(value: String) = Gson().fromJson(value, Array<Ingredient>::class.java).toList()
 
     @TypeConverter
-    fun fromInstructions(value: List<Instruction>?) = Gson().toJson(value)
+    fun fromInstructionsList(value: List<Instruction>?) = Gson().toJson(value)
 
     @TypeConverter
-    fun toInstructions(value: String) = Gson().fromJson(value, Array<Instruction>::class.java).toList()
+    fun toInstructionsList(value: String) = Gson().fromJson(value, Array<Instruction>::class.java).toList()
 }

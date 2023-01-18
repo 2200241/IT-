@@ -12,7 +12,7 @@ class FavoriteMenuRepository @Inject constructor(application: Application) {
     private val favoriteMenuDao = RecipeAppDatabase.getDatabase(application).favoriteMenuDao()
 
     //全件取得
-    fun getAllMenus() = favoriteMenuDao.getAllFavoriteMenus()
+    fun getAllFavoriteMenus() = favoriteMenuDao.getAllFavoriteMenus()
 
     //追加
     suspend fun addFavoriteMenu(favoriteMenu: FavoriteMenu) {

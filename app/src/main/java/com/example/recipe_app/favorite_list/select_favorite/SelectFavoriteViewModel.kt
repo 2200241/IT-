@@ -1,6 +1,5 @@
 package com.example.recipe_app.favorite_list.select_favorite
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.recipe_app.R
@@ -8,7 +7,9 @@ import com.example.recipe_app.data.Favorites
 import com.example.recipe_app.data.MenuWithoutIngredients
 import com.example.recipe_app.data.RecipeWithCategoryId
 import com.example.recipe_app.repositories.ApiRepository
-import com.example.recipe_app.use_cases.GetShoppingItemsUseCase
+import com.example.recipe_app.repositories.ShoppingListRepository
+import com.example.recipe_app.use_cases.shoppinglist.AddShoppingListUseCase
+import com.example.recipe_app.use_cases.shoppinglist.GetShoppingListsUseCase
 import com.example.recipe_app.use_cases.TestUseCase
 import com.example.recipe_app.use_cases.favorite_recipe.FavoriteRecipeUseCases
 import com.github.michaelbull.result.Ok
@@ -27,8 +28,11 @@ data class SelectFavoriteUiState(
 class SelectFavoriteViewModel @Inject constructor(
     private val useCase: TestUseCase,
     private val favoriteRecipesUseCases: FavoriteRecipeUseCases,
-    private val getShoppingItemsUseCase: GetShoppingItemsUseCase,
+    private val getShoppingListsUseCase: GetShoppingListsUseCase,
+    private val addShoppingListUseCase: AddShoppingListUseCase,
+    private val shoppingListRepository: ShoppingListRepository,
     private val apiRepository: ApiRepository
+
 ): ViewModel() {
 
     init{
@@ -36,7 +40,9 @@ class SelectFavoriteViewModel @Inject constructor(
 //            getShoppingItemsUseCase.setTestShoppingItemData().collect{
 //                Log.d("test", it.toString())
 //            }
-            apiRepository.recipeAllData()
+//            addShoppingListUseCase.addShoppingList(recipeThumb)
+
+
         }
     }
 

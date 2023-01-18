@@ -22,6 +22,13 @@ class AllergyRepository @Inject constructor(application: Application){
         }
     }
 
+    //追加
+    suspend fun checkAllergy(check: Boolean, id: Int) {
+        withContext(Dispatchers.IO){
+            allergyDao.checkAllergy(check, id)
+        }
+    }
+
     //指定したIDを削除
     suspend fun deleteAllergy(allergy_id: Int){
         withContext(Dispatchers.IO) {
