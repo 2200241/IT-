@@ -8,5 +8,5 @@ import androidx.room.PrimaryKey
 data class Allergy(
     @PrimaryKey val id: Int = 0,
     @ColumnInfo(name = "name") val name: String = "",
-    @ColumnInfo(name = "check") val check: Boolean = false
+    @ColumnInfo(name = "isCheck") val isCheck: Boolean = false
 )

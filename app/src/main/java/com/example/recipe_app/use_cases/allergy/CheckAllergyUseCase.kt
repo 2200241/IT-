@@ -7,8 +7,8 @@ class CheckAllergyUseCase @Inject constructor(
     private val repository: AllergyRepository
 ) {
 
-    suspend fun isCheckAllergy(check: Boolean, id: Int) {
+    suspend fun checkAllergy(id: Int, check: Boolean) {
 
-        repository.checkAllergy(check, id)
+        repository.checkAllergy(id, check)
     }
 }

@@ -6,17 +6,16 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AllergyDao {
-    @Query("SELECT * FROM allergies")
+    @Query("SELECT * FROM Allergies")
     fun getAllAllergies(): Flow<List<Allergy>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE) 
     suspend fun addAllergy(allergy: Allergy)
 
+    @Query("UPDATE Allergies SET isCheck = :isCheck WHERE id = :id")
+    suspend fun checkAllergy(id: Int, isCheck: Boolean)
 
-    @Query("UPDATE Allergies SET `check` = :check WHERE id = :id")
-    suspend fun checkAllergy(check: Boolean, id: Int)
-
-    @Query("delete from allergies where id =:id")
+    @Query("Delete from Allergies where id =:id")
     suspend fun deleteAllergy(id: Int)
 
     @Update

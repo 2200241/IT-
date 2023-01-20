@@ -29,7 +29,7 @@ class GetShoppingItemsUseCase @Inject constructor(private val shoppingItemReposi
     suspend fun setTestShoppingItemData(): Flow<List<ShoppingItem>> {
 //        shoppingListRepository.deleteAllShoppingItems()
         val ingredient = Ingredient("test", "test")
-        val shoppingItem = ShoppingItem(0, 0 ,0, ingredient, 0, false)
+        val shoppingItem = ShoppingItem(0, 0 ,0, "name","quantity", 0, false)
         shoppingItemRepository.addShoppingItem(shoppingItem)
 
         return shoppingItemRepository.getAllShoppingItems()

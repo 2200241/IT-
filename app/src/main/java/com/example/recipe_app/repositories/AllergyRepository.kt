@@ -23,9 +23,9 @@ class AllergyRepository @Inject constructor(application: Application){
     }
 
     //追加
-    suspend fun checkAllergy(check: Boolean, id: Int) {
+    suspend fun checkAllergy(id: Int, check: Boolean) {
         withContext(Dispatchers.IO){
-            allergyDao.checkAllergy(check, id)
+            allergyDao.checkAllergy(id, check)
         }
     }
 
