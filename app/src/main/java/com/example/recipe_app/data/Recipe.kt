@@ -1,37 +1,35 @@
 package com.example.recipe_app.data
 
-import com.example.recipe_app.room.favorite_recipe.FavoriteRecipe
-
 /**
 * For Favorite Recipe lists roomに追加
 */
-data class RecipeWithCategoryId(
-    val id: Int = 0,
-    val categoryId: Int = 0,
-    val title: String = "",
-    val thumb: String = "",
-)
+//data class RecipeWithCategoryId(
+//    val id: Int = 0,
+//    val categoryId: Int = 0,
+//    val title: String = "",
+//    val thumb: String = "",
+//)
 
 /**
  * For Recipe Details roomに追加
  */
-data class Recipe(
-    val id: Int = 0,
-    val categoryId: Int = 0,
-    val title: String = "",
-    val image: String = "",
-    val serving: Int = 0,
-    val ingredients:List<Ingredient> = emptyList(),
-    val instructions: List<Instruction> = emptyList()
-)
+//data class Recipe(
+//    val id: Int = 0,
+//    val categoryId: Int = 0,
+//    val title: String = "",
+//    val image: String = "",
+//    val servings: Int = 0,
+//    val ingredients:List<Ingredient> = emptyList(),
+//    val instructions: List<Instruction> = emptyList()
+//)
 
 /**
  * RecipeDetail property
  */
-data class Ingredient(
-    val name: String = "",
-    val quantity: String = ""
-)
+//data class Ingredient(
+//    val name: String = "",
+//    val quantity: String = ""
+//)
 
 /**
  * RecipeDetail property　
@@ -44,10 +42,10 @@ data class Instruction(
 /**
  * For Favorite Lists
 **/
-data class Favorites(
-    val menuWithoutIngredients: List<MenuWithoutIngredients> = emptyList(),
-    val recipeWithCategoryIds: List<RecipeWithCategoryId> = emptyList()
-)
+//data class Favorites(
+//    val menuWithoutIngredients: List<MenuWithoutIngredients> = emptyList(),
+//    val recipeWithCategoryIds: List<RecipeWithCategoryId> = emptyList()
+//)
 
 /**
  * For Menu Lists　roomに追加
@@ -77,8 +75,14 @@ data class MenuWithRecipeThumbs(
 /**
  * MenuDetail property
  */
-data class ShoppingItem(
-    val ingredient: Ingredient = Ingredient(),
-    val serving: Int = 0,
-    val isChecked: Boolean = false
-)
+//data class ShoppingItem(
+//    val ingredient: Ingredient = Ingredient(),
+//    val servings: Int = 0,
+//    val isChecked: Boolean = false
+//)
+
+//data class Allergen(
+//    val id: Int = 0,
+//    val name: String = "",
+//    val isChecked: Boolean = false
+//)

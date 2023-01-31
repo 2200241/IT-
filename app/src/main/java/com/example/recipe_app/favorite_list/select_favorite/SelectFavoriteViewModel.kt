@@ -14,6 +14,7 @@ import com.example.recipe_app.use_cases.shoppinglist.AddShoppingListUseCase
 import com.example.recipe_app.use_cases.shoppinglist.GetShoppingListsUseCase
 import com.example.recipe_app.use_cases.TestUseCase
 import com.example.recipe_app.use_cases.allergy.AllergyUseCases
+import com.example.recipe_app.use_cases.favorite_menu.FavoriteMenuUseCases
 import com.example.recipe_app.use_cases.favorite_recipe.FavoriteRecipeUseCases
 import com.example.recipe_app.use_cases.shoppinglist.AddShoppingItemUseCase
 import com.example.recipe_app.use_cases.shoppinglist.ShoppingListUseCases
@@ -31,22 +32,11 @@ data class SelectFavoriteUiState(
 
 @HiltViewModel
 class SelectFavoriteViewModel @Inject constructor(
-    private val useCase: TestUseCase,
-    private val allergyUseCases: AllergyUseCases,
-    private val apiRepository: ApiRepository,
-    private val shoppingListUseCases: ShoppingListUseCases
-
+    private val favoriteRecipeUseCases: FavoriteRecipeUseCases,
+    private val favoriteMenuUseCases: FavoriteMenuUseCases,
+//    private val useCase: TestUseCase,
+//    private val shoppingListUseCases: ShoppingListUseCases
 ): ViewModel() {
-
-    init{
-        viewModelScope.launch {
-
-//            allergyUseCases.addAllergy.addAllergy(Allergy(1,"name", false))
-            allergyUseCases.getAllergy.setTestAllergyData().collect{
-                Log.d("test", it.toString())
-            }
-        }
-    }
 
     private val _uiState = MutableStateFlow(
         SelectFavoriteUiState(
@@ -57,11 +47,23 @@ class SelectFavoriteViewModel @Inject constructor(
     )
     val uiState = _uiState.asStateFlow()
 
-    val favorites = useCase.fetchFavorites().stateIn(
+    val favoriteRecipes = favoriteRecipeUseCases.getFavoriteRecipes().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
-        initialValue = Ok(Favorites())
+        initialValue = emptyList()
     )
+
+    val favoriteMenus = favoriteMenuUseCases.getFavoriteMenus().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = emptyList()
+    )
+
+//    val favorites = useCase.fetchFavorites().stateIn(
+//        scope = viewModelScope,
+//        started = SharingStarted.WhileSubscribed(5000),
+//        initialValue = Ok(Favorites())
+//    )
 
     private fun startLoading() {
         _uiState.update { it.copy(isLoading = true) }
@@ -71,27 +73,27 @@ class SelectFavoriteViewModel @Inject constructor(
         _uiState.update { it.copy(isLoading = false) }
     }
 
-    fun addFavoriteRecipe(recipeWithCategoryId: RecipeWithCategoryId) {
+    fun addFavoriteRecipe(recipe: RecipeWithCategoryId) {
         viewModelScope.launch {
-            useCase.addFavoriteRecipe(recipeWithCategoryId)
+            favoriteRecipeUseCases.addFavoriteRecipe(recipe)
         }
     }
 
-    fun addFavoriteMenu(menuWithoutIngredients: MenuWithoutIngredients) {
+    fun addFavoriteMenu(menu: MenuWithoutIngredients) {
         viewModelScope.launch {
-            useCase.addFavoriteMenu(menuWithoutIngredients)
+            favoriteMenuUseCases.addFavoriteMenu(menu)
         }
     }
 
     fun removeFavoriteRecipe(id: Int) {
         viewModelScope.launch {
-            useCase.removeFavoriteRecipe(id)
+            favoriteRecipeUseCases.deleteFavoriteRecipe(id)
         }
     }
 
     fun removeFavoriteMenu(id: Int) {
         viewModelScope.launch {
-            useCase.removeFavoriteMenu(id)
+            favoriteMenuUseCases.deleteFavoriteMenu(id)
         }
     }
 

@@ -8,6 +8,7 @@ import com.example.recipe_app.R
 import com.example.recipe_app.data.Favorites
 import com.example.recipe_app.data.RecipeWithCategoryId
 import com.example.recipe_app.data.RecipeThumb
+import com.example.recipe_app.repositories.ApiRepository
 import com.example.recipe_app.use_cases.TestUseCase
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.mapBoth
@@ -25,8 +26,9 @@ data class SelectRecipesUiState(
 
 @HiltViewModel
 class SelectRecipesViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle,
-    private val useCase: TestUseCase
+    savedStateHandle: SavedStateHandle,
+    private val useCase: TestUseCase,
+    private val apiRepository: ApiRepository
 ): ViewModel() {
 
     private val conditions = savedStateHandle.get<String>("conditions")
@@ -54,7 +56,8 @@ class SelectRecipesViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             startLoading()
-            useCase.fetchRecipes(conditions ?: "").mapBoth(
+//            useCase.fetchRecipes(conditions ?: "").mapBoth(
+            apiRepository.fetchRecipes(conditions ?: "").mapBoth(
                 success = { recipes -> _uiState.update { it.copy(recipeWithCategoryIds = recipes) }},
                 failure = { err -> _uiState.update { it.copy(message = err) } }
             )

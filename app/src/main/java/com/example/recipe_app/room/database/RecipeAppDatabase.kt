@@ -4,30 +4,20 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
-import com.example.recipe_app.room.allergy.Allergy
-import com.example.recipe_app.room.allergy.AllergyDao
-import com.example.recipe_app.room.favorite_menu.*
-import com.example.recipe_app.room.favorite_recipe.FavoriteRecipe
-import com.example.recipe_app.room.favorite_recipe.FavoriteRecipeDao
-import com.example.recipe_app.room.menu.Menu
-import com.example.recipe_app.room.menu.MenuDao
-import com.example.recipe_app.room.recipe.*
-import com.example.recipe_app.room.shoppinglist.*
+import androidx.sqlite.db.SupportSQLiteDatabase
+import com.example.recipe_app.data.*
+import com.example.recipe_app.data.dao.*
 
-@Database(entities = [FavoriteRecipe::class, Allergy::class, Recipe::class, Menu::class, FavoriteMenu::class, ShoppingList::class, ShoppingItem::class], version = 1, exportSchema = false)
-@TypeConverters(RecipesTypeConverter::class, FavoriteMenusTypeConverter::class)
+@Database(entities = [Allergen::class, Recipe::class, Menu::class, FavoriteRecipeId::class, FavoriteMenuIds::class, ShoppingItem::class], version = 1, exportSchema = false)
+//@TypeConverters(RecipesTypeConverter::class, FavoriteMenusTypeConverter::class)
 
 abstract class RecipeAppDatabase: RoomDatabase() {
 
-    abstract fun favoriteRecipeDao(): FavoriteRecipeDao
-    abstract fun allergyDao(): AllergyDao
-    abstract fun recipeDao(): RecipeDao
-    abstract fun favoriteMenuDao(): FavoriteMenuDao
-    abstract fun shoppingListDao(): ShoppingListDao
-    abstract fun shoppingItemDao(): ShoppingItemDao
+    abstract fun allergenDao(): AllergenDao
+    abstract fun recipeDetailDao(): RecipeDetailDao
     abstract fun menuDao(): MenuDao
-
+    abstract fun favoriteRecipeDao(): FavoriteRecipeDao
+    abstract fun favoriteMenuDao(): FavoriteMenuDao
 
     companion object {
         @Volatile
@@ -42,7 +32,43 @@ abstract class RecipeAppDatabase: RoomDatabase() {
                     RecipeAppDatabase::class.java,
                     "recipe_app_database"
                 )
-                    .fallbackToDestructiveMigration()
+                    .addCallback(object: RoomDatabase.Callback() {
+                        override fun onCreate(db: SupportSQLiteDatabase) {
+                            super.onCreate(db)
+
+                            val sql = "INSERT INTO 'allergens' VALUES " +
+                                    "(1, 'えび')," +
+                                    "(2, 'かに')," +
+                                    "(3, '小麦')," +
+                                    "(4, 'そば')," +
+                                    "(5, '卵')," +
+                                    "(6, '乳')," +
+                                    "(7, '落花生')," +
+                                    "(101, 'アーモンド')," +
+                                    "(102, 'あわび')," +
+                                    "(103, 'いか')," +
+                                    "(104, 'いくら')," +
+                                    "(105, 'オレンジ')," +
+                                    "(106, 'カシューナッツ')," +
+                                    "(107, 'キウイフルーツ')," +
+                                    "(108, '牛肉')," +
+                                    "(109, 'くるみ')," +
+                                    "(110, 'ごま')," +
+                                    "(111, 'さけ')," +
+                                    "(112, 'さば')," +
+                                    "(113, '大豆')," +
+                                    "(114, '鶏肉')," +
+                                    "(115, 'バナナ')," +
+                                    "(116, '豚肉')," +
+                                    "(117, 'まつたけ')," +
+                                    "(118, 'もも')," +
+                                    "(119, 'やまいも')," +
+                                    "(120, 'りんご')," +
+                                    "(121, 'ゼラチン')";
+                            db.execSQL(sql)
+                        }
+                    })
+//                    .fallbackToDestructiveMigration()
                     .build()
                 INSTANCE = instance
                 instance

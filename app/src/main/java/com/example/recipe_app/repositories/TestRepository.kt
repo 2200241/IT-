@@ -59,7 +59,7 @@ class TestRepositoryImpl @Inject constructor(): TestRepository {
                 categoryId = 1,
                 title = "title$id",
                 image = "url$id",
-                serving = (1..5).random(),
+                servings = (1..5).random(),
                 ingredients = listOf(
                     Ingredient(name = "卵", quantity = "2個"),
                     Ingredient(name = "小麦粉", quantity = "大さじ2"),
@@ -160,7 +160,7 @@ class TestRepositoryImpl @Inject constructor(): TestRepository {
                 fetchRecipeDetail(it.id).mapBoth(
                     success = { recipe ->
                         recipe.ingredients.map { ingredient ->
-                            withIngredients += ShoppingItem(ingredient, recipe.serving, false)
+                            withIngredients += ShoppingItem(ingredient, recipe.servings, false)
                         }
                     },
                     failure = {}

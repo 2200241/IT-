@@ -52,7 +52,7 @@ class MakeMenuScreenState(
         }
     }
 
-    fun showSnackBar(message: String) {
+    private fun showSnackBar(message: String) {
         coroutineScope.launch {
             scaffoldState.snackbarHostState.showSnackbar(
                 message = message,

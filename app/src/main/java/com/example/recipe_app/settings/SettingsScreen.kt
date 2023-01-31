@@ -13,8 +13,6 @@ import androidx.compose.material.CheckboxDefaults
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,11 +21,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.recipe_app.R
+import com.example.recipe_app.room.allergy.Allergy
 
 @Composable
 fun SettingsScreen(
+    state: SettingsScreenState = rememberSettingsState(),
     paddingValues: PaddingValues,
 ) {
+    val uiState = state.uiState
+    val allergens = state.allergens
+
     Column(modifier = Modifier.padding(paddingValues)) {
         Text(
             modifier = Modifier
@@ -46,31 +49,33 @@ fun SettingsScreen(
             fontWeight = FontWeight.Bold,
             color = colorResource(id = R.color.fontColor)
         )
-        Allergies()
+        Allergies(allergens, state::checkAllergen)
     }
 }
 
 @Composable
-fun Allergies() {
+fun Allergies(
+    allergens: List<Allergy> = emptyList(),
+    check: (Int, Boolean) -> Unit
+) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
         contentPadding = PaddingValues(5.dp)
     ) {
-        for (i in 1..15) {
+        for (allergen in allergens) {
             item {
-                val checkedState = remember { mutableStateOf(false) }
                 Row(
-                    modifier = Modifier.clickable { checkedState.value = !checkedState.value },
+                    modifier = Modifier.clickable { check(allergen.id, !allergen.isChecked) },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Checkbox(
                         modifier = Modifier.size(40.dp),
                         colors = CheckboxDefaults.colors(colorResource(id = R.color.selectButtonColor)),
-                        checked = checkedState.value,
-                        onCheckedChange = { checkedState.value = it }
+                        checked = allergen.isChecked,
+                        onCheckedChange = {  }
                     )
                     Text(
-                        text = "アレルギー",
+                        text = allergen.name,
                         fontSize = 16.sp,
                         color = colorResource(id = R.color.fontColor),
                     )

@@ -59,7 +59,7 @@ fun RecipeDetail(
     ) {
         LazyColumn() {
             item { CookingImage(recipe = recipe) }
-            item { RecipeDetailTitle("材料(${recipe.serving}人分)") }
+            item { RecipeDetailTitle("材料(${recipe.servings}人分)") }
             item { RecipeDetailMaterials(recipe.ingredients) }
             item { RecipeDetailTitle("作り方") }
             item { CookingProcedure(recipe.instructions) }

@@ -15,11 +15,14 @@ class SelectFavoriteState(
     val uiState: SelectFavoriteUiState
         @Composable get() = viewModel.uiState.collectAsState().value
 
-    val favorites: Favorites
-        @Composable get() = viewModel.favorites.collectAsState().value.mapBoth(
-            success = { it },
-            failure = { Favorites() }
-        )
+//    val favorites: Favorites
+//        @Composable get() = viewModel.favorites.collectAsState().value.mapBoth(
+//            success = { it },
+//            failure = { Favorites() }
+//        )
+
+    val favoriteRecipes: List<RecipeWithCategoryId>
+        @Composable get() = viewModel.favoriteRecipes.collectAsState().value
 
     fun addFavoriteRecipe(recipe: RecipeWithCategoryId) = viewModel.addFavoriteRecipe(recipe)
 
