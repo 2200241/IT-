@@ -4,6 +4,7 @@ import android.app.Application
 import com.example.recipe_app.room.database.RecipeAppDatabase
 import com.example.recipe_app.room.recipe.Recipe
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -14,7 +15,7 @@ class RecipeRepository @Inject constructor(application: Application) {
     private val recipeDao = RecipeAppDatabase.getDatabase(application).recipeDao()
 
     //全件取得
-    suspend fun getAllRecipes(): List<Recipe> = recipeDao.getAllRecipes()
+    fun getAllRecipes(): Flow<List<Recipe>> = recipeDao.getAllRecipes()
 
     //追加
     suspend fun addRecipe(recipe: Recipe) {

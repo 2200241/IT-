@@ -6,12 +6,14 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.absoluteOffset
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -31,21 +33,23 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.sharp.Search
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.composed
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.recipe_app.R
+import com.google.accompanist.flowlayout.FlowRow
+import com.google.accompanist.flowlayout.MainAxisAlignment
 
 @Composable
 fun SelectIngredients(
@@ -53,9 +57,7 @@ fun SelectIngredients(
     keywords: String,
     setKeywords: (String) -> Unit
 ) {
-    LazyColumn(
-        modifier = modifier
-    ) {
+    LazyColumn(modifier = modifier) {
         item {
             SearchTextField(
                 keywords = keywords,
@@ -65,17 +67,16 @@ fun SelectIngredients(
         item { Divider(color = Color.LightGray) }
         item {
             Text(
-                modifier = Modifier.padding(start = 20.dp, top = 20.dp, bottom = 10.dp),
+                modifier = Modifier.padding(start = 15.dp, top = 15.dp, bottom = 3.dp),
                 text = "食材一覧",
-                fontSize = 20.sp,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
                 color = colorResource(id = R.color.fontColor)
             )
         }
         item { Divider(color = Color.LightGray) }
         for (i in 1..5) {
-            item {
-                Column { CategoryTitle("カテゴリー名$i") }
-            }
+            item { CategoryTitle("カテゴリー名$i") }
             item { Divider(color = Color.LightGray) }
         }
     }
@@ -86,11 +87,11 @@ fun SearchTextField(
     keywords: String = "",
     setKeywords: (String) -> Unit
 ) {
-//    val text = remember { mutableStateOf("") }
     BasicTextField(
         modifier = Modifier.padding(15.dp),
         value = keywords,
         onValueChange = { setKeywords(it) },
+        textStyle = TextStyle.Default.copy(fontSize = 17.sp),
         singleLine = true,
         decorationBox = { innerTextField ->
             Row(
@@ -101,8 +102,8 @@ fun SearchTextField(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Icon(
-                    Icons.Sharp.Search,
-                    contentDescription = null,
+                    imageVector = Icons.Sharp.Search,
+                    contentDescription = "Search",
                     tint = Color.DarkGray
                 )
                 Spacer(Modifier.width(5.dp))
@@ -142,19 +143,17 @@ fun CategoryTitle(title: String) {
             expandedState.value = !expandedState.value
         }
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(5.dp)
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
+        Column(modifier = Modifier.fillMaxWidth()) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Text(
                     modifier = Modifier
                         .weight(6f)
                         .padding(start = 15.dp),
                     text = title,
                     fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
                     color = colorResource(id = R.color.fontColor),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -182,45 +181,45 @@ fun CategoryTitle(title: String) {
 }
 
 @Composable
-fun Modifier.rippleClickable(
-    enabled: Boolean = true,
-    onClickLabel: String? = null,
-    role: Role? = null,
-    onClick: () -> Unit
-): Modifier = composed {
-    this.clickable(
-        interactionSource = remember { MutableInteractionSource() },
-        indication = null,
-        enabled = enabled,
-        onClickLabel = onClickLabel,
-        role = role,
-        onClick = onClick
-    )
-}
-
-@Composable
 fun Ingredients() {
-    for (i in 1..5) {
-        val checkedState = remember { mutableStateOf(false) }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 15.dp, vertical = 6.dp)
-                .rippleClickable { checkedState.value = !checkedState.value },
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = "食材名$i",
-                fontSize = 20.sp,
-                color = colorResource(id = R.color.fontColor)
-            )
-            Checkbox(
-                modifier = Modifier.size(40.dp),
-                colors = CheckboxDefaults.colors(colorResource(id = R.color.selectButtonColor)),
-                checked = checkedState.value,
-                onCheckedChange = { checkedState.value = it },
-            )
+    val screenWidth = LocalConfiguration.current.screenWidthDp
+
+    FlowRow(mainAxisAlignment = MainAxisAlignment.Start) {
+        for (i in 1 .. 5) {
+            val checkedState = remember { mutableStateOf(false) }
+            Box(modifier = Modifier.width(((screenWidth / 2)).dp)) {
+                Column {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 15.dp)
+                            .clickable { checkedState.value = !checkedState.value },
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = "食材名",
+                            fontSize = 16.sp,
+                            color = colorResource(id = R.color.fontColor)
+                        )
+                        Box(modifier = Modifier.size(30.dp)) {
+                            Checkbox(
+                                modifier = Modifier
+                                    .absoluteOffset(5.dp, 0.dp)
+                                    .size(40.dp),
+                                colors = CheckboxDefaults.colors(colorResource(id = R.color.selectButtonColor)),
+                                checked = checkedState.value,
+                                onCheckedChange = { checkedState.value = it }
+                            )
+                        }
+                    }
+                    Divider(
+                        modifier = Modifier.padding(horizontal = 10.dp),
+                        color = Color.LightGray
+                    )
+                    Spacer(Modifier.height(10.dp))
+                }
+            }
         }
     }
 }

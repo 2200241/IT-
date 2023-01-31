@@ -6,14 +6,13 @@ import com.example.recipe_app.room.menu.Menu
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
-import javax.inject.Singleton
 
 class MenuRepository @Inject constructor(application: Application) {
 
     private val menuDao = RecipeAppDatabase.getDatabase(application).menuDao()
 
     //全件取得
-    suspend fun getAllMenus(): List<Menu> = menuDao.getAllMenus()
+    fun getAllMenus() = menuDao.getAllMenus()
 
     //追加
     suspend fun addMenu(menu: Menu) {
@@ -23,9 +22,9 @@ class MenuRepository @Inject constructor(application: Application) {
     }
 
     //指定したIDを削除
-    suspend fun deleteMenu(menu_id: Int){
+    suspend fun deleteMenu(id: Int){
         withContext(Dispatchers.IO) {
-            menuDao.deleteMenu(menu_id)
+            menuDao.deleteMenu(id)
         }
     }
 
