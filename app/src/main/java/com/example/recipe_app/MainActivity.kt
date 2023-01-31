@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.recipe_app.data.RecipeWithoutCategory
 import com.example.recipe_app.favorite_list.FavoriteListScreen
 import com.example.recipe_app.favorite_list.rememberFavoriteListScreenState
 import com.example.recipe_app.make_menu.MakeMenuScreen

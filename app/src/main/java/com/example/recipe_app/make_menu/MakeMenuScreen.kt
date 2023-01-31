@@ -41,6 +41,10 @@ fun MakeMenuScreen(
                 onItemClicked = { recipeId, thumb ->
                     state.navigateToRecipeDetail(recipeId, thumb, backStackEntry)
                 },
+                selectedRecipes = uiState.selectedRecipes,
+                selectRecipe = state::selectRecipe,
+                removeRecipe = state::removeRecipe,
+                addMenu = state::addMenu,
                 onBackPressed = { state.navigateBack() }
             )
         }

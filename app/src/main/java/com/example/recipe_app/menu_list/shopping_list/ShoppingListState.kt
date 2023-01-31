@@ -15,6 +15,8 @@ class ShoppingListState(
     val uiState: ShoppingListUiState
         @Composable get() = viewModel.uiState.collectAsState().value
 
+    val menuId = viewModel.menuId
+
     val menuDetail: Map<RecipeWithoutCategory, List<ShoppingItemWithIngredient>>
         @Composable get() = viewModel.menuDetail.collectAsState().value
 

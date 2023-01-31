@@ -43,10 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.recipe_app.R
-import com.example.recipe_app.data.Recipe
-import com.example.recipe_app.data.RecipeThumb
-import com.example.recipe_app.data.RecipeWithCategory
-import com.example.recipe_app.data.RecipeWithoutCategory
+import com.example.recipe_app.data.*
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
 
@@ -56,6 +53,10 @@ fun SelectRecipes(
     state: SelectRecipesState,
     paddingValues: PaddingValues,
     onItemClicked: (Int, String) -> Unit,
+    selectedRecipes: Map<Recipe, List<Ingredient>>,
+    selectRecipe: (Recipe, List<Ingredient>) -> Unit,   // Add from RecipeDetail
+    removeRecipe: (Int) -> Unit,
+    addMenu: () -> Unit,
     onBackPressed: () -> Unit
 ) {
     val uiState = state.uiState
@@ -100,12 +101,12 @@ fun SelectRecipes(
                     )
                 }
                 item {
-                    if (uiState.selectedRecipes.isNotEmpty()) {
+                    if (selectedRecipes.isNotEmpty()) {
                         SelectedRecipes(
                             true,
-                            uiState.selectedRecipes.map { RecipeWithoutCategory(it.key.id, it.key.title, it.key.image) },
+                            selectedRecipes.map { RecipeWithoutCategory(it.key.id, it.key.title, it.key.image) },
                             onItemClicked,
-                            state::removeRecipe
+                            removeRecipe
                         )
                     } else {
                         SelectedRecipesIsEmpty()
@@ -133,7 +134,7 @@ fun SelectRecipes(
 
         SelectRecipesBottomButton(
             paddingValues = paddingValues,
-            onAddMenuClicked = { state.addMenu() }
+            onAddMenuClicked = addMenu
         )
     }
 }

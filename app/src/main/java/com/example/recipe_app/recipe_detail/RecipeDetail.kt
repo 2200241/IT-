@@ -29,6 +29,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.recipe_app.R
 import com.example.recipe_app.data.Ingredient
 import com.example.recipe_app.data.Instruction
@@ -39,10 +40,12 @@ fun RecipeDetail(
     state: RecipeDetailState = rememberRecipeDetailState(),
     paddingValues: PaddingValues,
     addButtonIsDisplayed: Boolean = false,
+    addMenu: () -> Unit = {},
     onBackPressed: () -> Unit = {}
 ) {
     val uiState = state.uiState
     val recipe = uiState.recipe
+    val ingredients = uiState.ingredients
 
     if (uiState.message.isNotBlank()) {
         LaunchedEffect(state.scaffoldState?.snackbarHostState) {
@@ -60,7 +63,7 @@ fun RecipeDetail(
         LazyColumn() {
             item { CookingImage(recipe = recipe) }
             item { RecipeDetailTitle("材料(${recipe.servings}人分)") }
-            item { RecipeDetailMaterials(recipe.ingredients) }
+            item { RecipeDetailMaterials(ingredients) }
             item { RecipeDetailTitle("作り方") }
             item { CookingProcedure(recipe.instructions) }
             item { Spacer(Modifier.height(80.dp)) }
@@ -72,7 +75,7 @@ fun RecipeDetail(
         recipeId = recipe.id,
         favoriteRecipeIds = state.favoriteRecipeIds,
         addButtonIsDisplayed = addButtonIsDisplayed,
-        onAddButtonClicked = state::addToTempMenu,
+        onAddButtonClicked = addMenu,
         onLiked = state::addFavoriteRecipe,
         onUnliked = state::removeFavoriteRecipe
     )
@@ -86,14 +89,15 @@ fun CookingImage(recipe: Recipe) {
             .height(220.dp)
             .background(color = Color.LightGray)
     ) {
-        Text(
-            modifier = Modifier
-                .padding(12.dp)
-                .align(Alignment.BottomStart),
-            text = recipe.title,
-            color = Color.White,
-            fontSize = 20.sp
-        )
+//        Text(
+//            modifier = Modifier
+//                .padding(12.dp)
+//                .align(Alignment.BottomStart),
+//            text = recipe.title,
+//            color = Color.White,
+//            fontSize = 20.sp
+//        )
+        AsyncImage(model = recipe.image, contentDescription = null)
     }
 }
 
@@ -139,7 +143,7 @@ fun RecipeDetailMaterials(
 
 @Composable
 fun CookingProcedure(
-    instructions: List<Instruction>
+    instructions: List<String>
 ) {
     Column(
         modifier = Modifier
@@ -149,7 +153,7 @@ fun CookingProcedure(
     ) {
         instructions.forEach { instruction ->
             Text(
-                text = instruction.content,
+                text = instruction,
                 fontSize = 16.sp,
                 color = colorResource(id = R.color.fontColor)
             )

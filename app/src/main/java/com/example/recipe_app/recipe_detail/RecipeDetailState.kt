@@ -15,16 +15,13 @@ class RecipeDetailState(
         @Composable get() = viewModel.uiState.collectAsState().value
 
     val favoriteRecipeIds
-        @Composable get() = viewModel.favoriteRecipeIds.collectAsState().value.mapBoth(
-            success = { favorites ->  favorites.recipeWithCategoryIds.map { it.id } },
-            failure = { emptyList() }
-        )
+        @Composable get() = viewModel.favoriteRecipeIds.collectAsState().value
 
     fun addFavoriteRecipe() = viewModel.addFavoriteRecipe()
 
     fun removeFavoriteRecipe() = viewModel.removeFavoriteRecipe()
 
-    fun addToTempMenu() = viewModel.addToTempMenu()
+//    fun addToTempMenu() = viewModel.addToTempMenu()
 
     fun resetMessage() = viewModel.resetMessage()
 }

@@ -31,11 +31,11 @@ class SelectRecipesState(
 
     fun resetMessage() = viewModel.resetMessage()
 
-    fun selectRecipe(recipe: Recipe, ingredients: List<Ingredient>) = viewModel.selectRecipe(recipe, ingredients)
-
-    fun removeRecipe(id: Int) = viewModel.removeRecipe(id)
-
-    fun addMenu() = viewModel.addMenu()
+//    fun selectRecipe(recipe: Recipe, ingredients: List<Ingredient>) = viewModel.selectRecipe(recipe, ingredients)
+//
+//    fun removeRecipe(id: Int) = viewModel.removeRecipe(id)
+//
+//    fun addMenu() = viewModel.addMenu()
 
     fun addFavorite(id: Int) = viewModel.addFavorite(id)
 

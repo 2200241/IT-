@@ -1,7 +1,6 @@
 package com.example.recipe_app.menu_list
 
 import androidx.lifecycle.ViewModel
-import com.example.recipe_app.use_cases.TestUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
@@ -12,7 +11,7 @@ data class MenuListUiState(
 
 @HiltViewModel
 class MenuListViewModel @Inject constructor(
-    private val useCase: TestUseCase
+//    private val useCase: TestUseCase
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow(MenuListUiState(

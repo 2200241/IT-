@@ -80,48 +80,47 @@ fun ShoppingList(
         LazyColumn {
             item { SelectedRecipes(false, menuDetail.map { it.key }, onThumbClicked) }
             item { Divider(color = Color.LightGray) }
-/*
-            item {
-                */
+
+//            item {
 /*Text(
                     modifier = Modifier.padding(start = 15.dp, top = 15.dp),
                     text = "材料(人分)",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     color = colorResource(id = R.color.fontColor)
-                )*//*
+                )*/
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 15.dp, end = 10.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "材料(人分)",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = colorResource(id = R.color.fontColor)
-                    )
-                    TextButton(
-                        onClick = { onDismissRequest.value = true }
-                    ) {
-                        Text(
-                            text = "人数変更",
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
-            }
-*/
+//                Row(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(start = 15.dp, end = 10.dp),
+//                    horizontalArrangement = Arrangement.SpaceBetween,
+//                    verticalAlignment = Alignment.CenterVertically
+//                ) {
+//                    Text(
+//                        text = "材料(人分)",
+//                        fontSize = 18.sp,
+//                        fontWeight = FontWeight.Bold,
+//                        color = colorResource(id = R.color.fontColor)
+//                    )
+//                    TextButton(
+//                        onClick = { onDismissRequest.value = true }
+//                    ) {
+//                        Text(
+//                            text = "人数変更",
+//                            fontSize = 15.sp,
+//                            fontWeight = FontWeight.Bold
+//                        )
+//                    }
+//                }
+//            }
             item { ShoppingListMaterials(menuDetail.values.map { it }, state::checkShoppingListItem) }
             item { Spacer(Modifier.height(80.dp)) }
         }
     }
 
     ShoppingListBottomButton(
+        menuId = state.menuId,
         paddingValues = paddingValues,
         menu = menuDetail,
         favoriteMenuIds = favoriteMenuIds,
@@ -226,17 +225,20 @@ fun MyDialog(
 
 @Composable
 fun ShoppingListMaterials(
-    items: List<ShoppingItem>,
+    items: List<List<ShoppingItemWithIngredient>>,
     onChecked: (Int) -> Unit
 ) {
-    items.forEachIndexed { index, item ->
+    val itemList = emptyList<ShoppingItemWithIngredient>()
+    items.forEach { itemList.plus(it) }
+
+    itemList.forEach { item ->
 //        val checkedState = remember { mutableStateOf(false) }
         Column {
             Row(
                 modifier = Modifier
                     .padding(horizontal = 16.dp, vertical = 5.dp)
                     .fillMaxWidth()
-                    .clickable { onChecked(index) },
+                    .clickable { onChecked(item.id) },
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Checkbox(
@@ -254,12 +256,12 @@ fun ShoppingListMaterials(
                 ) {
                     Text(
                         modifier = Modifier.absoluteOffset((-8).dp, 0.dp),
-                        text = item.ingredient.name,
+                        text = item.name,
                         fontSize = 16.sp,
                         color = colorResource(id = R.color.fontColor)
                     )
                     Text(
-                        text = item.ingredient.quantity,
+                        text = "${item.quantity}/(${item.servings}人",
                         fontSize = 16.sp,
                         color = colorResource(id = R.color.fontColor)
                     )
@@ -272,8 +274,9 @@ fun ShoppingListMaterials(
 
 @Composable
 fun ShoppingListBottomButton(
+    menuId: Int,
     paddingValues: PaddingValues,
-    menu: Map.Entry<RecipeWithoutCategory, List<ShoppingItemWithIngredient>>,
+    menu: Map<RecipeWithoutCategory, List<ShoppingItemWithIngredient>>,
     favoriteMenuIds: List<Int>,
     onMenuLiked: (Int) -> Unit,
     onMenuUnLiked: (Int) -> Unit
@@ -289,15 +292,15 @@ fun ShoppingListBottomButton(
             backgroundColor = Color.White,
             contentColor = Color.LightGray,
             onClick = {
-                if (favoriteMenuIds.contains(menu.id))
-                    onMenuUnLiked(menu.id)
-                else onMenuLiked(menu)
+                if (favoriteMenuIds.contains(menuId))
+                    onMenuUnLiked(menuId)
+                else onMenuLiked(menuId)
             }
         ) {
             Icon(
                 imageVector = Icons.Sharp.Favorite,
                 contentDescription = "favorite",
-                tint = if (favoriteMenuIds.contains(menu.id))
+                tint = if (favoriteMenuIds.contains(menuId))
                     colorResource(id = R.color.favoriteIconColor)
                 else Color.LightGray
             )

@@ -3,11 +3,12 @@ package com.example.recipe_app.recipe_detail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.recipe_app.data.Favorites
-import com.example.recipe_app.data.RecipeWithCategoryId
+import com.example.recipe_app.data.Ingredient
 import com.example.recipe_app.data.Recipe
 import com.example.recipe_app.data.RecipeThumb
-import com.example.recipe_app.use_cases.TestUseCase
+import com.example.recipe_app.repositories.ApiRepository
+import com.example.recipe_app.use_cases.FavoriteRecipeUseCase
+import com.example.recipe_app.use_cases.RecipeUseCase
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.mapBoth
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,13 +19,17 @@ import javax.inject.Inject
 data class RecipeDetailUiState(
     val isLoading: Boolean = false,
     val recipe: Recipe = Recipe(),
+    val ingredients: List<Ingredient> = emptyList(),
     val message: String = ""
 )
 
 @HiltViewModel
 class RecipeDetailViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val useCase: TestUseCase
+    private val recipeUseCase: RecipeUseCase,
+    private val favoriteRecipeUseCase: FavoriteRecipeUseCase,
+    private val apiRepository: ApiRepository
+//    private val useCase: TestUseCase
 //    private val recipeId: String?,
 //    private val useCase: GetRecipeDetailUseCase = GetRecipeDetailUseCase()
 ): ViewModel() {
@@ -37,17 +42,17 @@ class RecipeDetailViewModel @Inject constructor(
     ))
     val uiState = _uiState.asStateFlow()
 
-    val favoriteRecipeIds = useCase.fetchFavorites().stateIn(
+    val favoriteRecipeIds = favoriteRecipeUseCase.getFavoriteRecipeIds().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
-        initialValue = Ok(Favorites())
+        initialValue = emptyList()
     )
 
     init {
         viewModelScope.launch {
             startLoading()
-            useCase.fetchRecipeDetail(recipeId).mapBoth(
-                success = { recipe -> _uiState.update { it.copy(recipe = recipe) } },
+            apiRepository.fetchRecipeById(recipeId).mapBoth(
+                success = { recipe -> _uiState.update { it.copy(recipe = recipe.keys.first(), ingredients = recipe.values.first()) } },
                 failure = {  }
             )
             endLoading()
@@ -64,32 +69,25 @@ class RecipeDetailViewModel @Inject constructor(
 
     fun addFavoriteRecipe() {
         viewModelScope.launch {
-            useCase.addFavoriteRecipe(
-                RecipeWithCategoryId(
-                    id = recipeId,
-                    categoryId = _uiState.value.recipe.categoryId,
-                    title = _uiState.value.recipe.title,
-                    thumb = thumb
-                )
-            )
+            favoriteRecipeUseCase.addFavoriteRecipe(recipeId)
         }
     }
 
     fun removeFavoriteRecipe() {
         viewModelScope.launch {
-            useCase.removeFavoriteRecipe(recipeId)
+            favoriteRecipeUseCase.deleteFavoriteRecipe(recipeId)
         }
     }
 
     // TODO: 二重登録防止
-    fun addToTempMenu() {
-        viewModelScope.launch {
-            useCase.addToTempMenu(RecipeThumb(id = recipeId, thumb = thumb)).mapBoth(
-                success = { setMessage(it) },
-                failure = { setMessage(it) }
-            )
-        }
-    }
+//    fun addToTempMenu() {
+//        viewModelScope.launch {
+//            useCase.addToTempMenu(RecipeThumb(id = recipeId, thumb = thumb)).mapBoth(
+//                success = { setMessage(it) },
+//                failure = { setMessage(it) }
+//            )
+//        }
+//    }
 
     fun setMessage(message: String) {
         _uiState.update { it.copy(message = message) }

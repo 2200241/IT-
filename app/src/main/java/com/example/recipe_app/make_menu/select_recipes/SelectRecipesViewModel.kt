@@ -22,7 +22,7 @@ data class SelectRecipesUiState(
     val message: String = "",
     val recipeWithCategoryIds: List<RecipeWithCategory> = emptyList(),
     val selectedTab: CategoryTab = CategoryTab.SelectStapleFoodTab,
-    val selectedRecipes: Map<Recipe, List<Ingredient>> = emptyMap()
+//    val selectedRecipes: Map<Recipe, List<Ingredient>> = emptyMap()
 )
 
 @HiltViewModel
@@ -80,45 +80,42 @@ class SelectRecipesViewModel @Inject constructor(
         _uiState.update { it.copy(message = "") }
     }
 
-    fun selectRecipe(recipe: Recipe, ingredients: List<Ingredient>) {
-//        viewModelScope.launch {
-//            useCase.addToTempMenu(recipe)
-//        }
-        _uiState.update { it.copy(selectedRecipes = it.selectedRecipes.plus(recipe to ingredients)) }
-    }
+//    fun selectRecipe(recipe: Recipe, ingredients: List<Ingredient>) {
+////        viewModelScope.launch {
+////            useCase.addToTempMenu(recipe)
+////        }
+//        _uiState.update { it.copy(selectedRecipes = it.selectedRecipes.plus(recipe to ingredients)) }
+//    }
 
-    fun removeRecipe(id: Int) {
-//        viewModelScope.launch {
-//            useCase.removeFromTempMenu(id)
-//        }
-        _uiState.update { it.copy(selectedRecipes = it.selectedRecipes.filter { entry -> entry.key.id != id }) }
-    }
+//    fun removeRecipe(id: Int) {
+////        viewModelScope.launch {
+////            useCase.removeFromTempMenu(id)
+////        }
+//        _uiState.update { it.copy(selectedRecipes = it.selectedRecipes.filter { entry -> entry.key.id != id }) }
+//    }
 
-    fun addMenu() {
-        viewModelScope.launch {
-//            useCase.addMenu().mapBoth(
-//                success = { message ->
-//                    useCase.removeAllFromTempMenu()
-//                    _uiState.update { it.copy(message = message) }
-//                          },
-//                failure = { err -> _uiState.update { it.copy(message = err) }}
+//    fun addMenu() {
+//        viewModelScope.launch {
+////            useCase.addMenu().mapBoth(
+////                success = { message ->
+////                    useCase.removeAllFromTempMenu()
+////                    _uiState.update { it.copy(message = message) }
+////                          },
+////                failure = { err -> _uiState.update { it.copy(message = err) }}
+////            )
+//
+//            val tempList = emptyList<RecipeIngredient>()
+//            _uiState.value.selectedRecipes.forEach { it.value.forEach { ingredient ->
+//                tempList.plus(RecipeIngredient(0, it.key.id, ingredient.name, ingredient.quantity))
+//            } }
+//
+//            menuUseCase.addMenu(
+//                Menu(0, _uiState.value.selectedRecipes.map { it.key.id }),
+//                _uiState.value.selectedRecipes.map { it.key },
+//                tempList
 //            )
-
-            val ingredients = _uiState.value.selectedRecipes.map { it.value.map {
-                ingredient -> RecipeIngredient(0, it.key.id, ingredient.name, ingredient.quantity)
-            } }
-            val tempList = emptyList<RecipeIngredient>().toMutableList()
-            for (i in ingredients) {
-                tempList += i
-            }
-
-            menuUseCase.addMenu(
-                Menu(0, _uiState.value.selectedRecipes.map { it.key.id }),
-                _uiState.value.selectedRecipes.map { it.key },
-                tempList
-            )
-        }
-    }
+//        }
+//    }
 
     fun addFavorite(id: Int) {
         viewModelScope.launch {

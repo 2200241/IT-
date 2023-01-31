@@ -27,7 +27,7 @@ class ShoppingListViewModel @Inject constructor(
 //    private val menuId: String?
 ): ViewModel() {
 
-    private val menuId = savedStateHandle.get<String>("menuId")?.toInt() ?: -1
+    val menuId = savedStateHandle.get<String>("menuId")?.toInt() ?: -1
 
     private val _uiState = MutableStateFlow(ShoppingListUiState(
         isLoading = false,

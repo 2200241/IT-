@@ -10,6 +10,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.recipe_app.data.Ingredient
+import com.example.recipe_app.data.Recipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -60,6 +62,12 @@ class MakeMenuScreenState(
             )
         }
     }
+
+    fun selectRecipe(recipe: Recipe, ingredients: List<Ingredient>) = viewModel.selectRecipe(recipe, ingredients)
+
+    fun removeRecipe(id: Int) = viewModel.removeRecipe(id)
+
+    fun addMenu() = viewModel.addMenu()
 
     fun navigateBack() {
         navController.navigateUp()
