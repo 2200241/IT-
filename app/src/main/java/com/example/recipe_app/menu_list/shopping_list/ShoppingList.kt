@@ -46,7 +46,9 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.recipe_app.R
 import com.example.recipe_app.data.MenuWithRecipeThumbs
+import com.example.recipe_app.data.RecipeWithoutCategory
 import com.example.recipe_app.data.ShoppingItem
+import com.example.recipe_app.data.ShoppingItemWithIngredient
 import com.example.recipe_app.make_menu.select_recipes.SelectedRecipes
 
 @Composable
@@ -56,7 +58,7 @@ fun ShoppingList(
     onThumbClicked: (Int, String) -> Unit
 ) {
     val uiState = state.uiState
-    val menu = state.menuWithRecipeThumbs
+    val menuDetail = state.menuDetail
     val favoriteMenuIds = state.favoriteMenuIds
     val onDismissRequest = remember { mutableStateOf(false) }
 
@@ -76,16 +78,19 @@ fun ShoppingList(
         )
         Divider(color = Color.LightGray)
         LazyColumn {
-            item { SelectedRecipes(false, menu.recipes, onThumbClicked) }
+            item { SelectedRecipes(false, menuDetail.map { it.key }, onThumbClicked) }
             item { Divider(color = Color.LightGray) }
+/*
             item {
-                /*Text(
+                */
+/*Text(
                     modifier = Modifier.padding(start = 15.dp, top = 15.dp),
                     text = "材料(人分)",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     color = colorResource(id = R.color.fontColor)
-                )*/
+                )*//*
+
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -110,14 +115,15 @@ fun ShoppingList(
                     }
                 }
             }
-            item { ShoppingListMaterials(menu.shoppingItems, state::checkShoppingListItem) }
+*/
+            item { ShoppingListMaterials(menuDetail.values.map { it }, state::checkShoppingListItem) }
             item { Spacer(Modifier.height(80.dp)) }
         }
     }
 
     ShoppingListBottomButton(
         paddingValues = paddingValues,
-        menu = menu,
+        menu = menuDetail,
         favoriteMenuIds = favoriteMenuIds,
         onMenuLiked = state::addFavorite,
         onMenuUnLiked = state::removeFavorite
@@ -267,9 +273,9 @@ fun ShoppingListMaterials(
 @Composable
 fun ShoppingListBottomButton(
     paddingValues: PaddingValues,
-    menu: MenuWithRecipeThumbs,
+    menu: Map.Entry<RecipeWithoutCategory, List<ShoppingItemWithIngredient>>,
     favoriteMenuIds: List<Int>,
-    onMenuLiked: (MenuWithRecipeThumbs) -> Unit,
+    onMenuLiked: (Int) -> Unit,
     onMenuUnLiked: (Int) -> Unit
 ) {
     Box(

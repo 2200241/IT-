@@ -8,7 +8,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.recipe_app.data.*
 import com.example.recipe_app.data.dao.*
 
-@Database(entities = [Allergen::class, Recipe::class, Menu::class, FavoriteRecipeId::class, FavoriteMenuIds::class, ShoppingItem::class], version = 1, exportSchema = false)
+@Database(entities = [Allergen::class, Recipe::class, Menu::class, FavoriteRecipeId::class, FavoriteMenuId::class, ShoppingItem::class], version = 1, exportSchema = false)
 //@TypeConverters(RecipesTypeConverter::class, FavoriteMenusTypeConverter::class)
 
 abstract class RecipeAppDatabase: RoomDatabase() {

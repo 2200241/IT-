@@ -5,6 +5,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.recipe_app.data.MenuWithoutIngredients
+import com.example.recipe_app.data.RecipeWithoutCategory
 import com.github.michaelbull.result.mapBoth
 
 class SelectMenuState(
@@ -13,23 +14,17 @@ class SelectMenuState(
     val uiState: SelectMenuUiState
         @Composable get() = viewModel.uiState.collectAsState().value
 
-    val menus: List<MenuWithoutIngredients>
-        @Composable get() = viewModel.menus.collectAsState().value.mapBoth(
-            success = { it },
-            failure = { emptyList() }
-        )
+    val menus: Map<Int, List<RecipeWithoutCategory>>
+        @Composable get() = viewModel.menus.collectAsState().value
 
-    val favoriteMenus: List<MenuWithoutIngredients>
-        @Composable get() = viewModel.favorites.collectAsState().value.mapBoth(
-            success = { favorites -> favorites.menuWithoutIngredients },
-            failure = { emptyList() }
-        )
+    val favoriteMenuIds: List<Int>
+        @Composable get() = viewModel.favoriteMenuIds.collectAsState().value
 
-    fun removeMenu(id: Int) = viewModel.removeMenu(id)
+    fun removeMenu(menuId: Int) = viewModel.removeMenu(menuId)
 
-    fun addFavoriteMenu(menu: MenuWithoutIngredients) = viewModel.addFavoriteMenu(menu)
+    fun addFavoriteMenu(menuId: Int) = viewModel.addFavoriteMenu(menuId)
 
-    fun removeFavoriteMenu(id: Int) = viewModel.removeFavoriteMenu(id)
+    fun removeFavoriteMenu(menuId: Int) = viewModel.removeFavoriteMenu(menuId)
 }
 
 @Composable

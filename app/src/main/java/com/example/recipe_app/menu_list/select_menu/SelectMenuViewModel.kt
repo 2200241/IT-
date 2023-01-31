@@ -2,9 +2,8 @@ package com.example.recipe_app.menu_list.select_menu
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.recipe_app.data.Favorites
-import com.example.recipe_app.data.MenuWithoutIngredients
-import com.example.recipe_app.use_cases.TestUseCase
+import com.example.recipe_app.use_cases.FavoriteMenuUseCase
+import com.example.recipe_app.use_cases.MenuUseCase
 import com.github.michaelbull.result.Ok
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -17,7 +16,9 @@ data class SelectMenuUiState(
 
 @HiltViewModel
 class SelectMenuViewModel @Inject constructor(
-    private val useCase: TestUseCase
+    private val menuUseCase: MenuUseCase,
+    private val favoriteMenuUseCase: FavoriteMenuUseCase,
+//    private val useCase: TestUseCase
 //    private val menuId: String?
 ): ViewModel() {
 
@@ -26,16 +27,16 @@ class SelectMenuViewModel @Inject constructor(
     ))
     val uiState = _uiState.asStateFlow()
 
-    val menus = useCase.fetchMenus().stateIn(
+    val menus = menuUseCase.getAllMenus().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
-        initialValue = Ok(emptyList())
+        initialValue = emptyMap()
     )
 
-    val favorites = useCase.fetchFavorites().stateIn(
+    val favoriteMenuIds = favoriteMenuUseCase.getFavoriteMenuIds().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
-        initialValue = Ok(Favorites())
+        initialValue = emptyList()
     )
 
     private fun startLoading() {
@@ -48,19 +49,19 @@ class SelectMenuViewModel @Inject constructor(
 
     fun removeMenu(id: Int) {
         viewModelScope.launch {
-            useCase.removeMenu(id)
+            menuUseCase.deleteMenu(id)
         }
     }
 
-    fun addFavoriteMenu(menuWithoutIngredients: MenuWithoutIngredients) {
+    fun addFavoriteMenu(menuId: Int) {
         viewModelScope.launch {
-            useCase.addFavoriteMenu(menuWithoutIngredients)
+            favoriteMenuUseCase.addFavoriteMenu(menuId)
         }
     }
 
-    fun removeFavoriteMenu(id: Int) {
+    fun removeFavoriteMenu(menuId: Int) {
         viewModelScope.launch {
-            useCase.removeFavoriteMenu(id)
+            favoriteMenuUseCase.deleteFavoriteMenu(menuId)
         }
     }
 }

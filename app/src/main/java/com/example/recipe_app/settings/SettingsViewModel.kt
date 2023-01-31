@@ -3,8 +3,7 @@ package com.example.recipe_app.settings
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.recipe_app.use_cases.TestUseCase
-import com.example.recipe_app.use_cases.allergy.AllergyUseCases
+import com.example.recipe_app.use_cases.AllergenUseCase
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.mapBoth
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,14 +13,14 @@ import javax.inject.Inject
 
 data class SettingsUiState(
     val isLoading: Boolean = false,
-//    val allergens: List<Allergy> = emptyList(),
+//    val allergens: List<Allergen> = emptyList(),
     val message: String = ""
 )
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val allergyUseCase: AllergyUseCases,
+    private val allergenUseCase: AllergenUseCase,
 //    private val useCase: TestUseCase
 //    private val recipeId: String?,
 //    private val useCase: GetRecipeDetailUseCase = GetRecipeDetailUseCase()
@@ -32,7 +31,7 @@ class SettingsViewModel @Inject constructor(
     ))
     val uiState = _uiState.asStateFlow()
 
-    val allergens = allergyUseCase.getAllergies().stateIn(
+    val allergens = allergenUseCase.getAllergens().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = emptyList()
@@ -48,7 +47,7 @@ class SettingsViewModel @Inject constructor(
 
     fun checkAllergen(id: Int, isChecked: Boolean) {
         viewModelScope.launch {
-            allergyUseCase.checkAllergy(id, isChecked)
+            allergenUseCase.checkAllergen(id, isChecked)
         }
     }
 

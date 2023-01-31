@@ -4,9 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.recipe_app.data.Favorites
-import com.example.recipe_app.data.MenuWithoutIngredients
-import com.example.recipe_app.data.RecipeWithCategoryId
+import com.example.recipe_app.data.*
 import com.github.michaelbull.result.mapBoth
 
 class SelectFavoriteState(
@@ -21,12 +19,16 @@ class SelectFavoriteState(
 //            failure = { Favorites() }
 //        )
 
-    val favoriteRecipes: List<RecipeWithCategoryId>
+
+    val favoriteRecipes: List<RecipeWithCategory>
         @Composable get() = viewModel.favoriteRecipes.collectAsState().value
 
-    fun addFavoriteRecipe(recipe: RecipeWithCategoryId) = viewModel.addFavoriteRecipe(recipe)
+    val favoriteMenus: Map<Int, List<RecipeWithoutCategory>>
+        @Composable get() = viewModel.favoriteMenus.collectAsState().value
 
-    fun addFavoriteMenu(menu: MenuWithoutIngredients) = viewModel.addFavoriteMenu(menu)
+    fun addFavoriteRecipe(id: Int) = viewModel.addFavoriteRecipe(id)
+
+    fun addFavoriteMenu(id: Int) = viewModel.addFavoriteMenu(id)
 
     fun removeFavoriteRecipe(id: Int) = viewModel.removeFavoriteRecipe(id)
 

@@ -18,8 +18,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.recipe_app.R
 import com.example.recipe_app.data.MenuWithoutIngredients
+import com.example.recipe_app.data.RecipeWithoutCategory
 
 @Composable
 fun SelectMenu(
@@ -45,7 +47,7 @@ fun SelectMenu(
                 state.menus.forEach { menu ->
                     MenuListItem(
                         menu = menu,
-                        favoriteMenus = state.favoriteMenus,
+                        favoriteMenuIds = state.favoriteMenuIds,
                         onMenuClicked = onItemClicked,
                         onLikeClicked = state::addFavoriteMenu,
                         onUnlikeClicked = state::removeFavoriteMenu
@@ -59,11 +61,11 @@ fun SelectMenu(
 
 @Composable
 fun MenuListItem(
-    menu: MenuWithoutIngredients,
-    favoriteMenus: List<MenuWithoutIngredients>,
+    menu: Map.Entry<Int, List<RecipeWithoutCategory>>,
+    favoriteMenuIds: List<Int>,
     onMenuClicked: (Int) -> Unit,
-    onLikeClicked: (MenuWithoutIngredients) -> Unit,
-    onUnlikeClicked: (id: Int) -> Unit
+    onLikeClicked: (Int) -> Unit,
+    onUnlikeClicked: (Int) -> Unit
 ) {
     val screenWidth = LocalConfiguration.current.screenWidthDp
 
@@ -77,18 +79,19 @@ fun MenuListItem(
             LazyRow(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { onMenuClicked(menu.id) },
+                    .clickable { onMenuClicked(menu.key) },
                 contentPadding = PaddingValues(12.dp),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                menu.recipes.forEach { recipe ->
+                menu.value.forEach { recipe ->
                     item {
                         Box(
                             modifier = Modifier
                                 .size(110.dp, 75.dp)
                                 .background(color = Color.LightGray)
                         ) {
-                            Text(text = "料理画像", color = Color.White)
+//                            Text(text = "料理画像", color = Color.White)
+                            AsyncImage(model = recipe.image, contentDescription = null)
                         }
                     }
                 }
@@ -102,10 +105,10 @@ fun MenuListItem(
                 .size(30.dp)
                 .align(alignment = Alignment.Bottom)
                 .clickable {
-                    if (favoriteMenus.contains(menu)) onUnlikeClicked(menu.id)
-                    else onLikeClicked(menu)
+                    if (favoriteMenuIds.contains(menu.key)) onUnlikeClicked(menu.key)
+                    else onLikeClicked(menu.key)
                 },
-            tint = if (favoriteMenus.contains(menu))
+            tint = if (favoriteMenuIds.contains(menu.key))
                 colorResource(id = R.color.favoriteIconColor)
             else Color.LightGray
         )

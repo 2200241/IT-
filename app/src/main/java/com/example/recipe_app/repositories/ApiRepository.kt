@@ -14,15 +14,18 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.URL
 
-class ApiRepository @Inject constructor() {
+interface ApiRepository {
+    suspend fun fetchRecipeById(recipeId: Int): Result<MutableMap<Recipe, List<Ingredient>>, String>
+    suspend fun fetchRecipes(conditions: String): Result<List<RecipeWithCategory>, String>
+}
+
+class ApiRepositoryImpl @Inject constructor(): ApiRepository {
     private val baseUrl = "http://54.166.77.47/api"
 
     //レシピIDから検索
-    suspend fun searchRecipeId(recipeId: String) {
-        recipeData("${baseUrl}/recipe/?id=$recipeId")
-    }
+    override suspend fun fetchRecipeById(recipeId: Int): Result<MutableMap<Recipe, List<Ingredient>>, String> {
+        val url = "${baseUrl}/recipe/?id=$recipeId"
 
-    private suspend fun recipeData(url: String) {
         //Json格納
         var httpResult = ""
 
@@ -71,11 +74,12 @@ class ApiRepository @Inject constructor() {
                 Log.d("json", recipe.toString())
             }
 
-            return@withContext recipe
+            return@withContext Ok(recipe)
         }
+        return Err("error")
     }
 
-    suspend fun fetchRecipes(
+    override suspend fun fetchRecipes(
         conditions: String
 //        category_id: Int?,
 //        title: String?,

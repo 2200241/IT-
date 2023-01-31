@@ -1,24 +1,13 @@
 package com.example.recipe_app.favorite_list.select_favorite
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.recipe_app.R
-import com.example.recipe_app.data.Favorites
 import com.example.recipe_app.data.MenuWithoutIngredients
-import com.example.recipe_app.data.RecipeWithCategoryId
-import com.example.recipe_app.repositories.ApiRepository
-import com.example.recipe_app.repositories.ShoppingListRepository
-import com.example.recipe_app.room.allergy.Allergy
-import com.example.recipe_app.use_cases.shoppinglist.AddShoppingListUseCase
-import com.example.recipe_app.use_cases.shoppinglist.GetShoppingListsUseCase
-import com.example.recipe_app.use_cases.TestUseCase
-import com.example.recipe_app.use_cases.allergy.AllergyUseCases
-import com.example.recipe_app.use_cases.favorite_menu.FavoriteMenuUseCases
-import com.example.recipe_app.use_cases.favorite_recipe.FavoriteRecipeUseCases
-import com.example.recipe_app.use_cases.shoppinglist.AddShoppingItemUseCase
-import com.example.recipe_app.use_cases.shoppinglist.ShoppingListUseCases
-import com.github.michaelbull.result.Ok
+import com.example.recipe_app.data.Recipe
+import com.example.recipe_app.data.RecipeIngredient
+import com.example.recipe_app.use_cases.FavoriteMenuUseCase
+import com.example.recipe_app.use_cases.FavoriteRecipeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -32,8 +21,8 @@ data class SelectFavoriteUiState(
 
 @HiltViewModel
 class SelectFavoriteViewModel @Inject constructor(
-    private val favoriteRecipeUseCases: FavoriteRecipeUseCases,
-    private val favoriteMenuUseCases: FavoriteMenuUseCases,
+    private val favoriteRecipeUseCase: FavoriteRecipeUseCase,
+    private val favoriteMenuUseCase: FavoriteMenuUseCase,
 //    private val useCase: TestUseCase,
 //    private val shoppingListUseCases: ShoppingListUseCases
 ): ViewModel() {
@@ -47,16 +36,16 @@ class SelectFavoriteViewModel @Inject constructor(
     )
     val uiState = _uiState.asStateFlow()
 
-    val favoriteRecipes = favoriteRecipeUseCases.getFavoriteRecipes().stateIn(
+    val favoriteRecipes = favoriteRecipeUseCase.getFavoriteRecipes().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = emptyList()
     )
 
-    val favoriteMenus = favoriteMenuUseCases.getFavoriteMenus().stateIn(
+    val favoriteMenus = favoriteMenuUseCase.getFavoriteMenus().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
-        initialValue = emptyList()
+        initialValue = emptyMap()
     )
 
 //    val favorites = useCase.fetchFavorites().stateIn(
@@ -73,27 +62,27 @@ class SelectFavoriteViewModel @Inject constructor(
         _uiState.update { it.copy(isLoading = false) }
     }
 
-    fun addFavoriteRecipe(recipe: RecipeWithCategoryId) {
+    fun addFavoriteRecipe(id: Int) {
         viewModelScope.launch {
-            favoriteRecipeUseCases.addFavoriteRecipe(recipe)
+            favoriteRecipeUseCase.addFavoriteRecipe(id)
         }
     }
 
-    fun addFavoriteMenu(menu: MenuWithoutIngredients) {
+    fun addFavoriteMenu(id: Int) {
         viewModelScope.launch {
-            favoriteMenuUseCases.addFavoriteMenu(menu)
+            favoriteMenuUseCase.addFavoriteMenu(id)
         }
     }
 
     fun removeFavoriteRecipe(id: Int) {
         viewModelScope.launch {
-            favoriteRecipeUseCases.deleteFavoriteRecipe(id)
+            favoriteRecipeUseCase.deleteFavoriteRecipe(id)
         }
     }
 
     fun removeFavoriteMenu(id: Int) {
         viewModelScope.launch {
-            favoriteMenuUseCases.deleteFavoriteMenu(id)
+            favoriteMenuUseCase.deleteFavoriteMenu(id)
         }
     }
 

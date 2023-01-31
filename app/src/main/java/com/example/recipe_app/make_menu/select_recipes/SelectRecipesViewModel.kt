@@ -5,11 +5,11 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.recipe_app.R
-import com.example.recipe_app.data.Favorites
-import com.example.recipe_app.data.RecipeWithCategoryId
-import com.example.recipe_app.data.RecipeThumb
+import com.example.recipe_app.data.*
 import com.example.recipe_app.repositories.ApiRepository
-import com.example.recipe_app.use_cases.TestUseCase
+import com.example.recipe_app.repositories.MenuRepository
+import com.example.recipe_app.use_cases.FavoriteRecipeUseCase
+import com.example.recipe_app.use_cases.MenuUseCase
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.mapBoth
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,15 +20,18 @@ import javax.inject.Inject
 data class SelectRecipesUiState(
     val isLoading: Boolean = false,
     val message: String = "",
-    val recipeWithCategoryIds: List<RecipeWithCategoryId> = emptyList(),
-    val selectedTab: CategoryTab = CategoryTab.SelectStapleFoodTab
+    val recipeWithCategoryIds: List<RecipeWithCategory> = emptyList(),
+    val selectedTab: CategoryTab = CategoryTab.SelectStapleFoodTab,
+    val selectedRecipes: Map<Recipe, List<Ingredient>> = emptyMap()
 )
 
 @HiltViewModel
 class SelectRecipesViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val useCase: TestUseCase,
-    private val apiRepository: ApiRepository
+//    private val useCase: TestUseCase,
+    private val apiRepository: ApiRepository,
+    private val favoriteRecipeUseCase: FavoriteRecipeUseCase,
+    private val menuUseCase: MenuUseCase
 ): ViewModel() {
 
     private val conditions = savedStateHandle.get<String>("conditions")
@@ -41,17 +44,17 @@ class SelectRecipesViewModel @Inject constructor(
     ))
     val uiState = _uiState.asStateFlow()
 
-    val favoriteRecipes = useCase.fetchFavorites().stateIn(
+    val favoriteRecipeIds = favoriteRecipeUseCase.getFavoriteRecipeIds().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
-        initialValue = Ok(Favorites())
+        initialValue = emptyList()
     )
 
-    val selectedRecipes = useCase.getTempMenu().stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = Ok(emptyList())
-    )
+//    val selectedRecipes = useCase.getTempMenu().stateIn(
+//        scope = viewModelScope,
+//        started = SharingStarted.WhileSubscribed(5000),
+//        initialValue = Ok(emptyList())
+//    )
 
     init {
         viewModelScope.launch {
@@ -77,39 +80,55 @@ class SelectRecipesViewModel @Inject constructor(
         _uiState.update { it.copy(message = "") }
     }
 
-    fun selectRecipe(recipe: RecipeThumb) {
-        viewModelScope.launch {
-            useCase.addToTempMenu(recipe)
-        }
+    fun selectRecipe(recipe: Recipe, ingredients: List<Ingredient>) {
+//        viewModelScope.launch {
+//            useCase.addToTempMenu(recipe)
+//        }
+        _uiState.update { it.copy(selectedRecipes = it.selectedRecipes.plus(recipe to ingredients)) }
     }
 
     fun removeRecipe(id: Int) {
-        viewModelScope.launch {
-            useCase.removeFromTempMenu(id)
-        }
+//        viewModelScope.launch {
+//            useCase.removeFromTempMenu(id)
+//        }
+        _uiState.update { it.copy(selectedRecipes = it.selectedRecipes.filter { entry -> entry.key.id != id }) }
     }
 
     fun addMenu() {
         viewModelScope.launch {
-            useCase.addMenu().mapBoth(
-                success = { message ->
-                    useCase.removeAllFromTempMenu()
-                    _uiState.update { it.copy(message = message) }
-                          },
-                failure = { err -> _uiState.update { it.copy(message = err) }}
+//            useCase.addMenu().mapBoth(
+//                success = { message ->
+//                    useCase.removeAllFromTempMenu()
+//                    _uiState.update { it.copy(message = message) }
+//                          },
+//                failure = { err -> _uiState.update { it.copy(message = err) }}
+//            )
+
+            val ingredients = _uiState.value.selectedRecipes.map { it.value.map {
+                ingredient -> RecipeIngredient(0, it.key.id, ingredient.name, ingredient.quantity)
+            } }
+            val tempList = emptyList<RecipeIngredient>().toMutableList()
+            for (i in ingredients) {
+                tempList += i
+            }
+
+            menuUseCase.addMenu(
+                Menu(0, _uiState.value.selectedRecipes.map { it.key.id }),
+                _uiState.value.selectedRecipes.map { it.key },
+                tempList
             )
         }
     }
 
-    fun addFavorite(recipe: RecipeWithCategoryId) {
+    fun addFavorite(id: Int) {
         viewModelScope.launch {
-            useCase.addFavoriteRecipe(recipe)
+            favoriteRecipeUseCase.addFavoriteRecipe(id)
         }
     }
 
     fun removeFavorite(id: Int) {
         viewModelScope.launch {
-            useCase.removeFavoriteRecipe(id)
+            favoriteRecipeUseCase.deleteFavoriteRecipe(id)
         }
     }
 

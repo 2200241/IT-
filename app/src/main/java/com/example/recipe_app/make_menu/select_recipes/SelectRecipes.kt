@@ -41,9 +41,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.recipe_app.R
-import com.example.recipe_app.data.RecipeWithCategoryId
+import com.example.recipe_app.data.Recipe
 import com.example.recipe_app.data.RecipeThumb
+import com.example.recipe_app.data.RecipeWithCategory
+import com.example.recipe_app.data.RecipeWithoutCategory
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
 
@@ -97,8 +100,13 @@ fun SelectRecipes(
                     )
                 }
                 item {
-                    if (state.selectedRecipes.isNotEmpty()) {
-                        SelectedRecipes(true, state.selectedRecipes, onItemClicked, state::removeRecipe)
+                    if (uiState.selectedRecipes.isNotEmpty()) {
+                        SelectedRecipes(
+                            true,
+                            uiState.selectedRecipes.map { RecipeWithoutCategory(it.key.id, it.key.title, it.key.image) },
+                            onItemClicked,
+                            state::removeRecipe
+                        )
                     } else {
                         SelectedRecipesIsEmpty()
                     }
@@ -133,7 +141,7 @@ fun SelectRecipes(
 @Composable
 fun SelectedRecipes(
     deleteButtonIsDisplayed: Boolean = false,
-    selectedRecipes: List<RecipeThumb>,
+    selectedRecipes: List<RecipeWithoutCategory>,
     onItemClicked: (Int, String) -> Unit,
     onDeleteClicked: (Int) -> Unit = {}
 ) {
@@ -147,9 +155,9 @@ fun SelectedRecipes(
                     modifier = Modifier
                         .size(110.dp, 75.dp)
                         .background(color = Color.LightGray)
-                        .clickable { onItemClicked(recipe.id, recipe.thumb) }
+                        .clickable { onItemClicked(recipe.id, recipe.image) }
                 ) {
-                    Text(text = "料理画像", color = Color.White)
+                    AsyncImage(model = recipe.image, contentDescription = null)
 
                     if (deleteButtonIsDisplayed) {
                         FloatingActionButton(
@@ -259,10 +267,10 @@ private val CategoryTabs = listOf(
 
 @Composable
 fun SearchResultRecipes(
-    recipeWithCategoryIds: List<RecipeWithCategoryId>,
+    recipeWithCategoryIds: List<RecipeWithCategory>,
     favoriteRecipeIds: List<Int>,
     onItemClicked: (Int, String) -> Unit,
-    onRecipeLiked: (RecipeWithCategoryId) -> Unit,
+    onRecipeLiked: (Int) -> Unit,
     onRecipeUnLiked: (Int) -> Unit
 ) {
     val screenWidth = LocalConfiguration.current.screenWidthDp
@@ -278,7 +286,7 @@ fun SearchResultRecipes(
                 modifier = Modifier
                     .size(((screenWidth / 2) - 10).dp, 140.dp)
                     .background(color = Color.LightGray)
-                    .clickable { onItemClicked(recipe.id, recipe.thumb) }
+                    .clickable { onItemClicked(recipe.id, recipe.image) }
             ) {
                 Column(
                     modifier = Modifier.fillMaxSize(),
@@ -294,7 +302,7 @@ fun SearchResultRecipes(
                             if (favoriteRecipeIds.contains(recipe.id)) {
                                 onRecipeUnLiked(recipe.id)
                             } else {
-                                onRecipeLiked(recipe)
+                                onRecipeLiked(recipe.id)
                             }
                         }
                     ) {

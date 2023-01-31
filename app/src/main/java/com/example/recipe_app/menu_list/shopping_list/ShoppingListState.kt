@@ -5,6 +5,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.recipe_app.data.MenuWithRecipeThumbs
+import com.example.recipe_app.data.RecipeWithoutCategory
+import com.example.recipe_app.data.ShoppingItemWithIngredient
 import com.github.michaelbull.result.mapBoth
 
 class ShoppingListState(
@@ -13,21 +15,15 @@ class ShoppingListState(
     val uiState: ShoppingListUiState
         @Composable get() = viewModel.uiState.collectAsState().value
 
-    val menuWithRecipeThumbs: MenuWithRecipeThumbs
-        @Composable get() = viewModel.menuWithRecipeThumbs.collectAsState().value.mapBoth(
-            success = { it },
-            failure = { MenuWithRecipeThumbs() }
-        )
+    val menuDetail: Map<RecipeWithoutCategory, List<ShoppingItemWithIngredient>>
+        @Composable get() = viewModel.menuDetail.collectAsState().value
 
     val favoriteMenuIds: List<Int>
-        @Composable get() = viewModel.favorites.collectAsState().value.mapBoth(
-            success = { favorites -> favorites.menuWithoutIngredients.map { it.id } },
-            failure = { emptyList() }
-        )
+        @Composable get() = viewModel.favoriteMenuIds.collectAsState().value
 
     fun checkShoppingListItem(index: Int) = viewModel.checkShoppingListItem(index)
 
-    fun addFavorite(menu: MenuWithRecipeThumbs) = viewModel.addFavorite(menu)
+    fun addFavorite(id: Int) = viewModel.addFavorite(id)
 
     fun removeFavorite(id: Int) = viewModel.removeFavorite(id)
 }

@@ -1,48 +1,55 @@
 package com.example.recipe_app.repositories
 
 import android.app.Application
+import com.example.recipe_app.data.Ingredient
+import com.example.recipe_app.data.Recipe
+import com.example.recipe_app.data.RecipeIngredient
 import com.example.recipe_app.room.database.RecipeAppDatabase
-import com.example.recipe_app.room.recipe.Recipe
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
+interface RecipeRepository {
+    fun getRecipeDetail(id: Int): Flow<Map<Recipe, List<Ingredient>>>
+    suspend fun addRecipe(recipe: Recipe, ingredients: List<RecipeIngredient>)
+    suspend fun deleteRecipe(id: Int)
+}
+
 @Singleton
-class RecipeRepository @Inject constructor(application: Application) {
+class RecipeRepositoryImpl @Inject constructor(application: Application): RecipeRepository {
 
-    private val recipeDao = RecipeAppDatabase.getDatabase(application).recipeDao()
+    private val recipeDetailDao = RecipeAppDatabase.getDatabase(application).recipeDetailDao()
 
-    //全件取得
-    fun getAllRecipes(): Flow<List<Recipe>> = recipeDao.getAllRecipes()
+    override fun getRecipeDetail(id: Int): Flow<Map<Recipe, List<Ingredient>>> = recipeDetailDao.getRecipeDetail(id)
 
     //追加
-    suspend fun addRecipe(recipe: Recipe) {
+    override suspend fun addRecipe(recipe: Recipe, ingredients: List<RecipeIngredient>) {
         withContext(Dispatchers.IO){
-            recipeDao.addRecipe(recipe)
+            recipeDetailDao.addRecipe(recipe, ingredients)
         }
     }
 
     //指定したIDを削除
-    suspend fun deleteRecipe(id: Int){
+    override suspend fun deleteRecipe(id: Int){
         withContext(Dispatchers.IO) {
-            recipeDao.deleteRecipe(id)
+            recipeDetailDao.deleteRecipe(id)
         }
     }
 
-    //更新
-    suspend fun updateFavorite(recipe: Recipe){
-        withContext(Dispatchers.IO) {
-            recipeDao.updateRecipe(recipe)
-        }
-    }
-
-    //全件削除
-    suspend fun deleteAllRecipes(){
-        withContext(Dispatchers.IO) {
-            recipeDao.deleteAllRecipes()
-        }
-    }
+//    //更新
+//    suspend fun updateFavorite(recipe: Recipe){
+//        withContext(Dispatchers.IO) {
+//            recipeDetailDao.updateRecipe(recipe)
+//        }
+//    }
+//
+//    //全件削除
+//    suspend fun deleteAllRecipes(){
+//        withContext(Dispatchers.IO) {
+//            recipeDetailDao.deleteAllRecipes()
+//        }
+//    }
 }
 

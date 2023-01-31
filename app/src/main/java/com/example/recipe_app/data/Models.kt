@@ -54,7 +54,6 @@ data class Ingredient(
     val quantity: String = ""
 )
 
-
 @Entity(
     tableName = "menus",
 //    foreignKeys = [ForeignKey(
@@ -71,11 +70,18 @@ data class Menu(
 
 @Entity(
     tableName = "shopping_items",
-    foreignKeys = [ForeignKey(
-        entity = Menu::class,
-        parentColumns = arrayOf("id"),
-        childColumns = arrayOf("menu_id")
-    )]
+    foreignKeys = [
+        ForeignKey(
+            entity = Menu::class,
+            parentColumns = arrayOf("id"),
+            childColumns = arrayOf("menu_id")
+        ),
+        ForeignKey(
+            entity = RecipeIngredient::class,
+            parentColumns = arrayOf("id"),
+            childColumns = arrayOf("recipe_ingredients_id")
+        )
+    ]
 )
 data class ShoppingItem(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
@@ -94,12 +100,32 @@ data class ShoppingItemWithIngredient(
     @ColumnInfo(name = "is_checked") val isChecked: Boolean = false
 )
 
-@Entity(tableName = "favorite_recipe_ids")
+@Entity(
+    tableName = "favorite_recipe_ids",
+    foreignKeys = [
+        ForeignKey(
+            entity = Recipe::class,
+            parentColumns = arrayOf("id"),
+            childColumns = arrayOf("recipe_id")
+        )
+    ]
+)
 data class FavoriteRecipeId(
-    @PrimaryKey val id: Int = 0
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @ColumnInfo(name = "recipe_id") @NotNull val recipeId: Int = 0
 )
 
-@Entity(tableName = "favorite_menu_ids")
-data class FavoriteMenuIds(
-    @PrimaryKey val id: Int = 0
+@Entity(
+    tableName = "favorite_menu_ids",
+    foreignKeys = [
+        ForeignKey(
+            entity = Menu::class,
+            parentColumns = arrayOf("id"),
+            childColumns = arrayOf("menu_id")
+        )
+    ]
+)
+data class FavoriteMenuId(
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @ColumnInfo(name = "menu_id") @NotNull val menuId: Int = 0
 )

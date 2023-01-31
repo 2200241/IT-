@@ -24,8 +24,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.recipe_app.R
-import com.example.recipe_app.data.RecipeWithCategoryId
+import com.example.recipe_app.data.Recipe
+import com.example.recipe_app.data.RecipeIngredient
+import com.example.recipe_app.data.RecipeWithCategory
 import com.example.recipe_app.menu_list.select_menu.MenuListItem
 
 @Composable
@@ -36,7 +39,8 @@ fun SelectFavorite(
     onMenuClicked: (Int) -> Unit
 ) {
     val uiState = state.uiState
-    val favorites = state.favorites
+    val favoriteRecipes = state.favoriteRecipes
+    val favoriteMenus = state.favoriteMenus
 
     Column(modifier = Modifier.padding(paddingValues)) {
         SelectFavoritesTabBar(
@@ -53,13 +57,13 @@ fun SelectFavorite(
                     )
 
                     LazyColumn {
-                        favorites.recipeWithCategoryIds.filter {
+                        favoriteRecipes.filter {
                             it.categoryId == uiState.selectedSubTab.index + 1
                         }.forEach { recipe ->
                             item {
                                 FavoriteRecipeListItem(
                                     recipe = recipe,
-                                    favoriteRecipes = favorites.recipeWithCategoryIds,
+                                    favoriteRecipeIds = favoriteRecipes.map { it.id },
                                     onRecipeClicked = onRecipeClicked,
                                     onLiked = state::addFavoriteRecipe,
                                     onUnliked = state::removeFavoriteRecipe
@@ -73,11 +77,11 @@ fun SelectFavorite(
             FavoriteTab.SelectMenuTab -> {
                 LazyColumn {
 //                    item { FavoriteRecipeList(state) }
-                    favorites.menuWithoutIngredients.forEach { menu ->
+                    favoriteMenus.forEach { menu ->
                         item {
                             MenuListItem(
                                 menu = menu,
-                                favoriteMenus = favorites.menuWithoutIngredients,
+                                favoriteMenuIds = favoriteMenus.map { it.key },
                                 onMenuClicked = onMenuClicked,
                                 onLikeClicked = state::addFavoriteMenu,
                                 onUnlikeClicked = state::removeFavoriteMenu
@@ -184,17 +188,17 @@ private val FavoriteCategoryTabs = listOf(
 
 @Composable
 fun FavoriteRecipeListItem(
-    recipe: RecipeWithCategoryId,
-    favoriteRecipes: List<RecipeWithCategoryId>,
+    recipe: RecipeWithCategory,
+    favoriteRecipeIds: List<Int>,
     onRecipeClicked: (Int, String) -> Unit,
-    onLiked: (RecipeWithCategoryId) -> Unit,
+    onLiked: (Int) -> Unit,
     onUnliked: (Int) -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(12.dp)
-            .clickable { onRecipeClicked(recipe.id, recipe.thumb) },
+            .clickable { onRecipeClicked(recipe.id, recipe.image) },
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Row {
@@ -203,7 +207,7 @@ fun FavoriteRecipeListItem(
                     .size(115.dp, 75.dp)
                     .background(color = Color.LightGray)
             ) {
-                Text(text = recipe.thumb, color = Color.White)
+                AsyncImage(model = recipe.image, contentDescription = null)
             }
             Text(
                 modifier = Modifier.padding(start = 10.dp),
@@ -219,10 +223,10 @@ fun FavoriteRecipeListItem(
                 .size(30.dp)
                 .align(alignment = Alignment.Bottom)
                 .clickable {
-                    if (favoriteRecipes.contains(recipe)) onUnliked(recipe.id)
-                    else onLiked(recipe)
+                    if (favoriteRecipeIds.contains(recipe.id)) onUnliked(recipe.id)
+                    else onLiked(recipe.id)
                 },
-            tint = if (favoriteRecipes.contains(recipe))
+            tint = if (favoriteRecipeIds.contains(recipe.id))
                 colorResource(id = R.color.favoriteIconColor)
             else Color.LightGray
         )

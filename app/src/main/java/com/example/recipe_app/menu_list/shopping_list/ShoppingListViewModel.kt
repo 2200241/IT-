@@ -3,10 +3,10 @@ package com.example.recipe_app.menu_list.shopping_list
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.recipe_app.data.Favorites
 import com.example.recipe_app.data.MenuWithRecipeThumbs
 import com.example.recipe_app.data.MenuWithoutIngredients
-import com.example.recipe_app.use_cases.TestUseCase
+import com.example.recipe_app.use_cases.FavoriteMenuUseCase
+import com.example.recipe_app.use_cases.MenuUseCase
 import com.github.michaelbull.result.Ok
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -21,7 +21,9 @@ data class ShoppingListUiState(
 @HiltViewModel
 class ShoppingListViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val useCase: TestUseCase
+    private val menuUseCase: MenuUseCase,
+    private val favoriteMenuUseCase: FavoriteMenuUseCase
+//    private val useCase: TestUseCase
 //    private val menuId: String?
 ): ViewModel() {
 
@@ -32,16 +34,16 @@ class ShoppingListViewModel @Inject constructor(
     ))
     val uiState = _uiState.asStateFlow()
 
-    val menuWithRecipeThumbs = useCase.fetchMenu(menuId).stateIn(
+    val menuDetail = menuUseCase.getMenuDetail(menuId).stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
-        initialValue = Ok(MenuWithRecipeThumbs())
+        initialValue = emptyMap()
     )
 
-    val favorites = useCase.fetchFavorites().stateIn(
+    val favoriteMenuIds = favoriteMenuUseCase.getFavoriteMenuIds().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
-        initialValue = Ok(Favorites())
+        initialValue = emptyList()
     )
 
     private fun startLoading() {
@@ -52,24 +54,21 @@ class ShoppingListViewModel @Inject constructor(
         _uiState.update { it.copy(isLoading = false) }
     }
 
-    fun checkShoppingListItem(index: Int) {
+    fun checkShoppingListItem(id: Int) {
         viewModelScope.launch {
-            useCase.checkShoppingListItem(menuId, index)
+            menuUseCase.checkShoppingItem(id)
         }
     }
 
-    fun addFavorite(menu: MenuWithRecipeThumbs) {
+    fun addFavorite(id: Int) {
         viewModelScope.launch {
-            useCase.addFavoriteMenu(MenuWithoutIngredients(
-                id = menu.id,
-                recipes = menu.recipes
-            ))
+            favoriteMenuUseCase.addFavoriteMenu(id)
         }
     }
 
     fun removeFavorite(id: Int) {
         viewModelScope.launch {
-            useCase.removeFavoriteMenu(id)
+            favoriteMenuUseCase.deleteFavoriteMenu(id)
         }
     }
 

@@ -1,12 +1,7 @@
 package com.example.recipe_app
 
-import com.example.recipe_app.repositories.AllergenRepository
-import com.example.recipe_app.repositories.ApiRepository
-import com.example.recipe_app.repositories.FavoriteMenuRepository
-import com.example.recipe_app.repositories.FavoriteRecipeRepository
-import com.example.recipe_app.use_cases.allergy.AllergyUseCases
-import com.example.recipe_app.use_cases.favorite_menu.FavoriteMenuUseCases
-import com.example.recipe_app.use_cases.favorite_recipe.FavoriteRecipeUseCases
+import com.example.recipe_app.repositories.*
+import com.example.recipe_app.use_cases.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,24 +12,36 @@ import dagger.hilt.components.SingletonComponent
 object Module {
 
     @Provides
-    fun provideApiRepository(): ApiRepository = ApiRepository()
-// = ApiRepositoryImpl()
+    fun provideApiRepository(): ApiRepository = ApiRepositoryImpl()
 
     @Provides
-    fun allergyRepository(application: RecipeApplication): AllergenRepository = AllergenRepository(application)
+    fun provideAllergenRepository(application: RecipeApplication): AllergenRepository = AllergenRepositoryImpl(application)
 
     @Provides
-    fun allergyUseCases(allergenRepository: AllergenRepository): AllergyUseCases = AllergyUseCases(allergenRepository)
+    fun provideAllergenUseCase(allergenRepository: AllergenRepository): AllergenUseCase = AllergenUseCaseImpl(allergenRepository)
 
     @Provides
-    fun favoriteRecipeRepository(application: RecipeApplication): FavoriteRecipeRepository = FavoriteRecipeRepository(application)
+    fun provideFavoriteRecipeRepository(application: RecipeApplication): FavoriteRecipeRepository = FavoriteRecipeRepositoryImpl(application)
 
     @Provides
-    fun favoriteRecipeUseCases(favoriteRecipeRepository: FavoriteRecipeRepository): FavoriteRecipeUseCases = FavoriteRecipeUseCases(favoriteRecipeRepository)
+    fun provideFavoriteRecipeUseCase(favoriteRecipeRepository: FavoriteRecipeRepository): FavoriteRecipeUseCase = FavoriteRecipeUseCaseImpl(favoriteRecipeRepository)
 
     @Provides
-    fun favoriteMenuRepository(application: RecipeApplication): FavoriteMenuRepository = FavoriteMenuRepository(application)
+    fun provideFavoriteMenuRepository(application: RecipeApplication): FavoriteMenuRepository = FavoriteMenuRepositoryImpl(application)
 
     @Provides
-    fun favoriteMenuUseCases(favoriteMenuRepository: FavoriteMenuRepository): FavoriteMenuUseCases = FavoriteMenuUseCases(favoriteMenuRepository)
+    fun provideFavoriteMenuUseCase(favoriteMenuRepository: FavoriteMenuRepository): FavoriteMenuUseCase = FavoriteMenuUseCaseImpl(favoriteMenuRepository)
+
+    @Provides
+    fun provideMenuRepository(application: RecipeApplication): MenuRepository = MenuRepositoryImpl(application)
+
+    @Provides
+    fun provideMenuUseCase(menuRepository: MenuRepository): MenuUseCase = MenuUseCaseImpl(menuRepository)
+
+    @Provides
+    fun provideRecipeRepository(application: RecipeApplication): RecipeRepository = RecipeRepositoryImpl(application)
+
+    @Provides
+    fun provideRecipeUseCase(recipeRepository: RecipeRepository): RecipeUseCase = RecipeUseCaseImpl(recipeRepository)
+
 }

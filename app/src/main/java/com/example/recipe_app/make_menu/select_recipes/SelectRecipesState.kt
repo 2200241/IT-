@@ -5,7 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.recipe_app.data.RecipeWithCategoryId
+import com.example.recipe_app.data.Ingredient
+import com.example.recipe_app.data.Recipe
 import com.example.recipe_app.data.RecipeThumb
 import com.github.michaelbull.result.mapBoth
 
@@ -17,28 +18,26 @@ class SelectRecipesState(
         @Composable get() = viewModel.uiState.collectAsState().value
 
     val favoriteRecipeIds: List<Int>
-        @Composable get() = viewModel.favoriteRecipes.collectAsState().value.mapBoth(
-            success = { favorites ->  favorites.recipeWithCategoryIds.map { it.id } },
-            failure = { emptyList() }
-        )
+        @Composable get() = viewModel.favoriteRecipeIds.collectAsState().value
 
-    val selectedRecipes: List<RecipeThumb>
-        @Composable get() = viewModel.selectedRecipes.collectAsState().value.mapBoth(
-            success = { it },
-            failure = { emptyList() }
-        )
+
+//    val selectedRecipes: List<RecipeThumb>
+//        @Composable get() = viewModel.selectedRecipes.collectAsState().value.mapBoth(
+//            success = { it },
+//            failure = { emptyList() }
+//        )
 
     fun onTabClicked(selectedTab: CategoryTab) = viewModel.onTabClicked(selectedTab)
 
     fun resetMessage() = viewModel.resetMessage()
 
-    fun selectRecipe(recipe: RecipeThumb) = viewModel.selectRecipe(recipe)
+    fun selectRecipe(recipe: Recipe, ingredients: List<Ingredient>) = viewModel.selectRecipe(recipe, ingredients)
 
     fun removeRecipe(id: Int) = viewModel.removeRecipe(id)
 
     fun addMenu() = viewModel.addMenu()
 
-    fun addFavorite(recipe:RecipeWithCategoryId) = viewModel.addFavorite(recipe)
+    fun addFavorite(id: Int) = viewModel.addFavorite(id)
 
     fun removeFavorite(id: Int) = viewModel.removeFavorite(id)
 
