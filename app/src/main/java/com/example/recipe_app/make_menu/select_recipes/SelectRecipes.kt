@@ -53,8 +53,8 @@ fun SelectRecipes(
     state: SelectRecipesState,
     paddingValues: PaddingValues,
     onItemClicked: (Int, String) -> Unit,
-    selectedRecipes: Map<Recipe, List<Ingredient>>,
-    selectRecipe: (Recipe, List<Ingredient>) -> Unit,   // Add from RecipeDetail
+    selectedRecipes: List<RecipeDetail>,
+    selectRecipe: (RecipeDetail) -> Unit,   // Add from RecipeDetail
     removeRecipe: (Int) -> Unit,
     addMenu: () -> Unit,
     onBackPressed: () -> Unit
@@ -104,7 +104,7 @@ fun SelectRecipes(
                     if (selectedRecipes.isNotEmpty()) {
                         SelectedRecipes(
                             true,
-                            selectedRecipes.map { RecipeWithoutCategory(it.key.id, it.key.title, it.key.image) },
+                            selectedRecipes.map { RecipeWithoutCategory(it.recipe.id, it.recipe.title, it.recipe.image) },
                             onItemClicked,
                             removeRecipe
                         )

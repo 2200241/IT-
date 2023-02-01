@@ -3,8 +3,6 @@ package com.example.recipe_app.menu_list.shopping_list
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.recipe_app.data.MenuWithRecipeThumbs
-import com.example.recipe_app.data.MenuWithoutIngredients
 import com.example.recipe_app.use_cases.FavoriteMenuUseCase
 import com.example.recipe_app.use_cases.MenuUseCase
 import com.github.michaelbull.result.Ok

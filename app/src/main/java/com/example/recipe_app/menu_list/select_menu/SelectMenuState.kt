@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.recipe_app.data.MenuWithoutIngredients
+import com.example.recipe_app.data.Menu
 import com.example.recipe_app.data.RecipeWithoutCategory
 import com.github.michaelbull.result.mapBoth
 
@@ -14,7 +14,7 @@ class SelectMenuState(
     val uiState: SelectMenuUiState
         @Composable get() = viewModel.uiState.collectAsState().value
 
-    val menus: Map<Int, List<RecipeWithoutCategory>>
+    val menus: Map<Menu, List<RecipeWithoutCategory>>
         @Composable get() = viewModel.menus.collectAsState().value
 
     val favoriteMenuIds: List<Int>

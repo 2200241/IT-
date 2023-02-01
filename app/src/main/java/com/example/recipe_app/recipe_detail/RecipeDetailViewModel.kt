@@ -3,9 +3,7 @@ package com.example.recipe_app.recipe_detail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.recipe_app.data.Ingredient
-import com.example.recipe_app.data.Recipe
-import com.example.recipe_app.data.RecipeThumb
+import com.example.recipe_app.data.RecipeBase
 import com.example.recipe_app.repositories.ApiRepository
 import com.example.recipe_app.use_cases.FavoriteRecipeUseCase
 import com.example.recipe_app.use_cases.RecipeUseCase
@@ -18,8 +16,8 @@ import javax.inject.Inject
 
 data class RecipeDetailUiState(
     val isLoading: Boolean = false,
-    val recipe: Recipe = Recipe(),
-    val ingredients: List<Ingredient> = emptyList(),
+    val recipe: RecipeBase = RecipeBase(),
+//    val ingredients: List<Ingredient> = emptyList(),
     val message: String = ""
 )
 
@@ -52,7 +50,7 @@ class RecipeDetailViewModel @Inject constructor(
         viewModelScope.launch {
             startLoading()
             apiRepository.fetchRecipeById(recipeId).mapBoth(
-                success = { recipe -> _uiState.update { it.copy(recipe = recipe.keys.first(), ingredients = recipe.values.first()) } },
+                success = { recipe -> _uiState.update { it.copy(recipe = recipe) } },
                 failure = {  }
             )
             endLoading()

@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.recipe_app.data.MenuWithRecipeThumbs
 import com.example.recipe_app.data.RecipeWithoutCategory
 import com.example.recipe_app.data.ShoppingItemWithIngredient
 import com.github.michaelbull.result.mapBoth

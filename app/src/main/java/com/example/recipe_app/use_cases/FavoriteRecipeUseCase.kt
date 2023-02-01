@@ -1,8 +1,6 @@
 package com.example.recipe_app.use_cases
 
-import com.example.recipe_app.data.Recipe
-import com.example.recipe_app.data.RecipeIngredient
-import com.example.recipe_app.data.RecipeWithCategory
+import com.example.recipe_app.data.*
 import com.example.recipe_app.repositories.ApiRepository
 import com.example.recipe_app.repositories.FavoriteRecipeRepository
 import com.github.michaelbull.result.mapBoth
@@ -25,10 +23,14 @@ class FavoriteRecipeUseCaseImpl @Inject constructor(
 
     override suspend fun addFavoriteRecipe(id: Int) {
         apiRepository.fetchRecipeById(id).mapBoth(
-            success = { it.map { entry -> favoriteRecipeRepository.addFavoriteRecipe(
-                entry.key,
-                entry.value.map { ing -> RecipeIngredient(id = 0, recipeId = entry.key.id, name = ing.name, quantity = ing.quantity) }
-            ) } },
+            success = { favoriteRecipeRepository.addFavoriteRecipe(
+//                Recipe(it.id, it.categoryId, it.title, it.image, it.servings),
+                RecipeDetail(
+                    Recipe(it.id, it.categoryId, it.title, it.image, it.servings),
+                    it.ingredients.map { ing -> RecipeIngredient(0, it.id, ing.name, ing.quantity) },
+                    it.instructions.mapIndexed { index, ins -> Instruction(0, it.id, index, ins) }
+                )
+            ) },
             failure = { }
         )
     }

@@ -21,7 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.recipe_app.R
-import com.example.recipe_app.room.allergy.Allergy
+import com.example.recipe_app.data.Allergen
 
 @Composable
 fun SettingsScreen(
@@ -55,7 +55,7 @@ fun SettingsScreen(
 
 @Composable
 fun Allergies(
-    allergens: List<Allergy> = emptyList(),
+    allergens: List<Allergen> = emptyList(),
     check: (Int, Boolean) -> Unit
 ) {
     LazyVerticalGrid(

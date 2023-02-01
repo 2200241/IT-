@@ -45,7 +45,6 @@ fun RecipeDetail(
 ) {
     val uiState = state.uiState
     val recipe = uiState.recipe
-    val ingredients = uiState.ingredients
 
     if (uiState.message.isNotBlank()) {
         LaunchedEffect(state.scaffoldState?.snackbarHostState) {
@@ -61,9 +60,9 @@ fun RecipeDetail(
         modifier = Modifier.padding(paddingValues),
     ) {
         LazyColumn() {
-            item { CookingImage(recipe = recipe) }
+            item { CookingImage(recipe = Recipe(recipe.id, recipe.categoryId, recipe.title, recipe.image, recipe.servings)) }
             item { RecipeDetailTitle("材料(${recipe.servings}人分)") }
-            item { RecipeDetailMaterials(ingredients) }
+            item { RecipeDetailMaterials(recipe.ingredients) }
             item { RecipeDetailTitle("作り方") }
             item { CookingProcedure(recipe.instructions) }
             item { Spacer(Modifier.height(80.dp)) }

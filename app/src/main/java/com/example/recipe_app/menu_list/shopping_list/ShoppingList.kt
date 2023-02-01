@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Checkbox
 import androidx.compose.material.CheckboxDefaults
 import androidx.compose.material.Divider
@@ -45,9 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.recipe_app.R
-import com.example.recipe_app.data.MenuWithRecipeThumbs
 import com.example.recipe_app.data.RecipeWithoutCategory
-import com.example.recipe_app.data.ShoppingItem
 import com.example.recipe_app.data.ShoppingItemWithIngredient
 import com.example.recipe_app.make_menu.select_recipes.SelectedRecipes
 

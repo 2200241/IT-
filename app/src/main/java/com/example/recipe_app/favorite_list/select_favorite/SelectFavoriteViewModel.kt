@@ -3,9 +3,6 @@ package com.example.recipe_app.favorite_list.select_favorite
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.recipe_app.R
-import com.example.recipe_app.data.MenuWithoutIngredients
-import com.example.recipe_app.data.Recipe
-import com.example.recipe_app.data.RecipeIngredient
 import com.example.recipe_app.use_cases.FavoriteMenuUseCase
 import com.example.recipe_app.use_cases.FavoriteRecipeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel

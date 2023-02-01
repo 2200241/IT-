@@ -24,7 +24,10 @@ object Module {
     fun provideFavoriteRecipeRepository(application: RecipeApplication): FavoriteRecipeRepository = FavoriteRecipeRepositoryImpl(application)
 
     @Provides
-    fun provideFavoriteRecipeUseCase(favoriteRecipeRepository: FavoriteRecipeRepository): FavoriteRecipeUseCase = FavoriteRecipeUseCaseImpl(favoriteRecipeRepository)
+    fun provideFavoriteRecipeUseCase(
+        favoriteRecipeRepository: FavoriteRecipeRepository,
+        apiRepository: ApiRepository
+    ): FavoriteRecipeUseCase = FavoriteRecipeUseCaseImpl(favoriteRecipeRepository, apiRepository)
 
     @Provides
     fun provideFavoriteMenuRepository(application: RecipeApplication): FavoriteMenuRepository = FavoriteMenuRepositoryImpl(application)

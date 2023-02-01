@@ -15,7 +15,8 @@ import java.io.InputStreamReader
 import java.net.URL
 
 interface ApiRepository {
-    suspend fun fetchRecipeById(recipeId: Int): Result<MutableMap<Recipe, List<Ingredient>>, String>
+//    suspend fun fetchRecipeById(recipeId: Int): Result<MutableMap<Recipe, List<Ingredient>>, String>
+    suspend fun fetchRecipeById(recipeId: Int): Result<RecipeBase, String>
     suspend fun fetchRecipes(conditions: String): Result<List<RecipeWithCategory>, String>
 }
 
@@ -23,13 +24,14 @@ class ApiRepositoryImpl @Inject constructor(): ApiRepository {
     private val baseUrl = "http://54.166.77.47/api"
 
     //レシピIDから検索
-    override suspend fun fetchRecipeById(recipeId: Int): Result<MutableMap<Recipe, List<Ingredient>>, String> {
+    override suspend fun fetchRecipeById(recipeId: Int): Result<RecipeBase, String> {
         val url = "${baseUrl}/recipe/?id=$recipeId"
 
         //Json格納
         var httpResult = ""
 
-        val recipe: MutableMap<Recipe, List<Ingredient>> = mutableMapOf()
+//        val recipe: MutableMap<Recipe, List<Ingredient>> = mutableMapOf()
+        var recipe: RecipeBase = RecipeBase()
 
         withContext(Dispatchers.IO) {
             val urlObj = URL(url)
@@ -68,10 +70,12 @@ class ApiRepositoryImpl @Inject constructor(): ApiRepository {
                     instructions.add(content)
                 }
 
-                recipe[Recipe(id, categoryId, title, image, servings, instructions)] = ingredients
+//                recipe[Recipe(id, categoryId, title, image, servings, instructions)] = ingredients
+
+                recipe = RecipeBase(id, categoryId, title, image, servings, ingredients, instructions)
 
                 // 表示
-                Log.d("json", recipe.toString())
+//                Log.d("json", recipe.toString())
             }
 
             return@withContext Ok(recipe)

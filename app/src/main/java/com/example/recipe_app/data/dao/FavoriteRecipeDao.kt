@@ -1,10 +1,7 @@
 package com.example.recipe_app.data.dao
 
 import androidx.room.*
-import com.example.recipe_app.data.FavoriteRecipeId
-import com.example.recipe_app.data.Recipe
-import com.example.recipe_app.data.RecipeIngredient
-import com.example.recipe_app.data.RecipeWithCategory
+import com.example.recipe_app.data.*
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -17,7 +14,7 @@ interface FavoriteRecipeDao {
     fun getFavoriteRecipeIds(): Flow<List<Int>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun addFavoriteRecipe(recipeId: FavoriteRecipeId, recipe: Recipe, ingredients: List<RecipeIngredient>)
+    suspend fun addFavoriteRecipe(recipeId: FavoriteRecipeId, recipe: Recipe, ingredients: List<RecipeIngredient>, instructions: List<Instruction>)
 
     @Query("delete from favorite_recipe_ids where recipe_id = :recipeId")
     suspend fun deleteFavoriteRecipe(recipeId: Int)

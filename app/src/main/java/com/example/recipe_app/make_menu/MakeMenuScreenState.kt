@@ -12,6 +12,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.recipe_app.data.Ingredient
 import com.example.recipe_app.data.Recipe
+import com.example.recipe_app.data.RecipeDetail
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -63,7 +64,7 @@ class MakeMenuScreenState(
         }
     }
 
-    fun selectRecipe(recipe: Recipe, ingredients: List<Ingredient>) = viewModel.selectRecipe(recipe, ingredients)
+    fun selectRecipe(recipeDetail: RecipeDetail) = viewModel.selectRecipe(recipeDetail)
 
     fun removeRecipe(id: Int) = viewModel.removeRecipe(id)
 

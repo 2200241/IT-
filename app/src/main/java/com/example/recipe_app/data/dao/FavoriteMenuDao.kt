@@ -8,10 +8,10 @@ import kotlinx.coroutines.flow.Flow
 interface FavoriteMenuDao {
 
     @Query("SELECT menus.id, recipes.id, recipes.title, recipes.image FROM menus " +
-            "JOIN recipes ON recipes.id IN (SELECT menus.recipe_ids FROM menus) " +
+            "JOIN recipes ON recipes.id IN (SELECT menu_recipes.recipe_id FROM menu_recipes WHERE menu_recipes.menu_id = menus.id) " +
             "WHERE menus.id IN (SELECT menu_id FROM favorite_menu_ids)"
     )
-    fun getAllFavoriteMenus(): Flow<Map<Int, List<RecipeWithoutCategory>>>
+    fun getAllFavoriteMenus(): Flow<Map<Menu, List<RecipeWithoutCategory>>>
 
     @Query("SELECT favorite_menu_ids.menu_id FROM favorite_menu_ids")
     fun getFavoriteMenuIds(): Flow<List<Int>>

@@ -5,10 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.recipe_app.data.Ingredient
-import com.example.recipe_app.data.Recipe
-import com.example.recipe_app.data.RecipeThumb
-import com.github.michaelbull.result.mapBoth
 
 class SelectRecipesState(
     private val viewModel: SelectRecipesViewModel,

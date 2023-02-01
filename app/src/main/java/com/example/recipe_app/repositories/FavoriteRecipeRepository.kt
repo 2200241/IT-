@@ -1,10 +1,7 @@
 package com.example.recipe_app.repositories
 
 import android.app.Application
-import com.example.recipe_app.data.FavoriteRecipeId
-import com.example.recipe_app.data.Recipe
-import com.example.recipe_app.data.RecipeIngredient
-import com.example.recipe_app.data.RecipeWithCategory
+import com.example.recipe_app.data.*
 import com.example.recipe_app.room.database.RecipeAppDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -14,7 +11,7 @@ import javax.inject.Inject
 interface FavoriteRecipeRepository {
     fun getAllFavoriteRecipes(): Flow<List<RecipeWithCategory>>
     fun getFavoriteRecipeIds(): Flow<List<Int>>
-    suspend fun addFavoriteRecipe(recipe: Recipe, ingredients: List<RecipeIngredient>)
+    suspend fun addFavoriteRecipe(recipeDetail: RecipeDetail)
     suspend fun deleteFavoriteRecipe(recipeId: Int)
 }
 
@@ -28,9 +25,20 @@ class FavoriteRecipeRepositoryImpl @Inject constructor(application: Application)
     override fun getFavoriteRecipeIds() = favoriteRecipeDao.getFavoriteRecipeIds()
 
     //追加
-    override suspend fun addFavoriteRecipe(recipe: Recipe, ingredients: List<RecipeIngredient>) {
+    override suspend fun addFavoriteRecipe(recipeDetail: RecipeDetail) {
+        val ingredients = emptyList<RecipeIngredient>()
+        val instruction = emptyList<Instruction>()
+
+        recipeDetail.ingredients.forEach { ingredients.plus(it) }
+        recipeDetail.instructions.forEach { instruction.plus(it) }
+
         withContext(Dispatchers.IO){
-            favoriteRecipeDao.addFavoriteRecipe(FavoriteRecipeId(0, recipe.id), recipe, ingredients)
+            favoriteRecipeDao.addFavoriteRecipe(
+                FavoriteRecipeId(0, recipeDetail.recipe.id),
+                recipeDetail.recipe,
+                ingredients,
+                instruction
+            )
         }
     }
 

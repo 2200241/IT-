@@ -1,9 +1,7 @@
 package com.example.recipe_app.repositories
 
 import android.app.Application
-import com.example.recipe_app.data.Ingredient
-import com.example.recipe_app.data.Recipe
-import com.example.recipe_app.data.RecipeIngredient
+import com.example.recipe_app.data.*
 import com.example.recipe_app.room.database.RecipeAppDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -12,8 +10,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 interface RecipeRepository {
-    fun getRecipeDetail(id: Int): Flow<Map<Recipe, List<Ingredient>>>
-    suspend fun addRecipe(recipe: Recipe, ingredients: List<RecipeIngredient>)
+    suspend fun getRecipeDetail(id: Int): Flow<Map<Recipe, List<RecipeIngredient>>>
+    suspend fun addRecipe(recipe: Recipe, ingredients: List<RecipeIngredient>, instructions: List<Instruction>)
     suspend fun deleteRecipe(id: Int)
 }
 
@@ -22,12 +20,12 @@ class RecipeRepositoryImpl @Inject constructor(application: Application): Recipe
 
     private val recipeDetailDao = RecipeAppDatabase.getDatabase(application).recipeDetailDao()
 
-    override fun getRecipeDetail(id: Int): Flow<Map<Recipe, List<Ingredient>>> = recipeDetailDao.getRecipeDetail(id)
+    override suspend fun getRecipeDetail(id: Int): Flow<Map<Recipe, List<RecipeIngredient>>> = recipeDetailDao.getRecipeDetail(id)
 
     //追加
-    override suspend fun addRecipe(recipe: Recipe, ingredients: List<RecipeIngredient>) {
+    override suspend fun addRecipe(recipe: Recipe, ingredients: List<RecipeIngredient>, instructions: List<Instruction>) {
         withContext(Dispatchers.IO){
-            recipeDetailDao.addRecipe(recipe, ingredients)
+            recipeDetailDao.addRecipe(recipe, ingredients, instructions)
         }
     }
 

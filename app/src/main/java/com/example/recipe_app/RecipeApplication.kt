@@ -5,7 +5,7 @@ import com.example.recipe_app.repositories.FavoriteRecipeRepository
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
-class RecipeApplication(): Application() {
+class RecipeApplication: Application() {
 //    override fun onCreate() {
 //        super.onCreate()
 //

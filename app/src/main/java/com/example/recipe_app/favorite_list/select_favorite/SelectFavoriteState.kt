@@ -23,7 +23,7 @@ class SelectFavoriteState(
     val favoriteRecipes: List<RecipeWithCategory>
         @Composable get() = viewModel.favoriteRecipes.collectAsState().value
 
-    val favoriteMenus: Map<Int, List<RecipeWithoutCategory>>
+    val favoriteMenus: Map<Menu, List<RecipeWithoutCategory>>
         @Composable get() = viewModel.favoriteMenus.collectAsState().value
 
     fun addFavoriteRecipe(id: Int) = viewModel.addFavoriteRecipe(id)

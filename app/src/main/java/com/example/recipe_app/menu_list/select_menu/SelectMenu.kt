@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.recipe_app.R
-import com.example.recipe_app.data.MenuWithoutIngredients
+import com.example.recipe_app.data.Menu
 import com.example.recipe_app.data.RecipeWithoutCategory
 
 @Composable
@@ -61,7 +61,7 @@ fun SelectMenu(
 
 @Composable
 fun MenuListItem(
-    menu: Map.Entry<Int, List<RecipeWithoutCategory>>,
+    menu: Map.Entry<Menu, List<RecipeWithoutCategory>>,
     favoriteMenuIds: List<Int>,
     onMenuClicked: (Int) -> Unit,
     onLikeClicked: (Int) -> Unit,
@@ -79,7 +79,7 @@ fun MenuListItem(
             LazyRow(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { onMenuClicked(menu.key) },
+                    .clickable { onMenuClicked(menu.key.id) },
                 contentPadding = PaddingValues(12.dp),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
@@ -105,10 +105,10 @@ fun MenuListItem(
                 .size(30.dp)
                 .align(alignment = Alignment.Bottom)
                 .clickable {
-                    if (favoriteMenuIds.contains(menu.key)) onUnlikeClicked(menu.key)
-                    else onLikeClicked(menu.key)
+                    if (favoriteMenuIds.contains(menu.key.id)) onUnlikeClicked(menu.key.id)
+                    else onLikeClicked(menu.key.id)
                 },
-            tint = if (favoriteMenuIds.contains(menu.key))
+            tint = if (favoriteMenuIds.contains(menu.key.id))
                 colorResource(id = R.color.favoriteIconColor)
             else Color.LightGray
         )

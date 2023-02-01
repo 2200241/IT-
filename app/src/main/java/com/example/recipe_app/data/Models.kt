@@ -10,6 +10,17 @@ data class Allergen(
     @ColumnInfo(name = "is_checked") val isChecked: Boolean = false
 )
 
+data class RecipeBase(
+    val id: Int = 0,
+    val categoryId: Int = 0,
+    val title: String = "",
+    val image: String = "",
+//    val thumb: String = "",
+    val servings: Int = 0,
+    val ingredients: List<Ingredient> = emptyList(),
+    val instructions: List<String> = emptyList()
+)
+
 @Entity(tableName = "recipes")
 data class Recipe(
     @PrimaryKey val id: Int = 0,
@@ -18,8 +29,40 @@ data class Recipe(
     val image: String = "",
 //    val thumb: String = "",
     val servings: Int = 0,
-    val instructions: List<String> = emptyList()
+//    val instructions: List<String> = emptyList()
 )
+
+@Entity(
+    tableName = "instructions",
+    foreignKeys = [
+        ForeignKey(
+            entity = Recipe::class,
+            parentColumns = arrayOf("id"),
+            childColumns = arrayOf("recipe_id")
+        )
+    ]
+)
+data class Instruction(
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @ColumnInfo(name = "recipe_id", index = true) val recipeId: Int = 0,
+    val order: Int = 0,
+    val content: String = ""
+)
+
+data class RecipeDetail(
+    @Embedded val recipe: Recipe = Recipe(),
+    @Relation(
+        parentColumn = "id",
+        entityColumn = "recipe_id"
+    )
+    val ingredients: List<RecipeIngredient> = emptyList(),
+    @Relation(
+        parentColumn = "id",
+        entityColumn = "recipe_id"
+    )
+    val instructions: List<Instruction> = emptyList()
+)
+
 
 data class RecipeWithCategory(
     val id: Int = 0,
@@ -44,7 +87,7 @@ data class RecipeWithoutCategory(
 )
 data class RecipeIngredient(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    @ColumnInfo(name = "recipe_id") @NotNull val recipeId: Int = 0,
+    @ColumnInfo(name = "recipe_id", index = true) val recipeId: Int = 0,
     val name: String = "",
     val quantity: String = ""
 )
@@ -54,19 +97,31 @@ data class Ingredient(
     val quantity: String = ""
 )
 
-@Entity(
-    tableName = "menus",
-//    foreignKeys = [ForeignKey(
-//        entity = Recipe::class,
-//        parentColumns = arrayOf("id"),
-//        childColumns = arrayOf("recipe_ids")
-//    )]
-)
+@Entity(tableName = "menus")
 data class Menu(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    @ColumnInfo(name = "recipe_ids") val recipeIds: List<Int> = emptyList(),
+    @PrimaryKey(autoGenerate = true) val id: Int = 0
 )
-// MenuWithRecipes: Map<Int, List<RecipeWithCategory>>
+
+@Entity(
+    tableName = "menu_recipes",
+    foreignKeys = [
+        ForeignKey(
+            entity = Menu::class,
+            parentColumns = arrayOf("id"),
+            childColumns = arrayOf("menu_id")
+        ),
+        ForeignKey(
+            entity = Recipe::class,
+            parentColumns = arrayOf("id"),
+            childColumns = arrayOf("recipe_id")
+        )
+    ]
+)
+data class MenuRecipe(
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @ColumnInfo(name = "menu_id", index = true) val menuId: Int = 0,
+    @ColumnInfo(name = "recipe_id", index = true) val recipeId: Int = 0
+)
 
 @Entity(
     tableName = "shopping_items",
@@ -79,18 +134,17 @@ data class Menu(
         ForeignKey(
             entity = RecipeIngredient::class,
             parentColumns = arrayOf("id"),
-            childColumns = arrayOf("recipe_ingredients_id")
+            childColumns = arrayOf("recipe_ingredient_id")
         )
     ]
 )
 data class ShoppingItem(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    @ColumnInfo(name = "menu_id")  @NotNull val menuId: Int = 0,
-    @ColumnInfo(name = "recipe_ingredient_id") @NotNull val recipeIngredientId: Int = 0,
+    @ColumnInfo(name = "menu_id", index = true) val menuId: Int = 0,
+    @ColumnInfo(name = "recipe_ingredient_id", index = true) val recipeIngredientId: Int = 0,
 //    val servings: Int = 0,
     @ColumnInfo(name = "is_checked") val isChecked: Boolean = false
 )
-// MenuWithShoppingItems: Map<Menu, List<ShoppingItem>>
 
 data class ShoppingItemWithIngredient(
     val id: Int = 0,
@@ -112,7 +166,7 @@ data class ShoppingItemWithIngredient(
 )
 data class FavoriteRecipeId(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    @ColumnInfo(name = "recipe_id") @NotNull val recipeId: Int = 0
+    @ColumnInfo(name = "recipe_id", index = true) val recipeId: Int = 0
 )
 
 @Entity(
@@ -127,5 +181,5 @@ data class FavoriteRecipeId(
 )
 data class FavoriteMenuId(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    @ColumnInfo(name = "menu_id") @NotNull val menuId: Int = 0
+    @ColumnInfo(name = "menu_id", index = true) val menuId: Int = 0
 )

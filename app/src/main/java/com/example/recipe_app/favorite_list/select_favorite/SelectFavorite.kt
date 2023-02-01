@@ -81,7 +81,7 @@ fun SelectFavorite(
                         item {
                             MenuListItem(
                                 menu = menu,
-                                favoriteMenuIds = favoriteMenus.map { it.key },
+                                favoriteMenuIds = favoriteMenus.map { it.key.id },
                                 onMenuClicked = onMenuClicked,
                                 onLikeClicked = state::addFavoriteMenu,
                                 onUnlikeClicked = state::removeFavoriteMenu

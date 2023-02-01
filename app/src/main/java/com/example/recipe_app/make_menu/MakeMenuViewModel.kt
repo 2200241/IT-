@@ -2,10 +2,7 @@ package com.example.recipe_app.make_menu
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.recipe_app.data.Ingredient
-import com.example.recipe_app.data.Menu
-import com.example.recipe_app.data.Recipe
-import com.example.recipe_app.data.RecipeIngredient
+import com.example.recipe_app.data.*
 import com.example.recipe_app.use_cases.MenuUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +14,7 @@ import javax.inject.Inject
 data class MakeMenuUiState(
     val isLoading: Boolean = false,
     val error: String = "",
-    val selectedRecipes: Map<Recipe, List<Ingredient>> = emptyMap()
+    val selectedRecipes: List<RecipeDetail> = emptyList()
 )
 
 @HiltViewModel
@@ -38,26 +35,18 @@ class MakeMenuViewModel @Inject constructor(
         _uiState.update { it.copy(isLoading = false) }
     }
 
-    fun selectRecipe(recipe: Recipe, ingredients: List<Ingredient>) {
-        _uiState.update { it.copy(selectedRecipes = it.selectedRecipes.plus(recipe to ingredients)) }
+    fun selectRecipe(recipeDetail: RecipeDetail) {
+        _uiState.update { it.copy(selectedRecipes = it.selectedRecipes.plus(recipeDetail)) }
     }
 
     fun removeRecipe(id: Int) {
-        _uiState.update { it.copy(selectedRecipes = it.selectedRecipes.filter { entry -> entry.key.id != id }) }
+        _uiState.update { it.copy(selectedRecipes = it.selectedRecipes.filter { r -> r.recipe.id != id }) }
     }
 
     fun addMenu() {
         viewModelScope.launch {
-            val tempList = emptyList<RecipeIngredient>()
-            _uiState.value.selectedRecipes.forEach { it.value.forEach { ingredient ->
-                tempList.plus(RecipeIngredient(0, it.key.id, ingredient.name, ingredient.quantity))
-            } }
-
-            menuUseCase.addMenu(
-                Menu(0, _uiState.value.selectedRecipes.map { it.key.id }),
-                _uiState.value.selectedRecipes.map { it.key },
-                tempList
-            )
+            menuUseCase.addMenu(_uiState.value.selectedRecipes)
+            _uiState.update { it.copy(selectedRecipes = emptyList()) }
         }
     }
 

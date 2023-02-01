@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 interface FavoriteMenuUseCase {
-    fun getFavoriteMenus(): Flow<Map<Int, List<RecipeWithoutCategory>>>
+    fun getFavoriteMenus(): Flow<Map<Menu, List<RecipeWithoutCategory>>>
     fun getFavoriteMenuIds(): Flow<List<Int>>
     suspend fun addFavoriteMenu(menuId: Int)
     suspend fun deleteFavoriteMenu(menuId: Int)
