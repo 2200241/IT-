@@ -18,6 +18,7 @@ interface ApiRepository {
 //    suspend fun fetchRecipeById(recipeId: Int): Result<MutableMap<Recipe, List<Ingredient>>, String>
     suspend fun fetchRecipeById(recipeId: Int): Result<RecipeBase, String>
     suspend fun fetchRecipes(conditions: String): Result<List<RecipeWithCategory>, String>
+    suspend fun fetchSuggestions(keyword: String, target: String): Result<Map<Int, String>, String>
 }
 
 class ApiRepositoryImpl @Inject constructor(): ApiRepository {
@@ -135,6 +136,45 @@ class ApiRepositoryImpl @Inject constructor(): ApiRepository {
             }
 
             return@withContext Ok(recipes)
+        }
+        return Err("Error")
+    }
+
+
+    override suspend fun fetchSuggestions(keyword: String, target: String): Result<Map<Int, String>, String> {
+
+        if (keyword.isNullOrBlank()) {
+            return Err("条件が指定されていません")
+        }
+        //Json格納
+        var httpResult = ""
+
+        withContext(Dispatchers.IO) {
+            var url = "${baseUrl}/${target}/?keyword=${keyword}"
+
+            val urlObj = URL(url)
+
+            // アクセスしたAPIから情報を取得
+            //テキストファイルを読み込むクラス(文字コードを読めるようにする準備(URLオブジェクト))
+            val br = BufferedReader(InputStreamReader(urlObj.openStream()))
+
+            //読み込んだデータを文字列に変換して代入
+            httpResult = br.readText()
+
+            val jsonObj = JSONObject(httpResult)
+
+            val obj =jsonObj.getJSONArray("data")
+
+            //レシピデータをListに格納
+            var tags = emptyMap<Int, String>().toMutableMap()
+            for(i in 0 until obj.length()) {
+                val id = obj.getJSONObject(i).getString("id").toInt()
+                val name = obj.getJSONObject(i).getString("name")
+
+                tags[id] = name
+            }
+
+            return@withContext Ok(tags)
         }
         return Err("Error")
     }

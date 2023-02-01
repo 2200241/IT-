@@ -1,23 +1,31 @@
 package com.example.recipe_app.make_menu.select_conditions
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.recipe_app.R
+import com.example.recipe_app.repositories.ApiRepository
+import com.github.michaelbull.result.mapBoth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class SelectConditionsUiState(
     val isLoading: Boolean = false,
-    val largeCategories: List<LargeCategory>,
-    val selectedTags: List<Int>,
-    val keywords: String,
-    val selectedTab: ConditionTab = ConditionTab.SelectTagsTab
+//    val largeCategories: List<LargeCategory>,
+    val selectedTags: List<Int> = emptyList(),
+    val selectedIngredients: List<Int> = emptyList(),
+    val keywords: String = "",
+    val tagKeyword: String = "",
+    val selectedTab: ConditionTab = ConditionTab.SelectTagsTab,
+    val ingredients: Map<Int, String> = emptyMap(),
+    val tags: Map<Int, String> = emptyMap()
 )
 
 //呼び出すより先に記述しないと呼び出されなかった？
-private val categories = listOf(
+/*private val categories = listOf(
     R.string.staple_food,
     R.string.main_dish,
     R.string.side_dish,
@@ -43,15 +51,16 @@ sealed class LargeCategory(
 ) {
     object Categories: LargeCategory(R.string.category, categories)
     object Styles: LargeCategory(R.string.style, styles)
-}
+}*/
 
 @HiltViewModel
 class SelectConditionsViewModel @Inject constructor(
+    private val apiRepository: ApiRepository
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow(SelectConditionsUiState(
         isLoading = false,
-        largeCategories = largeCategories,
+//        largeCategories = largeCategories,
         selectedTags = emptyList(),
         keywords = "",
         selectedTab = ConditionTab.SelectTagsTab
@@ -83,6 +92,15 @@ class SelectConditionsViewModel @Inject constructor(
         }
     }
 
+    fun onIngredientClicked(id: Int) {
+        if (_uiState.value.selectedIngredients.contains(id)) {
+            _uiState.update { it.copy(selectedIngredients = _uiState.value.selectedIngredients - id) }
+        } else {
+            _uiState.update { it.copy(selectedIngredients = _uiState.value.selectedIngredients + id) }
+        }
+    }
+
+
     fun onClearClicked() {
         _uiState.update { it.copy(selectedTags = emptyList()) }
     }
@@ -91,16 +109,39 @@ class SelectConditionsViewModel @Inject constructor(
         _uiState.update { it.copy(keywords = text) }
     }
 
-    fun getSuggestions(keywords: String) {
+    fun getIngredientSuggestions() {
+        viewModelScope.launch {
+            apiRepository.fetchSuggestions(_uiState.value.keywords, "ingredients").mapBoth(
+                success = { res -> _uiState.update { it.copy(ingredients = res) } },
+                failure = { }
+            )
 
+        }
+    }
+
+    fun getTagSuggestions() {
+        viewModelScope.launch {
+            apiRepository.fetchSuggestions(_uiState.value.tagKeyword, "tags").mapBoth(
+                success = { res -> _uiState.update { it.copy(tags = res) } },
+                failure = { }
+            )
+        }
     }
 
     fun getConditions(): String {
-        // TODO: Add ingredients
+        var conditions = ""
         val separator = "&"
-        val conditions = _uiState.value.selectedTags.joinToString(separator)
-        // TODO: Catch exceptions
-        return conditions
+        val delimiter = ","
+
+        if (_uiState.value.selectedIngredients.isNotEmpty()) {
+            conditions += "ingredients=" + _uiState.value.selectedIngredients.joinToString(delimiter) + separator
+        }
+        if (_uiState.value.selectedTags.isNotEmpty()) {
+            conditions += "tags=" + _uiState.value.selectedTags.joinToString(delimiter)
+        }
+
+//        return conditions
+        return "title=" + _uiState.value.keywords
     }
 
 }

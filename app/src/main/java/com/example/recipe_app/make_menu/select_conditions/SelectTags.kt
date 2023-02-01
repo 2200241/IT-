@@ -22,32 +22,36 @@ import com.google.accompanist.flowlayout.MainAxisAlignment
 @Composable
 fun SelectTags(
     modifier: Modifier = Modifier,
-    largeCategories: List<LargeCategory>,
+//    largeCategories: List<LargeCategory>,
+    tags: Map<Int, String> = emptyMap(),
     selectedTags: List<Int>,
     onTagClicked: (Int) -> Unit,
 ) {
     LazyColumn(modifier = modifier) {
-        largeCategories.forEach { item ->
+//        largeCategories.forEach { item ->
             item {
                 TagCategory(
-                    largeCategory = item,
+                    tags = tags,
+//                    largeCategory = item,
                     selectedTags = selectedTags,
                     onTagClicked = onTagClicked
                 )
             }
-        }
+//        }
     }
 }
 
 @Composable
 fun TagCategory(
-    largeCategory: LargeCategory,
+    tags: Map<Int, String> = emptyMap(),
+//    largeCategory: LargeCategory,
     selectedTags: List<Int>,
     onTagClicked: (Int) -> Unit
 ) {
-    SelectTagsTitle(largeCategory.id)
+//    SelectTagsTitle(largeCategory.id)
     SelectTagsButton(
-        items = largeCategory.items,
+        items = tags,
+//        items = largeCategory.items,
         selectedTags = selectedTags,
         onTagClicked = onTagClicked
     )
@@ -66,7 +70,8 @@ fun SelectTagsTitle(id: Int) {
 
 @Composable
 fun SelectTagsButton(
-    items: List<Int>,
+    items: Map<Int, String> = emptyMap(),
+//    items: List<Int>,
     selectedTags: List<Int>,
     onTagClicked: (Int) -> Unit
 ) {
@@ -77,20 +82,20 @@ fun SelectTagsButton(
         crossAxisSpacing = 5.dp,
     ) {
         items.forEach { item ->
-            val backgroundColor = if (selectedTags.contains(item)) colorResource(id = R.color.selectButtonColor) else Color.White
-            val contentColor = if (selectedTags.contains(item)) Color.White else colorResource(id = R.color.fontColor)
-            val borderColor = if (selectedTags.contains(item)) colorResource(id = R.color.selectButtonColor) else colorResource(id = R.color.borderLightColor)
-            val fontWeight = if (selectedTags.contains(item)) FontWeight.Bold else FontWeight.Normal
+            val backgroundColor = if (selectedTags.contains(item.key)) colorResource(id = R.color.selectButtonColor) else Color.White
+            val contentColor = if (selectedTags.contains(item.key)) Color.White else colorResource(id = R.color.fontColor)
+            val borderColor = if (selectedTags.contains(item.key)) colorResource(id = R.color.selectButtonColor) else colorResource(id = R.color.borderLightColor)
+            val fontWeight = if (selectedTags.contains(item.key)) FontWeight.Bold else FontWeight.Normal
 
             OutlinedButton(
                 border = BorderStroke(1.5.dp, borderColor),
                 shape = CircleShape,
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = backgroundColor, contentColor = contentColor),
-                onClick = { onTagClicked(item) }
+                onClick = { onTagClicked(item.key) }
             ) {
                 Text(
-                    text = stringResource(item),
+                    text = item.value,
                     fontSize = 16.sp,
                     fontWeight = fontWeight
                 )

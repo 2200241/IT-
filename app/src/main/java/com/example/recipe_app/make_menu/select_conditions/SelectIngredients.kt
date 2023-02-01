@@ -20,15 +20,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material.Card
-import androidx.compose.material.Checkbox
-import androidx.compose.material.CheckboxDefaults
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.Divider
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.sharp.Search
@@ -42,6 +34,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -55,13 +48,17 @@ import com.google.accompanist.flowlayout.MainAxisAlignment
 fun SelectIngredients(
     modifier: Modifier = Modifier,
     keywords: String,
-    setKeywords: (String) -> Unit
+    setKeywords: (String) -> Unit,
+    ingredients: Map<Int, String> = emptyMap(),
+    selectedIngredients: List<Int> = emptyList(),
+    onClicked: () -> Unit
 ) {
     LazyColumn(modifier = modifier) {
         item {
             SearchTextField(
                 keywords = keywords,
-                setKeywords = setKeywords
+                setKeywords = setKeywords,
+                onClicked = onClicked
             )
         }
         item { Divider(color = Color.LightGray) }
@@ -85,7 +82,8 @@ fun SelectIngredients(
 @Composable
 fun SearchTextField(
     keywords: String = "",
-    setKeywords: (String) -> Unit
+    setKeywords: (String) -> Unit,
+    onClicked:() -> Unit,
 ) {
     BasicTextField(
         modifier = Modifier.padding(15.dp),
@@ -116,6 +114,20 @@ fun SearchTextField(
                 } else {
                     innerTextField()
                 }
+//                ExtendedFloatingActionButton(
+//                    modifier = Modifier.weight(1f),
+//                    backgroundColor = colorResource(id = R.color.searchButtonColor),
+//                    contentColor = Color.White,
+//                    text = {
+//                        Text(
+//                            text = stringResource(id = R.string.search),
+//                            fontSize = 20.sp,
+//                            fontWeight = FontWeight.Bold
+//                        )
+//                    },
+//                    onClick = onClicked
+//                )
+
             }
         }
     )
