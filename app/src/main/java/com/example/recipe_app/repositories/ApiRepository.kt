@@ -8,6 +8,7 @@ import com.github.michaelbull.result.Result
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
+import org.json.JSONArray
 import org.json.JSONObject
 import javax.inject.Inject
 import java.io.BufferedReader
@@ -24,64 +25,48 @@ interface ApiRepository {
 class ApiRepositoryImpl @Inject constructor(): ApiRepository {
     private val baseUrl = "http://54.166.77.47/api"
 
-    //レシピIDから検索
     override suspend fun fetchRecipeById(recipeId: Int): Result<RecipeBase, String> {
+        if (recipeId < 0) return Err("Invalid ID")
+
         val url = "${baseUrl}/recipe/?id=$recipeId"
 
-        //Json格納
-        var httpResult = ""
+        try {
+            return withContext(Dispatchers.IO) {
+                val urlObj = URL(url)
 
-//        val recipe: MutableMap<Recipe, List<Ingredient>> = mutableMapOf()
-        var recipe: RecipeBase = RecipeBase()
+                // アクセスしたAPIから情報を取得
+                //テキストファイルを読み込むクラス(文字コードを読めるようにする準備(URLオブジェクト))
+                val br = BufferedReader(InputStreamReader(urlObj.openStream()))
 
-        withContext(Dispatchers.IO) {
-            val urlObj = URL(url)
+                //読み込んだデータを文字列に変換して代入
+                val httpResult = br.readText()
+                // 配列で返さない
+                val obj = JSONObject(httpResult)
 
-            // アクセスしたAPIから情報を取得
-            //テキストファイルを読み込むクラス(文字コードを読めるようにする準備(URLオブジェクト))
-            val br = BufferedReader(InputStreamReader(urlObj.openStream()))
+                val id = obj.getString("id").toInt()
+                val categoryId = obj.getString("category_id").toInt()
+                val title = obj.getString("title")
+                val image = obj.getString("image")
+                val servings = obj.getString("servings").toInt()
 
-            //読み込んだデータを文字列に変換して代入
-            httpResult = br.readText()
-
-            val jsonObj = JSONObject(httpResult)
-
-            val obj =jsonObj.getJSONArray("data")
-
-            //レシピデータをListに格納
-            for(i in 0 until obj.length()) {
-
-                val id = obj.getJSONObject(i).getString("id").toInt()
-                val categoryId = obj.getJSONObject(i).getString("category_id").toInt()
-                val title = obj.getJSONObject(i).getString("title")
-                val image = obj.getJSONObject(i).getString("image")
-                val servings = obj.getJSONObject(i).getString("servings").toInt()
-
-                val ingredients =  mutableListOf<Ingredient>()
+                val ingredients = mutableListOf<Ingredient>()
                 val instructions = mutableListOf<String>()
-
-                for (j in 0 until obj.getJSONObject(i).getJSONArray("ingredients").length()) {
-                    val name = obj.getJSONObject(i).getJSONArray("ingredients").getJSONObject(j).getString("name")
-                    val quantity = obj.getJSONObject(i).getJSONArray("ingredients").getJSONObject(j).getString("quantity")
+                for (j in 0 until obj.getJSONArray("ingredients").length()) {
+                    val name = obj.getJSONArray("ingredients").getJSONObject(j).getString("name")
+                    val quantity = obj.getJSONArray("ingredients").getJSONObject(j).getString("quantity")
                     ingredients.add(Ingredient(name, quantity))
                 }
-
-                for (j in 0 until obj.getJSONObject(i).getJSONArray("instructions").length()) {
-                    val content = obj.getJSONObject(i).getJSONArray("instructions").getJSONObject(j).getString("content")
+                for (j in 0 until obj.getJSONArray("instructions").length()) {
+                    val content = obj.getJSONArray("instructions").getJSONObject(j).getString("content")
                     instructions.add(content)
                 }
 
-//                recipe[Recipe(id, categoryId, title, image, servings, instructions)] = ingredients
-
-                recipe = RecipeBase(id, categoryId, title, image, servings, ingredients, instructions)
-
-                // 表示
-//                Log.d("json", recipe.toString())
+                val recipe = RecipeBase(id, categoryId, title, image, servings, ingredients, instructions)
+                return@withContext Ok(recipe)
             }
-
-            return@withContext Ok(recipe)
+        } catch (e: Error) {
+            return Err(e.toString())
         }
-        return Err("error")
     }
 
     override suspend fun fetchRecipes(
@@ -94,14 +79,11 @@ class ApiRepositoryImpl @Inject constructor(): ApiRepository {
 //        allergens: List<Int>?,
 //        tags: List<Int>?
     ): Result<List<RecipeWithCategory>, String> {
-        if (conditions.isNullOrBlank()) {
-            return Err("条件が指定されていません")
-        }
-        //Json格納
-        var httpResult = ""
+        if (conditions.isBlank()) return Err("条件が指定されていません")
 
-        withContext(Dispatchers.IO) {
-            var url = "${baseUrl}/recipes/?${conditions}"
+        try {
+            return withContext(Dispatchers.IO) {
+                val url = "${baseUrl}/recipes/?${conditions}"
 
 //            if (category_id != null) url += "category_id=${category_id}&"
 //            if (!title.isNullOrBlank()) url += "title=${title}&"
@@ -111,72 +93,66 @@ class ApiRepositoryImpl @Inject constructor(): ApiRepository {
 //            if (!allergens.isNullOrEmpty()) url += "allergens=" + allergens.joinToString(",") + "&"
 //            if (!tags.isNullOrEmpty()) url += "tags=" + tags.joinToString(",")
 
-            val urlObj = URL(url)
+                val urlObj = URL(url)
 
-            // アクセスしたAPIから情報を取得
-            //テキストファイルを読み込むクラス(文字コードを読めるようにする準備(URLオブジェクト))
-            val br = BufferedReader(InputStreamReader(urlObj.openStream()))
+                // アクセスしたAPIから情報を取得
+                //テキストファイルを読み込むクラス(文字コードを読めるようにする準備(URLオブジェクト))
+                val br = BufferedReader(InputStreamReader(urlObj.openStream()))
 
-            //読み込んだデータを文字列に変換して代入
-            httpResult = br.readText()
+                //読み込んだデータを文字列に変換して代入
+                val httpResult = br.readText()
+                val array = JSONArray(httpResult)
 
-            val jsonObj = JSONObject(httpResult)
+                if (array.length() < 1) return@withContext Err("No result")
 
-            val obj =jsonObj.getJSONArray("data")
+                //レシピデータをListに格納
+                val recipes = mutableListOf<RecipeWithCategory>()
+                for (i in 0 until array.length()) {
+                    val obj = array.getJSONObject(i)
+                    val id = obj.getString("id").toInt()
+                    val categoryId = obj.getString("category_id").toInt()
+                    val title = obj.getString("title")
+                    val image = obj.getString("image")
 
-            //レシピデータをListに格納
-            var recipes = emptyArray<RecipeWithCategory>()
-            for(i in 0 until obj.length()) {
-                val id = obj.getJSONObject(i).getString("id").toInt()
-                val categoryId = obj.getJSONObject(i).getString("category_id").toInt()
-                val title = obj.getJSONObject(i).getString("title")
-                val image = obj.getJSONObject(i).getString("image")
-
-                recipes += RecipeWithCategory(id, categoryId, title, image)
+                    recipes += RecipeWithCategory(id, categoryId, title, image)
+                }
+                return@withContext Ok(recipes)
             }
-
-            return@withContext Ok(recipes)
+        } catch (e: Error) {
+            return Err(e.toString())
         }
-        return Err("Error")
     }
 
-
     override suspend fun fetchSuggestions(keyword: String, target: String): Result<Map<Int, String>, String> {
+        if (keyword.isBlank()) return Err("条件が指定されていません")
 
-        if (keyword.isNullOrBlank()) {
-            return Err("条件が指定されていません")
-        }
-        //Json格納
-        var httpResult = ""
+        try {
+            return withContext(Dispatchers.IO) {
+                val url = "${baseUrl}/${target}/?keyword=${keyword}"
 
-        withContext(Dispatchers.IO) {
-            var url = "${baseUrl}/${target}/?keyword=${keyword}"
+                val urlObj = URL(url)
 
-            val urlObj = URL(url)
+                // アクセスしたAPIから情報を取得
+                //テキストファイルを読み込むクラス(文字コードを読めるようにする準備(URLオブジェクト))
+                val br = BufferedReader(InputStreamReader(urlObj.openStream()))
 
-            // アクセスしたAPIから情報を取得
-            //テキストファイルを読み込むクラス(文字コードを読めるようにする準備(URLオブジェクト))
-            val br = BufferedReader(InputStreamReader(urlObj.openStream()))
+                //読み込んだデータを文字列に変換して代入
+                val httpResult = br.readText()
+                val array = JSONArray(httpResult)
 
-            //読み込んだデータを文字列に変換して代入
-            httpResult = br.readText()
+                val items = mutableMapOf<Int, String>()
+                for (i in 0 until array.length()) {
+                    val obj = array.getJSONObject(i)
+                    val id = obj.getString("id").toInt()
+                    val name = obj.getString("name")
 
-            val jsonObj = JSONObject(httpResult)
-
-            val obj =jsonObj.getJSONArray("data")
-
-            //レシピデータをListに格納
-            var tags = emptyMap<Int, String>().toMutableMap()
-            for(i in 0 until obj.length()) {
-                val id = obj.getJSONObject(i).getString("id").toInt()
-                val name = obj.getJSONObject(i).getString("name")
-
-                tags[id] = name
+                    items[id] = name
+                }
+                return@withContext Ok(items)
             }
-
-            return@withContext Ok(tags)
+        } catch (e: Error) {
+            return Err(e.toString())
         }
-        return Err("Error")
     }
 }
 

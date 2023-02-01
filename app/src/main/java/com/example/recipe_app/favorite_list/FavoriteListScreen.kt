@@ -29,7 +29,7 @@ fun FavoriteListScreen(
             )
         }
         composable(
-            route = "recipeDetail/{recipeId}/{thumb}",
+            route = "recipeDetail/{recipeId}",
 //            arguments = listOf(navArgument("conditions") { type = NavType.StringType })
         ) { backStackEntry ->
             RecipeDetail(

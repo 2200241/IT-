@@ -33,7 +33,7 @@ class RecipeDetailViewModel @Inject constructor(
 ): ViewModel() {
 
     private val recipeId = savedStateHandle.get<String>("recipeId")?.toInt() ?: -1
-    private val thumb = savedStateHandle.get<String>("thumb") ?: ""
+//    private val thumb = savedStateHandle.get<String>("thumb") ?: ""
 
     private val _uiState = MutableStateFlow(RecipeDetailUiState(
         isLoading = false,

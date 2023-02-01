@@ -15,11 +15,11 @@ import kotlinx.coroutines.launch
 
 internal sealed class Screen(val route: String) {
     object SelectFavorite : Screen("selectFavorite")
-    object ShoppingList : Screen("shoppingList/{menuId}/") {
+    object ShoppingList : Screen("shoppingList/{menuId}") {
         fun createRoute(menuId: Int) = "shoppingList/$menuId"
     }
-    object RecipeDetail : Screen("recipeDetail/{recipeId}/{thumb}") {
-        fun createRoute(recipeId: Int, thumb: String) = "recipeDetail/$recipeId/$thumb"
+    object RecipeDetail : Screen("recipeDetail/{recipeId}") {
+        fun createRoute(recipeId: Int, thumb: String) = "recipeDetail/$recipeId"
     }
 }
 

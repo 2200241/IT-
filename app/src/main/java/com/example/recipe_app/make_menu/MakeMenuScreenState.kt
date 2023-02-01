@@ -21,8 +21,8 @@ internal sealed class Screen(val route: String) {
     object SelectRecipes : Screen("selectRecipes/{conditions}") {
         fun createRoute(conditions: String) = "selectRecipes/$conditions"
     }
-    object RecipeDetail : Screen("recipeDetail/{recipeId}/{thumb}") {
-        fun createRoute(recipeId: Int, thumb: String) = "recipeDetail/$recipeId/$thumb"
+    object RecipeDetail : Screen("recipeDetail/{recipeId}") {
+        fun createRoute(recipeId: Int, thumb: String) = "recipeDetail/$recipeId"
     }
 }
 
