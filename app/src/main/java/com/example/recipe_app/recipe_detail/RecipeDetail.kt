@@ -136,7 +136,7 @@ fun CookingProcedure(
     ) {
         instructions.forEach { instruction ->
             Text(
-                text = instruction.content,
+                text = "${instruction.order}. ${instruction.content}",
                 fontSize = 16.sp,
                 color = colorResource(id = R.color.fontColor)
             )

@@ -54,9 +54,17 @@ fun SettingsScreen(
 fun Allergies() {
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
-        contentPadding = PaddingValues(5.dp)
+        contentPadding = PaddingValues(3.dp)
     ) {
-        for (i in 1..15) {
+        val allergyList = listOf(
+            "卵", "乳", "小麦", "そば", "落花生", "えび", "かに", "アーモンド",
+            "あわび", "いか", "いくら", "オレンジ", "カシューナッツ", "キウイ", "牛肉",
+            "くるみ", "ごま", "さけ", "さば", "鶏肉", "バナナ", "豚肉", "まつたけ",
+            "桃", "やまいも", "りんご", "ゼラチン"
+        )
+
+        //for (i in 1..15) {
+        allergyList.forEach {  item ->
             item {
                 val checkedState = remember { mutableStateOf(false) }
                 Row(
@@ -70,8 +78,10 @@ fun Allergies() {
                         onCheckedChange = { checkedState.value = it }
                     )
                     Text(
-                        text = "アレルギー",
-                        fontSize = 16.sp,
+                        //text = "アレルギー",
+                        text = item,
+                        //fontSize = 16.sp,
+                        fontSize = if(item.length > 5) 13.sp else 16.sp,
                         color = colorResource(id = R.color.fontColor),
                     )
                 }

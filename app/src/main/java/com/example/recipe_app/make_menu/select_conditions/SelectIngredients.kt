@@ -64,7 +64,7 @@ fun SelectIngredients(
                 setKeywords = setKeywords
             )
         }
-        item { Divider(color = Color.LightGray) }
+        /*item { Divider(color = Color.LightGray) }
         item {
             Text(
                 modifier = Modifier.padding(start = 15.dp, top = 15.dp, bottom = 3.dp),
@@ -78,7 +78,7 @@ fun SelectIngredients(
         for (i in 1..5) {
             item { CategoryTitle("カテゴリー名$i") }
             item { Divider(color = Color.LightGray) }
-        }
+        }*/
     }
 }
 
@@ -109,7 +109,7 @@ fun SearchTextField(
                 Spacer(Modifier.width(5.dp))
                 if (keywords.isEmpty()) {
                     Text(
-                        text = "検索",
+                        text = "キーワード検索",
                         fontWeight = FontWeight.Bold,
                         color = Color.Gray
                     )
@@ -120,7 +120,6 @@ fun SearchTextField(
         }
     )
 }
-
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable

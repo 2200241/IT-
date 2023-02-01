@@ -99,6 +99,25 @@ private val ConditionTabs = listOf(
 
 @Composable
 fun SelectConditionsBottomButtons(onSearchClicked: () -> Unit) {
+    ExtendedFloatingActionButton(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 30.dp, vertical = 8.dp),
+        backgroundColor = colorResource(id = R.color.searchButtonColor),
+        contentColor = Color.White,
+        text = {
+            Text(
+                text = stringResource(id = R.string.search),
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            )
+        },
+        onClick = onSearchClicked
+    )
+}
+
+/*@Composable
+fun SelectConditionsBottomButtons(onSearchClicked: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -132,4 +151,4 @@ fun SelectConditionsBottomButtons(onSearchClicked: () -> Unit) {
             onClick = onSearchClicked
         )
     }
-}
+}*/

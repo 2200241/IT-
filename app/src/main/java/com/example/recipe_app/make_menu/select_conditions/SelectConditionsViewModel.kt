@@ -106,7 +106,8 @@ sealed class ConditionTab(
     val index: Int
 ) {
     object SelectTagsTab: ConditionTab(R.string.select_tags, 0)
-    object SelectIngredientsTab: ConditionTab(R.string.select_ingredients, 1)
+    //object SelectIngredientsTab: ConditionTab(R.string.select_ingredients, 1)
+    object SelectIngredientsTab: ConditionTab(R.string.search_ingredients, 1)
 }
 
 /*

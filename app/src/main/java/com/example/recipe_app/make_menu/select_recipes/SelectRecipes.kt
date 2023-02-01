@@ -2,6 +2,7 @@ package com.example.recipe_app.make_menu.select_recipes
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -150,6 +151,7 @@ fun SelectedRecipes(
                         .clickable { onItemClicked(recipe.id, recipe.thumb) }
                 ) {
                     Text(text = "料理画像", color = Color.White)
+                    //Image(painter = , contentDescription = )
 
                     if (deleteButtonIsDisplayed) {
                         FloatingActionButton(

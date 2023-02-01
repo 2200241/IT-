@@ -6,6 +6,7 @@
     <string name="settings_title">設定</string>
     <string name="select_tags">条件選択</string>
     <string name="select_ingredients">食材選択</string>
+    <string name="search_ingredients">食材検索</string>
 
     <string name="search">検索</string>
     <string name="clear">クリア</string>

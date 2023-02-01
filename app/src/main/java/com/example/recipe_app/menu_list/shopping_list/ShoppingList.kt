@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Checkbox
@@ -61,7 +62,10 @@ fun ShoppingList(
     val onDismissRequest = remember { mutableStateOf(false) }
 
     if (onDismissRequest.value) {
-        MyDialog(onDismissRequest = { onDismissRequest.value = it })
+        MyDialog(
+            onDismissRequest = { onDismissRequest.value = it },
+            content = { SettingNumber() }
+        )
     }
 
     Column(modifier = Modifier.padding(paddingValues)) {
@@ -79,14 +83,14 @@ fun ShoppingList(
             item { SelectedRecipes(false, menu.recipes, onThumbClicked) }
             item { Divider(color = Color.LightGray) }
             item {
-                /*Text(
+                Text(
                     modifier = Modifier.padding(start = 15.dp, top = 15.dp),
-                    text = "材料(人分)",
+                    text = "材料",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     color = colorResource(id = R.color.fontColor)
-                )*/
-                Row(
+                )
+                /*Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 15.dp, end = 10.dp),
@@ -108,7 +112,7 @@ fun ShoppingList(
                             fontWeight = FontWeight.Bold
                         )
                     }
-                }
+                }*/
             }
             item { ShoppingListMaterials(menu.shoppingItems, state::checkShoppingListItem) }
             item { Spacer(Modifier.height(80.dp)) }
@@ -130,15 +134,12 @@ fun SettingNumber() {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            Icons.Sharp.Remove,
+            imageVector = Icons.Sharp.Remove,
             contentDescription = "Remove",
             modifier = Modifier
                 .clickable { /*TODO*/ }
-                .background(
-                    color = Color.White,
-                    shape = RoundedCornerShape(50),
-                )
-                .border(BorderStroke(1.dp, Color.Gray))
+                .size(30.dp)
+                .border(BorderStroke(1.5.dp, Color.Gray), CircleShape)
         )
         Spacer(Modifier.width(15.dp))
         Text(
@@ -148,15 +149,12 @@ fun SettingNumber() {
         )
         Spacer(Modifier.width(10.dp))
         Icon(
-            Icons.Sharp.Add,
+            imageVector = Icons.Sharp.Add,
             contentDescription = "Add",
             modifier = Modifier
                 .clickable { /*TODO*/ }
-                .background(
-                    color = Color.White,
-                    shape = RoundedCornerShape(50),
-                )
-                .border(BorderStroke(1.dp, Color.Gray))
+                .size(30.dp)
+                .border(BorderStroke(1.5.dp, Color.Gray), CircleShape)
         )
     }
 }
@@ -164,6 +162,7 @@ fun SettingNumber() {
 @Composable
 fun MyDialog(
     onDismissRequest: (Boolean) -> Unit,
+    content: @Composable () -> Unit
 ) {
     Dialog(
         onDismissRequest = { onDismissRequest(false) },
@@ -198,7 +197,7 @@ fun MyDialog(
                         )
                     }
                     Spacer(Modifier.height(10.dp))
-                    SettingNumber()
+                    content()
                     Spacer(Modifier.height(10.dp))
                     Box(
                         modifier = Modifier.align(Alignment.End)
@@ -224,7 +223,6 @@ fun ShoppingListMaterials(
     onChecked: (Int) -> Unit
 ) {
     items.forEachIndexed { index, item ->
-//        val checkedState = remember { mutableStateOf(false) }
         Column {
             Row(
                 modifier = Modifier
@@ -239,7 +237,7 @@ fun ShoppingListMaterials(
                         .size(40.dp),
                     colors = CheckboxDefaults.colors(colorResource(id = R.color.selectButtonColor)),
                     checked = item.isChecked,
-                    onCheckedChange = {}
+                    onCheckedChange = { onChecked(index) }
                 )
                 Row(
                     modifier = Modifier.fillMaxWidth(),
