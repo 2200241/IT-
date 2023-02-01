@@ -101,7 +101,7 @@ class ApiRepositoryImpl @Inject constructor(): ApiRepository {
         var httpResult = ""
 
         withContext(Dispatchers.IO) {
-            var url = "${baseUrl}/recipe/?${conditions}"
+            var url = "${baseUrl}/recipes/?${conditions}"
 
 //            if (category_id != null) url += "category_id=${category_id}&"
 //            if (!title.isNullOrBlank()) url += "title=${title}&"
