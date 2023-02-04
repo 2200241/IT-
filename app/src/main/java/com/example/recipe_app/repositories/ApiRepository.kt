@@ -1,12 +1,10 @@
 package com.example.recipe_app.repositories
 
-import android.util.Log
 import com.example.recipe_app.data.*
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
@@ -46,7 +44,10 @@ class ApiRepositoryImpl @Inject constructor(): ApiRepository {
                 val id = obj.getString("id").toInt()
                 val categoryId = obj.getString("category_id").toInt()
                 val title = obj.getString("title")
-                val image = obj.getString("image")
+                var image = obj.getString("image")
+                if (image.contains("-website-us-east-1")) {
+                    image = image.replace("-website-us-east-1", "")
+                }
                 val servings = obj.getString("servings").toInt()
 
                 val ingredients = mutableListOf<Ingredient>()
@@ -64,7 +65,7 @@ class ApiRepositoryImpl @Inject constructor(): ApiRepository {
                 val recipe = RecipeBase(id, categoryId, title, image, servings, ingredients, instructions)
                 return@withContext Ok(recipe)
             }
-        } catch (e: Error) {
+        } catch (e: Exception) {
             return Err(e.toString())
         }
     }
@@ -112,13 +113,16 @@ class ApiRepositoryImpl @Inject constructor(): ApiRepository {
                     val id = obj.getString("id").toInt()
                     val categoryId = obj.getString("category_id").toInt()
                     val title = obj.getString("title")
-                    val image = obj.getString("image")
+                    var image = obj.getString("image")
+                    if (image.contains("-website-us-east-1")) {
+                        image = image.replace("-website-us-east-1", "")
+                    }
 
                     recipes += RecipeWithCategory(id, categoryId, title, image)
                 }
                 return@withContext Ok(recipes)
             }
-        } catch (e: Error) {
+        } catch (e: Exception) {
             return Err(e.toString())
         }
     }
@@ -150,7 +154,7 @@ class ApiRepositoryImpl @Inject constructor(): ApiRepository {
                 }
                 return@withContext Ok(items)
             }
-        } catch (e: Error) {
+        } catch (e: Exception) {
             return Err(e.toString())
         }
     }

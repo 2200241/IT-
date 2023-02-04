@@ -15,13 +15,13 @@ interface AllergenDao {
     @Query("UPDATE allergens SET is_checked = :isChecked WHERE id = :id")
     suspend fun checkAllergen(id: Int, isChecked: Boolean)
 
-    @Query("Delete from allergens where id =:id")
+    @Query("DELETE FROM allergens WHERE id =:id")
     suspend fun deleteAllergen(id: Int)
 
     @Update
     suspend fun updateAllergen(Allergen: Allergen)
 
-    @Query("delete from allergens")
+    @Query("DELETE FROM allergens")
     suspend fun deleteAllAllergens()
 
 }

@@ -20,7 +20,8 @@ class SelectMenuState(
     val favoriteMenuIds: List<Int>
         @Composable get() = viewModel.favoriteMenuIds.collectAsState().value
 
-    fun removeMenu(menuId: Int) = viewModel.removeMenu(menuId)
+    // TODO
+    fun removeMenu(menuId: Int, recipeIds: List<Int>) = viewModel.removeMenu(menuId, recipeIds)
 
     fun addFavoriteMenu(menuId: Int) = viewModel.addFavoriteMenu(menuId)
 

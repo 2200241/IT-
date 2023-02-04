@@ -2,6 +2,7 @@ package com.example.recipe_app.make_menu
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -18,6 +19,16 @@ fun MakeMenuScreen(
     paddingValues: PaddingValues,
 ) {
     val uiState = state.uiState
+
+    if (uiState.message.isNotBlank()) {
+        LaunchedEffect(state.scaffoldState.snackbarHostState) {
+            state.scaffoldState.snackbarHostState.showSnackbar(
+                message = uiState.message,
+                actionLabel = "OK"
+            )
+            state.resetMessage()
+        }
+    }
 
     NavHost(
         navController = state.navController,
@@ -55,6 +66,7 @@ fun MakeMenuScreen(
             RecipeDetail(
                 state = rememberRecipeDetailState(scaffoldState = state.scaffoldState),
                 addButtonIsDisplayed = true,
+                selectRecipe = state::selectRecipe,
                 paddingValues = paddingValues,
                 onBackPressed = { state.navigateBack() }
             )

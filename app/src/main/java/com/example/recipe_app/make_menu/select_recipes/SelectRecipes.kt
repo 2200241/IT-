@@ -5,17 +5,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.absoluteOffset
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
@@ -53,8 +43,8 @@ fun SelectRecipes(
     state: SelectRecipesState,
     paddingValues: PaddingValues,
     onItemClicked: (Int, String) -> Unit,
-    selectedRecipes: List<RecipeDetail>,
-    selectRecipe: (RecipeDetail) -> Unit,   // Add from RecipeDetail
+    selectedRecipes: List<DetailedRecipe>,
+    selectRecipe: (RecipeBase) -> Unit,   // Add from RecipeDetail
     removeRecipe: (Int) -> Unit,
     addMenu: () -> Unit,
     onBackPressed: () -> Unit
@@ -158,7 +148,7 @@ fun SelectedRecipes(
                         .background(color = Color.LightGray)
                         .clickable { onItemClicked(recipe.id, recipe.image) }
                 ) {
-                    AsyncImage(model = recipe.image, contentDescription = null)
+                    AsyncImage(model = recipe.image, contentDescription = recipe.title)
 
                     if (deleteButtonIsDisplayed) {
                         FloatingActionButton(
@@ -285,10 +275,12 @@ fun SearchResultRecipes(
         recipeWithCategoryIds.map { recipe ->
             Box(
                 modifier = Modifier
-                    .size(((screenWidth / 2) - 10).dp, 140.dp)
+//                    .size(((screenWidth / 2) - 10).dp, 140.dp)
+                    .width(((screenWidth / 2) - 10).dp)
                     .background(color = Color.LightGray)
                     .clickable { onItemClicked(recipe.id, recipe.image) }
             ) {
+                AsyncImage(model = recipe.image, contentDescription = recipe.title)
                 Column(
                     modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.SpaceBetween
@@ -316,11 +308,6 @@ fun SearchResultRecipes(
                             else Color.LightGray
                         )
                     }
-                    Text(
-                        modifier = Modifier.padding(8.dp),
-                        text = recipe.title,
-                        color = Color.White,
-                    )
                 }
             }
         }

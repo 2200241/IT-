@@ -34,13 +34,14 @@ import com.example.recipe_app.R
 import com.example.recipe_app.data.Ingredient
 import com.example.recipe_app.data.Instruction
 import com.example.recipe_app.data.Recipe
+import com.example.recipe_app.data.RecipeBase
 
 @Composable
 fun RecipeDetail(
     state: RecipeDetailState = rememberRecipeDetailState(),
     paddingValues: PaddingValues,
     addButtonIsDisplayed: Boolean = false,
-    addMenu: () -> Unit = {},
+    selectRecipe: (RecipeBase) -> Unit = {},
     onBackPressed: () -> Unit = {}
 ) {
     val uiState = state.uiState
@@ -74,7 +75,7 @@ fun RecipeDetail(
         recipeId = recipe.id,
         favoriteRecipeIds = state.favoriteRecipeIds,
         addButtonIsDisplayed = addButtonIsDisplayed,
-        onAddButtonClicked = addMenu,
+        onAddButtonClicked = { selectRecipe(recipe) },
         onLiked = state::addFavoriteRecipe,
         onUnliked = state::removeFavoriteRecipe
     )
@@ -85,7 +86,7 @@ fun CookingImage(recipe: Recipe) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(220.dp)
+//            .height(220.dp)
             .background(color = Color.LightGray)
     ) {
 //        Text(
@@ -96,7 +97,7 @@ fun CookingImage(recipe: Recipe) {
 //            color = Color.White,
 //            fontSize = 20.sp
 //        )
-        AsyncImage(model = recipe.image, contentDescription = null)
+        AsyncImage(model = recipe.image, contentDescription = recipe.title)
     }
 }
 

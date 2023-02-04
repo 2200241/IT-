@@ -10,6 +10,7 @@ data class Allergen(
     @ColumnInfo(name = "is_checked") val isChecked: Boolean = false
 )
 
+// For api
 data class RecipeBase(
     val id: Int = 0,
     val categoryId: Int = 0,
@@ -49,7 +50,7 @@ data class Instruction(
     val content: String = ""
 )
 
-data class RecipeDetail(
+data class DetailedRecipe(
     @Embedded val recipe: Recipe = Recipe(),
     @Relation(
         parentColumn = "id",

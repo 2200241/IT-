@@ -1,8 +1,12 @@
 package com.example.recipe_app.repositories
 
 import android.app.Application
+import androidx.room.withTransaction
 import com.example.recipe_app.data.*
 import com.example.recipe_app.room.database.RecipeAppDatabase
+import com.github.michaelbull.result.Err
+import com.github.michaelbull.result.Ok
+import com.github.michaelbull.result.Result
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
@@ -11,63 +15,92 @@ import javax.inject.Inject
 interface MenuRepository {
     fun getAllMenus(): Flow<Map<Menu, List<RecipeWithoutCategory>>>
     fun getMenuDetail(id: Int): Flow<Map<RecipeWithoutCategory, List<ShoppingItemWithIngredient>>>
-    suspend fun addMenu(recipes: List<RecipeDetail>)
-    suspend fun deleteMenu(id: Int)
-    suspend fun updateMenu(menu: Menu)
-    suspend fun checkShoppingItem(id: Int)
+    suspend fun addMenu(recipes: List<DetailedRecipe>): Result<String, String>
+    suspend fun deleteMenu(id: Int): Result<String, String>
+    suspend fun updateMenu(menu: Menu): Result<String, String>
+    suspend fun checkShoppingItem(id: Int): Result<String, String>
 }
 
 class MenuRepositoryImpl @Inject constructor(application: Application): MenuRepository {
-    private val menuDao = RecipeAppDatabase.getDatabase(application).menuDao()
+    private val db = RecipeAppDatabase.getDatabase(application)
+    private val menuDao = db.menuDao()
 
     //全件取得
     override fun getAllMenus() = menuDao.getAllMenus()
     override fun getMenuDetail(id: Int) = menuDao.getMenuDetail(id)
 
-    //追加
-    override suspend fun addMenu(recipes: List<RecipeDetail>) {
-        withContext(Dispatchers.IO){
-            val ingredients = emptyList<RecipeIngredient>()
-            val instructions = emptyList<Instruction>()
+    override suspend fun addMenu(recipes: List<DetailedRecipe>): Result<String, String> {
+        try {
+            return withContext(Dispatchers.IO) {
+                db.withTransaction {
+                    val ingredients = mutableListOf<RecipeIngredient>()
+                    val instructions = mutableListOf<Instruction>()
 
-            recipes.map { it.ingredients.map { ing -> ingredients.plus(ing) } }
-            recipes.map { it.instructions.map { ins -> instructions.plus(ins) } }
+                    recipes.forEach { it.ingredients.forEach { ing -> ingredients.add(ing) } }
+                    recipes.forEach { it.instructions.forEach { ins -> instructions.add(ins) } }
 
-            val id = menuDao.addMenu(Menu())
-            menuDao.addRecipes(
-                recipes.map { it.recipe },
-                ingredients,
-                instructions
-            )
-
-            menuDao.addMenuRecipes(
-                recipes.map { MenuRecipe(0, id.toInt(), it.recipe.id) }
-            )
-
-            val temp = emptyList<ShoppingItem>()
-            recipes.map { it.ingredients.map { temp.plus(ShoppingItem(0, id.toInt(), it.id, false )) } }
-            menuDao.addShoppingItems(temp)
+                    menuDao.addRecipes(
+                        recipes.map { it.recipe },
+                        instructions
+                    )
+                    val id = menuDao.addMenu(Menu())
+                    menuDao.addMenuRecipes(
+                        recipes.map { MenuRecipe(0, id.toInt(), it.recipe.id) }
+                    )
+                    val ingIds = menuDao.addIngredients(ingredients)
+                    val temp = mutableListOf<ShoppingItem>()
+                    ingIds.forEach {
+                        temp.add(ShoppingItem(
+                                0,
+                                id.toInt(),
+                                it.toInt(),
+                                false
+                        ))
+                    }
+                    menuDao.addShoppingItems(temp)
+                }
+                return@withContext Ok("The menu added successfully")
+            }
+        } catch (e: Exception) {
+            return Err(e.toString())
         }
     }
 
-    // TODO
-    //指定したIDを削除
-    override suspend fun deleteMenu(id: Int){
-        withContext(Dispatchers.IO) {
-            menuDao.deleteMenu(id)
+    override suspend fun deleteMenu(id: Int): Result<String, String> {
+        try {
+            return withContext(Dispatchers.IO) {
+                db.withTransaction {
+                    menuDao.deleteMenuRecipes(id)
+                    menuDao.deleteShoppingItems(id)
+                    menuDao.deleteMenu(id)
+                }
+                return@withContext Ok("The menu deleted successfully")
+            }
+        } catch (e: Exception) {
+            return Err(e.toString())
         }
     }
 
     //更新
-    override suspend fun updateMenu(menu: Menu){
-        withContext(Dispatchers.IO) {
-            menuDao.updateMenu(menu)
+    override suspend fun updateMenu(menu: Menu): Result<String, String> {
+        try {
+            return withContext(Dispatchers.IO) {
+                menuDao.updateMenu(menu)
+                return@withContext Ok("The menu updated successfully")
+            }
+        } catch (e: Exception) {
+            return Err(e.toString())
         }
     }
 
-    override suspend fun checkShoppingItem(id: Int) {
-        withContext(Dispatchers.IO) {
-            menuDao.checkShoppingItem(id)
+    override suspend fun checkShoppingItem(id: Int): Result<String, String> {
+        try {
+            return withContext(Dispatchers.IO) {
+                menuDao.checkShoppingItem(id)
+                return@withContext Ok("The item updated successfully")
+            }
+        } catch (e: Exception) {
+            return Err(e.toString())
         }
     }
 

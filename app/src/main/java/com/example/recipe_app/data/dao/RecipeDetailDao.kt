@@ -23,14 +23,22 @@ interface RecipeDetailDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE) 
     suspend fun addRecipe(recipe: Recipe, ingredients: List<RecipeIngredient>, instructions: List<Instruction>)
 
-    // TODO
-    @Query("delete from recipes where id = :id")
+    @Query("DELETE FROM recipes WHERE id = :id")
     suspend fun deleteRecipe(id: Int)
+
+    @Query("DELETE FROM recipes WHERE id IN (:ids)")
+    suspend fun deleteRecipes(ids: List<Int>)
+
+    @Query("DELETE FROM instructions WHERE recipe_id = :id")
+    suspend fun deleteInstructions(id: Int)
+
+    @Query("DELETE FROM recipe_ingredients WHERE recipe_id = :id")
+    suspend fun deleteIngredients(id: Int)
 
     @Update
     suspend fun updateRecipe(recipe: Recipe)
 
-    @Query("delete from recipes")
+    @Query("DELETE FROM recipes")
     suspend fun deleteAllRecipes()
 
 }

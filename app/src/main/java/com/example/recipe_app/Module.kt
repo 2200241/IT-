@@ -27,8 +27,9 @@ object Module {
     @Provides
     fun provideFavoriteRecipeUseCase(
         favoriteRecipeRepository: FavoriteRecipeRepository,
+        recipeRepository: RecipeRepository,
         apiRepository: ApiRepository
-    ): FavoriteRecipeUseCase = FavoriteRecipeUseCaseImpl(favoriteRecipeRepository, apiRepository)
+    ): FavoriteRecipeUseCase = FavoriteRecipeUseCaseImpl(favoriteRecipeRepository, recipeRepository, apiRepository)
 
     @Provides
     fun provideFavoriteMenuRepository(application: Application): FavoriteMenuRepository = FavoriteMenuRepositoryImpl(application)
@@ -40,7 +41,10 @@ object Module {
     fun provideMenuRepository(application: Application): MenuRepository = MenuRepositoryImpl(application)
 
     @Provides
-    fun provideMenuUseCase(menuRepository: MenuRepository): MenuUseCase = MenuUseCaseImpl(menuRepository)
+    fun provideMenuUseCase(
+        menuRepository: MenuRepository,
+        recipeRepository: RecipeRepository
+    ): MenuUseCase = MenuUseCaseImpl(menuRepository, recipeRepository)
 
     @Provides
     fun provideRecipeRepository(application: Application): RecipeRepository = RecipeRepositoryImpl(application)

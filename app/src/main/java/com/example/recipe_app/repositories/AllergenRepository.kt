@@ -3,6 +3,9 @@ package com.example.recipe_app.repositories
 import android.app.Application
 import com.example.recipe_app.data.Allergen
 import com.example.recipe_app.room.database.RecipeAppDatabase
+import com.github.michaelbull.result.Err
+import com.github.michaelbull.result.Ok
+import com.github.michaelbull.result.Result
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
@@ -10,7 +13,7 @@ import javax.inject.Inject
 
 interface AllergenRepository {
     fun getAllAllergens(): Flow<List<Allergen>>
-    suspend fun checkAllergen(id: Int, isChecked: Boolean)
+    suspend fun checkAllergen(id: Int, isChecked: Boolean): Result<String, String>
 }
 
 class AllergenRepositoryImpl @Inject constructor(application: Application):AllergenRepository  {
@@ -27,9 +30,14 @@ class AllergenRepositoryImpl @Inject constructor(application: Application):Aller
 //        }
 //    }
 
-    override suspend fun checkAllergen(id: Int, isChecked: Boolean) {
-        withContext(Dispatchers.IO){
-            allergenDao.checkAllergen(id, isChecked)
+    override suspend fun checkAllergen(id: Int, isChecked: Boolean): Result<String, String> {
+        try {
+            return withContext(Dispatchers.IO) {
+                allergenDao.checkAllergen(id, isChecked)
+                return@withContext Ok("Success")
+            }
+        } catch (e: Exception) {
+            return Err(e.toString())
         }
     }
 

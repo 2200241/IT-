@@ -7,7 +7,6 @@ import com.example.recipe_app.data.RecipeBase
 import com.example.recipe_app.repositories.ApiRepository
 import com.example.recipe_app.use_cases.FavoriteRecipeUseCase
 import com.example.recipe_app.use_cases.RecipeUseCase
-import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.mapBoth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*

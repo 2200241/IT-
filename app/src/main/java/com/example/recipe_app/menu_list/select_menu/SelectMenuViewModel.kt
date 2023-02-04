@@ -47,9 +47,9 @@ class SelectMenuViewModel @Inject constructor(
         _uiState.update { it.copy(isLoading = false) }
     }
 
-    fun removeMenu(id: Int) {
+    fun removeMenu(id: Int, recipeIds: List<Int>) {
         viewModelScope.launch {
-            menuUseCase.deleteMenu(id)
+            menuUseCase.deleteMenu(id, recipeIds)
         }
     }
 
