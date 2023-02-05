@@ -1,5 +1,6 @@
 package com.example.recipe_app.menu_list.shopping_list
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -75,17 +76,17 @@ fun ShoppingList(
         )
         Divider(color = Color.LightGray)
         LazyColumn {
-            item { SelectedRecipes(false, menuDetail.map { it.key }, onThumbClicked) }
+            item { SelectedRecipes(false, menuDetail.first, onThumbClicked) }
             item { Divider(color = Color.LightGray) }
 
-//            item {
-/*Text(
+            item {
+                Text(
                     modifier = Modifier.padding(start = 15.dp, top = 15.dp),
-                    text = "材料(人分)",
+                    text = "材料",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     color = colorResource(id = R.color.fontColor)
-                )*/
+                )
 
 //                Row(
 //                    modifier = Modifier
@@ -110,8 +111,8 @@ fun ShoppingList(
 //                        )
 //                    }
 //                }
-//            }
-            item { ShoppingListMaterials(menuDetail.values.map { it }, state::checkShoppingListItem) }
+            }
+            item { ShoppingListMaterials(menuDetail.second, state::checkShoppingListItem) }
             item { Spacer(Modifier.height(80.dp)) }
         }
     }
@@ -119,7 +120,7 @@ fun ShoppingList(
     ShoppingListBottomButton(
         menuId = state.menuId,
         paddingValues = paddingValues,
-        menu = menuDetail,
+//        menu = menuDetail,
         favoriteMenuIds = favoriteMenuIds,
         onMenuLiked = state::addFavorite,
         onMenuUnLiked = state::removeFavorite
@@ -222,20 +223,19 @@ fun MyDialog(
 
 @Composable
 fun ShoppingListMaterials(
-    items: List<List<ShoppingItemWithIngredient>>,
+    items: List<ShoppingItemWithIngredient>,
     onChecked: (Int) -> Unit
 ) {
-    val itemList = emptyList<ShoppingItemWithIngredient>()
-    items.forEach { itemList.plus(it) }
 
-    itemList.forEach { item ->
+    items.forEach { item ->
 //        val checkedState = remember { mutableStateOf(false) }
         Column {
             Row(
                 modifier = Modifier
                     .padding(horizontal = 16.dp, vertical = 5.dp)
                     .fillMaxWidth()
-                    .clickable { onChecked(item.id) },
+                    .clickable { onChecked(item.id)
+                        Log.d("debug", "${item.id}")},
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Checkbox(
@@ -244,10 +244,13 @@ fun ShoppingListMaterials(
                         .size(40.dp),
                     colors = CheckboxDefaults.colors(colorResource(id = R.color.selectButtonColor)),
                     checked = item.isChecked,
-                    onCheckedChange = {}
+                    onCheckedChange = { onChecked(item.id)
+                        Log.d("debug", "${item.id}")}
                 )
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth()
+                        .clickable { onChecked(item.id)
+                            Log.d("debug", "${item.id}")},
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -258,7 +261,7 @@ fun ShoppingListMaterials(
                         color = colorResource(id = R.color.fontColor)
                     )
                     Text(
-                        text = "${item.quantity}/(${item.servings}人",
+                        text = "${item.quantity}/${item.servings}人",
                         fontSize = 16.sp,
                         color = colorResource(id = R.color.fontColor)
                     )
@@ -273,7 +276,7 @@ fun ShoppingListMaterials(
 fun ShoppingListBottomButton(
     menuId: Int,
     paddingValues: PaddingValues,
-    menu: Map<RecipeWithoutCategory, List<ShoppingItemWithIngredient>>,
+//    menu: Pair<List<RecipeWithoutCategory>, List<ShoppingItemWithIngredient>>,
     favoriteMenuIds: List<Int>,
     onMenuLiked: (Int) -> Unit,
     onMenuUnLiked: (Int) -> Unit

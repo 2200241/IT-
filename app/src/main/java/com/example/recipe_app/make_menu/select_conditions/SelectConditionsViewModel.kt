@@ -100,14 +100,11 @@ class SelectConditionsViewModel @Inject constructor(
         }
     }
 
+    fun onClearClicked() = _uiState.update { it.copy(selectedTags = emptyList()) }
 
-    fun onClearClicked() {
-        _uiState.update { it.copy(selectedTags = emptyList()) }
-    }
+    fun setKeywords(text: String) = _uiState.update { it.copy(keywords = text) }
 
-    fun setKeywords(text: String) {
-        _uiState.update { it.copy(keywords = text) }
-    }
+    fun setTagKeyword(text: String) = _uiState.update { it.copy(tagKeyword = text) }
 
     fun getIngredientSuggestions() {
         viewModelScope.launch {

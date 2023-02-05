@@ -22,12 +22,22 @@ import com.google.accompanist.flowlayout.MainAxisAlignment
 @Composable
 fun SelectTags(
     modifier: Modifier = Modifier,
+    keywords: String,
+    setKeywords: (String) -> Unit,
 //    largeCategories: List<LargeCategory>,
     tags: Map<Int, String> = emptyMap(),
     selectedTags: List<Int>,
     onTagClicked: (Int) -> Unit,
+    onSearchClicked: () -> Unit
 ) {
     LazyColumn(modifier = modifier) {
+        item {
+            SearchTextField(
+                keywords = keywords,
+                setKeywords = setKeywords,
+                onClicked = onSearchClicked
+            )
+        }
 //        largeCategories.forEach { item ->
             item {
                 TagCategory(

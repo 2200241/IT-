@@ -51,14 +51,15 @@ fun SelectIngredients(
     setKeywords: (String) -> Unit,
     ingredients: Map<Int, String> = emptyMap(),
     selectedIngredients: List<Int> = emptyList(),
-    onClicked: () -> Unit
+    onItemClicked: (Int) -> Unit,
+    onSearchClicked: () -> Unit
 ) {
     LazyColumn(modifier = modifier) {
         item {
             SearchTextField(
                 keywords = keywords,
                 setKeywords = setKeywords,
-                onClicked = onClicked
+                onClicked = onSearchClicked
             )
         }
         item { Divider(color = Color.LightGray) }
@@ -107,28 +108,27 @@ fun SearchTextField(
                 Spacer(Modifier.width(5.dp))
                 if (keywords.isEmpty()) {
                     Text(
-                        text = "検索",
+                        text = "キーワード",
                         fontWeight = FontWeight.Bold,
                         color = Color.Gray
                     )
                 } else {
                     innerTextField()
                 }
-//                ExtendedFloatingActionButton(
-//                    modifier = Modifier.weight(1f),
-//                    backgroundColor = colorResource(id = R.color.searchButtonColor),
-//                    contentColor = Color.White,
-//                    text = {
-//                        Text(
-//                            text = stringResource(id = R.string.search),
-//                            fontSize = 20.sp,
-//                            fontWeight = FontWeight.Bold
-//                        )
-//                    },
-//                    onClick = onClicked
-//                )
-
             }
+            ExtendedFloatingActionButton(
+//                modifier = Modifier.weight(1f),
+                backgroundColor = colorResource(id = R.color.searchButtonColor),
+                contentColor = Color.White,
+                text = {
+                    Text(
+                        text = "候補表示",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                },
+                onClick = onClicked
+            )
         }
     )
 }

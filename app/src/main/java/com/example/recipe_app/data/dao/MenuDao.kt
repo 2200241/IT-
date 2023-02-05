@@ -30,7 +30,7 @@ interface MenuDao {
             "WHERE menus.id = :id"
     )
 */
-    @Query("SELECT recipes.id, recipes.title, recipes.image, " +
+/*    @Query("SELECT recipes.id, recipes.title, recipes.image, " +
             "shopping_items.id, shopping_items.is_checked, recipe_ingredients.name, recipe_ingredients.quantity, recipes.servings " +
             "FROM menus " +
             "JOIN menu_recipes ON menu_recipes.menu_id = menus.id " +
@@ -39,7 +39,23 @@ interface MenuDao {
             "JOIN recipe_ingredients ON recipe_ingredients.id = shopping_items.recipe_ingredient_id " +
             "WHERE menus.id = :id"
     )
-    fun getMenuDetail(id: Int): Flow<Map<RecipeWithoutCategory, List<ShoppingItemWithIngredient>>>
+    fun getMenuDetail(id: Int): Flow<Map<RecipeWithoutCategory, List<ShoppingItemWithIngredient>>>*/
+
+    @Query("SELECT recipes.id, recipes.title, recipes.image " +
+            "FROM menu_recipes " +
+            "JOIN recipes ON recipes.id = menu_recipes.recipe_id " +
+            "WHERE menu_recipes.menu_id = :id"
+    )
+    fun getMenuRecipes(id: Int): Flow<List<RecipeWithoutCategory>>
+
+    @Query("SELECT DISTINCT shopping_items.id, shopping_items.is_checked, recipe_ingredients.name, recipe_ingredients.quantity, recipes.servings " +
+            "FROM shopping_items " +
+            "JOIN menu_recipes ON menu_recipes.menu_id = shopping_items.menu_id " +
+            "JOIN recipes ON recipes.id = menu_recipes.recipe_id " +
+            "JOIN recipe_ingredients ON recipe_ingredients.id = shopping_items.recipe_ingredient_id " +
+            "WHERE menu_recipes.menu_id = :id GROUP BY shopping_items.id ORDER BY recipe_ingredients.name"
+    )
+    fun getShoppingItems(id: Int): Flow<List<ShoppingItemWithIngredient>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addMenu(menu: Menu): Long
@@ -74,6 +90,7 @@ interface MenuDao {
     @Query("DELETE FROM menus")
     suspend fun deleteAllMenus()
 
-    @Query("UPDATE shopping_items SET is_checked = IIF(is_checked = 1, 0, 1) WHERE id = :id")
+//    @Query("UPDATE shopping_items SET is_checked = IIF(is_checked = 1, 0, 1) WHERE id = :id")
+    @Query("UPDATE shopping_items SET is_checked = CASE WHEN is_checked = 1 THEN 0 ELSE 1 END WHERE id = :id")
     suspend fun checkShoppingItem(id: Int)
 }

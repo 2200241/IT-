@@ -41,10 +41,13 @@ fun SelectConditions(
             ConditionTab.SelectTagsTab -> {
                 SelectTags(
                     modifier = Modifier.weight(1f),
+                    keywords = uiState.tagKeyword,
+                    setKeywords = state::setTagKeywords,
 //                    largeCategories = uiState.largeCategories,
                     tags = uiState.tags,
                     selectedTags = uiState.selectedTags,
-                    onTagClicked = state::onTagClicked
+                    onTagClicked = state::onTagClicked,
+                    onSearchClicked = state::getTagSuggestion
                 )
             }
             ConditionTab.SelectIngredientsTab -> {
@@ -52,7 +55,8 @@ fun SelectConditions(
                     modifier = Modifier.weight(1f),
                     keywords = uiState.keywords,
                     setKeywords = state::setKeywords,
-                    onClicked = state::getIngredientSuggestion
+                    onItemClicked = state::onIngredientClicked,
+                    onSearchClicked = state::getIngredientSuggestion
                 )
             }
         }

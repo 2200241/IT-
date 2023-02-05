@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 interface MenuUseCase {
     fun getAllMenus(): Flow<Map<Menu, List<RecipeWithoutCategory>>>
-    fun getMenuDetail(id: Int): Flow<Map<RecipeWithoutCategory, List<ShoppingItemWithIngredient>>>
+    fun getMenuDetail(id: Int): Flow<Pair<List<RecipeWithoutCategory>, List<ShoppingItemWithIngredient>>>
     suspend fun addMenu(recipes: List<DetailedRecipe>): Result<String, String>
     suspend fun deleteMenu(id: Int, recipeIds: List<Int>): Result<String, String>
     suspend fun updateMenu(menu: Menu): Result<String, String>
@@ -23,7 +23,7 @@ data class MenuUseCaseImpl @Inject constructor(
     private val recipeRepository: RecipeRepository
 ): MenuUseCase {
     override fun getAllMenus() = menuRepository.getAllMenus()
-    override fun getMenuDetail(id: Int) = menuRepository.getMenuDetail(id)
+    override fun getMenuDetail(id: Int): Flow<Pair<List<RecipeWithoutCategory>, List<ShoppingItemWithIngredient>>> = menuRepository.getMenuDetail(id)
     override suspend fun addMenu(recipes: List<DetailedRecipe>): Result<String, String> = menuRepository.addMenu(recipes)
     override suspend fun deleteMenu(id: Int, recipeIds: List<Int>): Result<String, String> {
         return try {

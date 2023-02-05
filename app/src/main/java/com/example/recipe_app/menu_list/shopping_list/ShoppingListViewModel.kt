@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.recipe_app.use_cases.FavoriteMenuUseCase
 import com.example.recipe_app.use_cases.MenuUseCase
 import com.github.michaelbull.result.Ok
+import com.github.michaelbull.result.mapBoth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -13,6 +14,7 @@ import javax.inject.Inject
 
 data class ShoppingListUiState(
     val isLoading: Boolean = false,
+    val message: String = "",
 //    val menuDetail: MenuDetail = MenuDetail(),
 )
 
@@ -29,13 +31,14 @@ class ShoppingListViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(ShoppingListUiState(
         isLoading = false,
+        message = ""
     ))
     val uiState = _uiState.asStateFlow()
 
     val menuDetail = menuUseCase.getMenuDetail(menuId).stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
-        initialValue = emptyMap()
+        initialValue = Pair(emptyList(), emptyList())
     )
 
     val favoriteMenuIds = favoriteMenuUseCase.getFavoriteMenuIds().stateIn(

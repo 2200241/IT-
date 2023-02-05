@@ -7,14 +7,16 @@ import com.example.recipe_app.room.database.RecipeAppDatabase
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.combine
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 interface MenuRepository {
     fun getAllMenus(): Flow<Map<Menu, List<RecipeWithoutCategory>>>
-    fun getMenuDetail(id: Int): Flow<Map<RecipeWithoutCategory, List<ShoppingItemWithIngredient>>>
+    fun getMenuDetail(id: Int): Flow<Pair<List<RecipeWithoutCategory>, List<ShoppingItemWithIngredient>>>
     suspend fun addMenu(recipes: List<DetailedRecipe>): Result<String, String>
     suspend fun deleteMenu(id: Int): Result<String, String>
     suspend fun updateMenu(menu: Menu): Result<String, String>
@@ -25,9 +27,10 @@ class MenuRepositoryImpl @Inject constructor(application: Application): MenuRepo
     private val db = RecipeAppDatabase.getDatabase(application)
     private val menuDao = db.menuDao()
 
-    //全件取得
     override fun getAllMenus() = menuDao.getAllMenus()
-    override fun getMenuDetail(id: Int) = menuDao.getMenuDetail(id)
+    override fun getMenuDetail(id: Int): Flow<Pair<List<RecipeWithoutCategory>, List<ShoppingItemWithIngredient>>> {
+        return combine(menuDao.getMenuRecipes(id), menuDao.getShoppingItems(id), ::Pair)
+    }
 
     override suspend fun addMenu(recipes: List<DetailedRecipe>): Result<String, String> {
         try {

@@ -16,13 +16,13 @@ class ShoppingListState(
 
     val menuId = viewModel.menuId
 
-    val menuDetail: Map<RecipeWithoutCategory, List<ShoppingItemWithIngredient>>
+    val menuDetail: Pair<List<RecipeWithoutCategory>, List<ShoppingItemWithIngredient>>
         @Composable get() = viewModel.menuDetail.collectAsState().value
 
     val favoriteMenuIds: List<Int>
         @Composable get() = viewModel.favoriteMenuIds.collectAsState().value
 
-    fun checkShoppingListItem(index: Int) = viewModel.checkShoppingListItem(index)
+    fun checkShoppingListItem(id: Int) = viewModel.checkShoppingListItem(id)
 
     fun addFavorite(id: Int) = viewModel.addFavorite(id)
 

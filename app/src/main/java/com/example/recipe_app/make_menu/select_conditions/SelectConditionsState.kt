@@ -26,6 +26,7 @@ class SelectConditionsState(
 
     fun setKeywords(text:String) = viewModel.setKeywords(text)
 
+    fun setTagKeywords(text: String) = viewModel.setTagKeyword(text)
 
     fun getConditions() = viewModel.getConditions()
 }

@@ -72,7 +72,7 @@ fun Allergies(
                         modifier = Modifier.size(40.dp),
                         colors = CheckboxDefaults.colors(colorResource(id = R.color.selectButtonColor)),
                         checked = allergen.isChecked,
-                        onCheckedChange = {  }
+                        onCheckedChange = { check(allergen.id, !allergen.isChecked) }
                     )
                     Text(
                         text = allergen.name,
