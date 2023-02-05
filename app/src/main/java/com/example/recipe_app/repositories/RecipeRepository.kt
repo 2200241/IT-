@@ -14,7 +14,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 interface RecipeRepository {
-    suspend fun getRecipeDetail(id: Int): Flow<Map<Recipe, List<RecipeIngredient>>>
+    suspend fun getRecipeDetail(id: Int): Result<DetailedRecipe, String>
     suspend fun addRecipe(recipe: Recipe, ingredients: List<RecipeIngredient>, instructions: List<Instruction>): Result<String, String>
     suspend fun deleteRecipe(id: Int): Result<String, String>
     suspend fun deleteRecipes(ids: List<Int>): Result<String, String>
@@ -25,7 +25,19 @@ class RecipeRepositoryImpl @Inject constructor(application: Application): Recipe
     private val db = RecipeAppDatabase.getDatabase(application)
     private val recipeDetailDao = db.recipeDetailDao()
 
-    override suspend fun getRecipeDetail(id: Int): Flow<Map<Recipe, List<RecipeIngredient>>> = recipeDetailDao.getRecipeDetail(id)
+    override suspend fun getRecipeDetail(id: Int): Result<DetailedRecipe, String> {
+        try {
+            return withContext(Dispatchers.IO) {
+                val recipe = recipeDetailDao.getRecipeDetail(id)
+                if (recipe.recipe.id == 0 || recipe.ingredients.isEmpty() || recipe.instructions.isEmpty()) {
+                    return@withContext Err("Null returned")
+                }
+                return@withContext Ok(recipe)
+            }
+        } catch (e: Exception) {
+            return Err(e.toString())
+        }
+    }
 
     //追加
     override suspend fun addRecipe(recipe: Recipe, ingredients: List<RecipeIngredient>, instructions: List<Instruction>): Result<String, String> {

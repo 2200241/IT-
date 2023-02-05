@@ -1,9 +1,12 @@
 package com.example.recipe_app.recipe_detail
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.recipe_app.data.Ingredient
 import com.example.recipe_app.data.RecipeBase
+import com.example.recipe_app.data.RecipeIngredient
 import com.example.recipe_app.repositories.ApiRepository
 import com.example.recipe_app.use_cases.FavoriteRecipeUseCase
 import com.example.recipe_app.use_cases.RecipeUseCase
@@ -48,9 +51,24 @@ class RecipeDetailViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             startLoading()
-            apiRepository.fetchRecipeById(recipeId).mapBoth(
-                success = { recipe -> _uiState.update { it.copy(recipe = recipe) } },
-                failure = {  }
+            recipeUseCase.getRecipeDetail(recipeId).mapBoth(
+                success = { recipe ->
+                    _uiState.update { it.copy(recipe = RecipeBase(
+                        id = recipe.recipe.id,
+                        categoryId = recipe.recipe.categoryId,
+                        title = recipe.recipe.title,
+                        image = recipe.recipe.image,
+                        servings = recipe.recipe.servings,
+                        ingredients = recipe.ingredients.map { i -> Ingredient(i.name, i.quantity) },
+                        instructions = recipe.instructions.map { i -> i.content }
+                    )) }
+                },
+                failure = {
+                    apiRepository.fetchRecipeById(recipeId).mapBoth(
+                        success = { recipe -> _uiState.update { it.copy(recipe = recipe) } },
+                        failure = { message -> _uiState.update { it.copy(message = message) }}
+                    )
+                }
             )
             endLoading()
         }

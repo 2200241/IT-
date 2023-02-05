@@ -27,6 +27,8 @@ class ShoppingListState(
     fun addFavorite(id: Int) = viewModel.addFavorite(id)
 
     fun removeFavorite(id: Int) = viewModel.removeFavorite(id)
+
+    fun removeMenu(id: Int, recipeIds: List<Int>) = viewModel.removeMenu(id, recipeIds)
 }
 
 @Composable

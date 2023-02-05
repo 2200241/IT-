@@ -13,11 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Divider
-import androidx.compose.material.ExtendedFloatingActionButton
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.sharp.Favorite
 import androidx.compose.runtime.Composable
@@ -57,28 +53,49 @@ fun RecipeDetail(
         }
     }
 
-    Column(
-        modifier = Modifier.padding(paddingValues),
-    ) {
-        LazyColumn() {
-            item { CookingImage(recipe = Recipe(recipe.id, recipe.categoryId, recipe.title, recipe.image, recipe.servings)) }
-            item { RecipeDetailTitle("材料(${recipe.servings}人分)") }
-            item { RecipeDetailMaterials(recipe.ingredients) }
-            item { RecipeDetailTitle("作り方") }
-            item { CookingProcedure(recipe.instructions) }
-            item { Spacer(Modifier.height(80.dp)) }
+    if (uiState.isLoading) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
         }
-    }
+    } else {
+        Column(
+            modifier = Modifier.padding(paddingValues),
+        ) {
+            LazyColumn() {
+                item {
+                    CookingImage(
+                        recipe = Recipe(
+                            recipe.id,
+                            recipe.categoryId,
+                            recipe.title,
+                            recipe.image,
+                            recipe.servings
+                        )
+                    )
+                }
+                item { RecipeDetailTitle(recipe.title) }
+                item { RecipeServings(recipe.servings) }
+//                item { RecipeTags(tags = )}
+                item { RecipeDetailMaterials(recipe.ingredients) }
+                item { RecipeDetailTitle("作り方") }
+                item { CookingProcedure(recipe.instructions) }
+                item { Spacer(Modifier.height(80.dp)) }
+            }
+        }
 
-    RecipeDetailBottomButtons(
-        paddingValues = paddingValues,
-        recipeId = recipe.id,
-        favoriteRecipeIds = state.favoriteRecipeIds,
-        addButtonIsDisplayed = addButtonIsDisplayed,
-        onAddButtonClicked = { selectRecipe(recipe) },
-        onLiked = state::addFavoriteRecipe,
-        onUnliked = state::removeFavoriteRecipe
-    )
+        RecipeDetailBottomButtons(
+            paddingValues = paddingValues,
+            recipeId = recipe.id,
+            favoriteRecipeIds = state.favoriteRecipeIds,
+            addButtonIsDisplayed = addButtonIsDisplayed,
+            onAddButtonClicked = { selectRecipe(recipe) },
+            onLiked = state::addFavoriteRecipe,
+            onUnliked = state::removeFavoriteRecipe
+        )
+    }
 }
 
 @Composable
@@ -106,6 +123,33 @@ fun RecipeDetailTitle(title: String) {
     Text(
         modifier = Modifier.padding(start = 15.dp, top = 15.dp, bottom = 3.dp),
         text = title,
+        fontSize = 24.sp,
+        fontWeight = FontWeight.Bold,
+        color = colorResource(id = R.color.fontColor)
+    )
+}
+
+@Composable
+fun RecipeTags(
+    tags: List<String>
+) {
+    Column() {
+        tags.forEach { tag ->
+            Text(
+                modifier = Modifier.padding(start = 4.dp, top = 2.dp, bottom = 2.dp),
+                text = tag,
+                fontSize = 16.sp,
+                color = colorResource(id = R.color.fontColor)
+            )
+        }
+    }
+}
+
+@Composable
+fun RecipeServings(servings: Int) {
+    Text(
+        modifier = Modifier.padding(start = 15.dp, top = 15.dp, bottom = 3.dp),
+        text = "材料（${servings}人前）",
         fontSize = 18.sp,
         fontWeight = FontWeight.Bold,
         color = colorResource(id = R.color.fontColor)

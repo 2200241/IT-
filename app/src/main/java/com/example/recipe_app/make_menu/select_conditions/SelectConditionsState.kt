@@ -14,9 +14,9 @@ class SelectConditionsState(
 
     fun onTabClicked(selectedTab: ConditionTab) = viewModel.onTabClicked(selectedTab)
 
-    fun onTagClicked(id: Int) = viewModel.onTagClicked(id)
+    fun onTagClicked(tag: Map.Entry<Int, String>) = viewModel.onTagClicked(tag)
 
-    fun onIngredientClicked(id: Int) = viewModel.onIngredientClicked(id)
+    fun onIngredientClicked(ingredient: Map.Entry<Int, String>) = viewModel.onIngredientClicked(ingredient)
 
     fun getIngredientSuggestion() = viewModel.getIngredientSuggestions()
 

@@ -73,6 +73,12 @@ class ShoppingListViewModel @Inject constructor(
         }
     }
 
+    fun removeMenu(id: Int, recipeIds: List<Int>) {
+        viewModelScope.launch {
+            menuUseCase.deleteMenu(id, recipeIds)
+        }
+    }
+
 /*
     class Factory(
         private val menuId: String?

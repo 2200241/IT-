@@ -7,13 +7,14 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface RecipeDetailDao {
 
-//    "instructions.`order`, instructions.content " +
-
-    @Query("SELECT recipes.*, recipe_ingredients.* " +
-            "FROM recipes JOIN recipe_ingredients ON recipe_ingredients.recipe_id = recipes.id " +
+    // TODO: タグ取得
+    @Query("SELECT recipes.*, recipe_ingredients.*, instructions.* " +
+            "FROM recipes " +
+            "JOIN recipe_ingredients ON recipe_ingredients.recipe_id = recipes.id " +
             "JOIN instructions ON instructions.recipe_id = recipes.id " +
             "WHERE recipes.id = :id")
-    fun getRecipeDetail(id: Int): Flow<Map<Recipe, List<RecipeIngredient>>>
+    fun getRecipeDetail(id: Int): DetailedRecipe
+
 /*
     @Transaction
     @Query("SELECT * FROM recipes WHERE recipes.id = :id")

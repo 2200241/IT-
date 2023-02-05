@@ -116,6 +116,7 @@ fun ShoppingList(
             item { Spacer(Modifier.height(80.dp)) }
         }
     }
+    // TODO: 削除ボタン（一覧でも削除できた方がいい）
 
     ShoppingListBottomButton(
         menuId = state.menuId,

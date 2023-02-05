@@ -36,7 +36,6 @@ fun SelectConditions(
             selectedTab = uiState.selectedTab,
             onClick = state::onTabClicked
         )
-
         when (uiState.selectedTab) {
             ConditionTab.SelectTagsTab -> {
                 SelectTags(
@@ -55,6 +54,8 @@ fun SelectConditions(
                     modifier = Modifier.weight(1f),
                     keywords = uiState.keywords,
                     setKeywords = state::setKeywords,
+                    ingredients = uiState.ingredients,
+                    selectedIngredients = uiState.selectedIngredients,
                     onItemClicked = state::onIngredientClicked,
                     onSearchClicked = state::getIngredientSuggestion
                 )

@@ -50,33 +50,38 @@ fun SelectIngredients(
     keywords: String,
     setKeywords: (String) -> Unit,
     ingredients: Map<Int, String> = emptyMap(),
-    selectedIngredients: List<Int> = emptyList(),
-    onItemClicked: (Int) -> Unit,
-    onSearchClicked: () -> Unit
+    selectedIngredients: Map<Int, String> = emptyMap(),
+    onItemClicked: (Map.Entry<Int, String>) -> Unit,
+    onSearchClicked: () -> Unit = {}
 ) {
     LazyColumn(modifier = modifier) {
         item {
             SearchTextField(
                 keywords = keywords,
                 setKeywords = setKeywords,
-                onClicked = onSearchClicked
+//                onSearch = onSearchClicked
             )
         }
+        item { Divider(color = Color.LightGray) }
+        // 選択した食材
+        item { Ingredients(ingredients = selectedIngredients, selectedIngredients = selectedIngredients, onItemClicked = onItemClicked) }
         item { Divider(color = Color.LightGray) }
         item {
             Text(
                 modifier = Modifier.padding(start = 15.dp, top = 15.dp, bottom = 3.dp),
-                text = "食材一覧",
+                text = "食材選択",
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 color = colorResource(id = R.color.fontColor)
             )
         }
         item { Divider(color = Color.LightGray) }
-        for (i in 1..5) {
-            item { CategoryTitle("カテゴリー名$i") }
-            item { Divider(color = Color.LightGray) }
-        }
+        item { Ingredients(ingredients = ingredients, selectedIngredients = selectedIngredients, onItemClicked = onItemClicked) }
+
+//        for (i in 1..5) {
+//            item { CategoryTitle("カテゴリー名$i") }
+//            item { Divider(color = Color.LightGray) }
+//        }
     }
 }
 
@@ -84,7 +89,7 @@ fun SelectIngredients(
 fun SearchTextField(
     keywords: String = "",
     setKeywords: (String) -> Unit,
-    onClicked:() -> Unit,
+    onSearch:() -> Unit = {},
 ) {
     BasicTextField(
         modifier = Modifier.padding(15.dp),
@@ -115,20 +120,21 @@ fun SearchTextField(
                 } else {
                     innerTextField()
                 }
+/*                Spacer(modifier = Modifier.weight(1f))
+                ExtendedFloatingActionButton(
+                    modifier = Modifier.padding(2.dp),
+                    backgroundColor = colorResource(id = R.color.searchButtonColor),
+                    contentColor = Color.White,
+                    text = {
+                        Text(
+                            text = "候補表示",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    },
+                    onClick = onClicked
+                )*/
             }
-            ExtendedFloatingActionButton(
-//                modifier = Modifier.weight(1f),
-                backgroundColor = colorResource(id = R.color.searchButtonColor),
-                contentColor = Color.White,
-                text = {
-                    Text(
-                        text = "候補表示",
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                },
-                onClick = onClicked
-            )
         }
     )
 }
@@ -186,32 +192,35 @@ fun CategoryTitle(title: String) {
                 }
             }
             if (expandedState.value) {
-                Ingredients()
+//                Ingredients()
             }
         }
     }
 }
 
 @Composable
-fun Ingredients() {
+fun Ingredients(
+    ingredients: Map<Int, String>,
+    selectedIngredients: Map<Int, String>,
+    onItemClicked: (Map.Entry<Int, String>) -> Unit = {}
+) {
     val screenWidth = LocalConfiguration.current.screenWidthDp
 
     FlowRow(mainAxisAlignment = MainAxisAlignment.Start) {
-        for (i in 1 .. 5) {
-            val checkedState = remember { mutableStateOf(false) }
+        ingredients.map { ingredient ->
             Box(modifier = Modifier.width(((screenWidth / 2)).dp)) {
                 Column {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 15.dp)
-                            .clickable { checkedState.value = !checkedState.value },
+                            .clickable { onItemClicked(ingredient) },
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
-                            text = "食材名",
-                            fontSize = 16.sp,
+                            text = ingredient.value,
+                            fontSize = 20.sp,
                             color = colorResource(id = R.color.fontColor)
                         )
                         Box(modifier = Modifier.size(30.dp)) {
@@ -220,8 +229,8 @@ fun Ingredients() {
                                     .absoluteOffset(5.dp, 0.dp)
                                     .size(40.dp),
                                 colors = CheckboxDefaults.colors(colorResource(id = R.color.selectButtonColor)),
-                                checked = checkedState.value,
-                                onCheckedChange = { checkedState.value = it }
+                                checked = selectedIngredients.contains(ingredient.key),
+                                onCheckedChange = { onItemClicked(ingredient) }
                             )
                         }
                     }

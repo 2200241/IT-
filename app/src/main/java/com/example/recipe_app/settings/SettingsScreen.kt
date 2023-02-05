@@ -59,7 +59,7 @@ fun Allergies(
     check: (Int, Boolean) -> Unit
 ) {
     LazyVerticalGrid(
-        columns = GridCells.Fixed(3),
+        columns = GridCells.Fixed(2),
         contentPadding = PaddingValues(5.dp)
     ) {
         for (allergen in allergens) {
@@ -76,7 +76,7 @@ fun Allergies(
                     )
                     Text(
                         text = allergen.name,
-                        fontSize = 16.sp,
+                        fontSize = 20.sp,
                         color = colorResource(id = R.color.fontColor),
                     )
                 }

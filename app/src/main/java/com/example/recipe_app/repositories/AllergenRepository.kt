@@ -13,6 +13,7 @@ import javax.inject.Inject
 
 interface AllergenRepository {
     fun getAllAllergens(): Flow<List<Allergen>>
+    fun getCheckedAllergens(): Flow<List<Int>>
     suspend fun checkAllergen(id: Int, isChecked: Boolean): Result<String, String>
 }
 
@@ -22,6 +23,8 @@ class AllergenRepositoryImpl @Inject constructor(application: Application):Aller
 
     //全件取得
     override fun getAllAllergens() = allergenDao.getAllAllergens()
+
+    override fun getCheckedAllergens() = allergenDao.getCheckedAllergens()
 
     //追加
 //    suspend fun addAllergen(allergen: Allergen) {

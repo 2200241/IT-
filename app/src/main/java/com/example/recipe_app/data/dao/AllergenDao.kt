@@ -9,6 +9,9 @@ interface AllergenDao {
     @Query("SELECT * FROM allergens")
     fun getAllAllergens(): Flow<List<Allergen>>
 
+    @Query("SELECT id FROM allergens WHERE is_checked = 1")
+    fun getCheckedAllergens(): Flow<List<Int>>
+
     @Insert(onConflict = OnConflictStrategy.IGNORE) 
     suspend fun addAllergen(allergen: Allergen)
 
